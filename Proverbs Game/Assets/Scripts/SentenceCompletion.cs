@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class SentenceCompletion : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI sentence;
+    [SerializeField]
+    private List<GameObject> buttons;
+    [SerializeField]
+    private List<TextMeshProUGUI> buttonTexts;
 
     private static string correctProverb = "Don't look a gifted horse in the mouth";
 
@@ -24,7 +29,10 @@ public class SentenceCompletion : MonoBehaviour
             answerProverb = answerProverb.Replace(v, "...");
         }
 
-
+        for(int i = 0; i < buttonTexts.Count; i++)
+        {
+            buttonTexts[i].text = allWords[i];
+        }
 
         sentence.text = answerProverb;
     }
@@ -56,6 +64,11 @@ public class SentenceCompletion : MonoBehaviour
 
     private void removeWord(string word)
     {
+        for(int i = 0 ; i < buttonTexts.Count; i++) {
+            if(buttonTexts[i].text.Equals(word)) {
+                buttons[i].SetActive(true);
+            }
+        }
         word = "<u><b>" + word + "</u></b>";
         answerProverb = ReplaceFirst(answerProverb, word, "...");
         sentence.text = answerProverb;
@@ -69,6 +82,11 @@ public class SentenceCompletion : MonoBehaviour
             return text;
         }
         return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+    }
+
+    public void buttonPressed(int index) {
+        inputWord(buttonTexts[index].text);
+        buttons[index].SetActive(false);
     }
 
 }
