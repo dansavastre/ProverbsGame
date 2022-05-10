@@ -32,6 +32,9 @@ ExportedObj/
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 
+# Unity3D Logs
+logs/
+
 # Builds
 *.apk
 *.unitypackage
@@ -39,3 +42,5 @@ sysinfo.txt
 # Crashlytics generated file
 Assets/StreamingAssets/crashlytics-build.properties
 
+# Rider IDEA
+.idea/
