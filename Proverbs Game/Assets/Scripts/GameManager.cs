@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
     public Question[] questions;
@@ -15,6 +16,9 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField]
     private Text answerText1, answerText2, answerText3, answerText4;
+
+    [SerializeField]
+    private float delayBetweenQuestions = 1f;
 
     private void Start() {
         // only initialize the notAnswered list at the beginning, not on every scene load
@@ -36,8 +40,14 @@ public class GameManager : MonoBehaviour {
         answerText2.text = currentQuestion.answers[1].text;
         answerText3.text = currentQuestion.answers[2].text;
         answerText4.text = currentQuestion.answers[3].text;
+    }
 
-        notAnswered.RemoveAt(randomQuestionIndex); // remove the question from the list
+    IEnumerator TransitionToNextQuestion() {
+        notAnswered.Remove(currentQuestion); // remove the question from the list
+
+        yield return new WaitForSeconds(delayBetweenQuestions); // wait for a bit before transitioning to the next question
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // load the scene with the index of our current scene (i.e. restart)
     }
 
     public void UserSelectFirst() {
@@ -45,6 +55,8 @@ public class GameManager : MonoBehaviour {
             Debug.Log("CORRECT!");
         else
             Debug.Log("WRONG!");
+
+        StartCoroutine(TransitionToNextQuestion());
     }
 
     public void UserSelectSecond() {
@@ -52,6 +64,8 @@ public class GameManager : MonoBehaviour {
             Debug.Log("CORRECT!");
         else
             Debug.Log("WRONG!");
+
+        StartCoroutine(TransitionToNextQuestion());
     }
 
     public void UserSelectThird() {
@@ -59,6 +73,8 @@ public class GameManager : MonoBehaviour {
             Debug.Log("CORRECT!");
         else
             Debug.Log("WRONG!");
+
+        StartCoroutine(TransitionToNextQuestion());
     }
 
     public void UserSelectFourth() {
@@ -66,5 +82,7 @@ public class GameManager : MonoBehaviour {
             Debug.Log("CORRECT!");
         else
             Debug.Log("WRONG!");
+
+        StartCoroutine(TransitionToNextQuestion());
     }
 }
