@@ -9,6 +9,8 @@ public class SentenceCompletion : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI sentence;
     [SerializeField]
+    private TextMeshProUGUI ResultText;
+    [SerializeField]
     private List<GameObject> buttons;
     [SerializeField]
     private List<TextMeshProUGUI> buttonTexts;
@@ -55,6 +57,16 @@ public class SentenceCompletion : MonoBehaviour
         }
     }
 
+    public bool canInput(string text, string search)
+    {
+        int pos = text.IndexOf(search);
+        if(pos < 0) 
+        {
+            return false;
+        }
+        return true;
+    }
+
     private void inputWord(string word)
     {
         word = "<u><b>" + word + "</u></b>";
@@ -76,17 +88,36 @@ public class SentenceCompletion : MonoBehaviour
 
     public string ReplaceFirst(string text, string search, string replace)
     {
-        int pos = text.IndexOf(search);
-        if (pos < 0)
+        if (!canInput(answerProverb, search))
         {
             return text;
         }
-        return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+        return text.Substring(0, text.IndexOf(search)) + replace + text.Substring(text.IndexOf(search) + search.Length);
     }
 
-    public void buttonPressed(int index) {
-        inputWord(buttonTexts[index].text);
-        buttons[index].SetActive(false);
+    public void buttonPressed(int index)
+    {
+        if(canInput(answerProverb, "...")) 
+        {
+            inputWord(buttonTexts[index].text);
+            buttons[index].SetActive(false);
+        }
+    }
+
+    public void CheckAnswer()
+    {
+        //Debug.Log(answerProverb.Replace("<u><b>", "").Replace("</u></b>", ""));
+        string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
+        if(playerProverb.Equals(correctProverb))
+        {
+            Debug.Log("Correct!");
+            ResultText.text = "Correct!";
+        }
+        else 
+        {
+            Debug.Log("Incorrect!");
+            ResultText.text = "Incorrect!";
+        }
     }
 
 }
