@@ -110,12 +110,10 @@ public class SentenceCompletion : MonoBehaviour
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
         if(playerProverb.Equals(correctProverb))
         {
-            Debug.Log("Correct!");
             ResultText.text = "Correct!";
         }
         else 
         {
-            Debug.Log("Incorrect!");
             ResultText.text = "Incorrect!";
         }
     }
