@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour {
     private Text answerText1, answerText2, answerText3, answerText4;
 
     [SerializeField]
+    private Text correctAnswerText, wrongAnswerText;
+
+    [SerializeField]
     private float delayBetweenQuestions = 1f;
 
     private void Start() {
@@ -56,6 +59,7 @@ public class GameManager : MonoBehaviour {
         else
             Debug.Log("WRONG!");
 
+        DisplayFeedback(0);
         StartCoroutine(TransitionToNextQuestion());
     }
 
@@ -65,6 +69,7 @@ public class GameManager : MonoBehaviour {
         else
             Debug.Log("WRONG!");
 
+        DisplayFeedback(1);
         StartCoroutine(TransitionToNextQuestion());
     }
 
@@ -74,6 +79,7 @@ public class GameManager : MonoBehaviour {
         else
             Debug.Log("WRONG!");
 
+        DisplayFeedback(2);
         StartCoroutine(TransitionToNextQuestion());
     }
 
@@ -83,6 +89,17 @@ public class GameManager : MonoBehaviour {
         else
             Debug.Log("WRONG!");
 
+        DisplayFeedback(3);
         StartCoroutine(TransitionToNextQuestion());
+    }
+
+    /**
+     * Method that displays the feedback after the player answers the question.
+     */
+    private void DisplayFeedback(int answerIndex) {
+        if (currentQuestion.answers[answerIndex].isCorrect)
+            correctAnswerText.text = "CORRECT!";
+        else
+            wrongAnswerText.text = "WRONG!";
     }
 }
