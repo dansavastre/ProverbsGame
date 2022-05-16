@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class SentenceCompletion : MonoBehaviour
@@ -14,6 +15,8 @@ public class SentenceCompletion : MonoBehaviour
     private List<GameObject> buttons;
     [SerializeField]
     private List<TextMeshProUGUI> buttonTexts;
+    [SerializeField]
+    private GameObject nextQuestionButton;
 
     private static string correctProverb = "Don't look a gifted horse in the mouth";
 
@@ -37,6 +40,8 @@ public class SentenceCompletion : MonoBehaviour
         }
 
         sentence.text = answerProverb;
+
+        nextQuestionButton.SetActive(false);
     }
 
     private void Update()
@@ -116,6 +121,15 @@ public class SentenceCompletion : MonoBehaviour
         {
             ResultText.text = "Incorrect!";
         }
+        nextQuestionButton.SetActive(true);
+    }
+
+    public void LoadQuestion() 
+    {
+        // Query the db for the next question and display it to the user using the already implemented methods
+        // For now we will just show a message in the console
+        Debug.Log("Load next question");
+        SceneManager.LoadScene("FillBlankGame");
     }
 
 }
