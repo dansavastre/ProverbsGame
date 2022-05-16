@@ -71,13 +71,16 @@ public class DatabaseManager : MonoBehaviour
         Example.text = "";
     }
     
-    
+    // Use the proverb ID to fetch the phrase
     public IEnumerator GetPhrase(Action<string> onCallback)
     {
+        // Value of the data residing at the reference location
         var proverbData = dbReference.Child("proverbs").Child(proverbID).Child("phrase").GetValueAsync();
 
+        // Wait until the data is completely loaded before continuing
         yield return new WaitUntil(predicate: () => proverbData.IsCompleted);
 
+        // If there was data at location, take a snapshot of the data and invoke the callback
         if (proverbData != null)  
         {
             DataSnapshot snapshot = proverbData.Result;
@@ -85,6 +88,7 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
+    // See comments for GetPhrase
     public IEnumerator GetKeywords(Action<string> onCallback)
     {
         var proverbData = dbReference.Child("proverbs").Child(proverbID).Child("keywords").GetValueAsync();
@@ -98,6 +102,7 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
+    // See comments for GetPhrase
     public IEnumerator GetMeaning(Action<string> onCallback)
     {
         var proverbData = dbReference.Child("proverbs").Child(proverbID).Child("meaning").GetValueAsync();
@@ -111,6 +116,7 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
+    // See comments for GetPhrase
     public IEnumerator GetExample(Action<string> onCallback)
     {
         var proverbData = dbReference.Child("proverbs").Child(proverbID).Child("example").GetValueAsync();
@@ -124,6 +130,7 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
+    // Start a coroutine for each bit of data to make sure everything is loaded
     public void GetProverbInfo()
     {
         StartCoroutine(GetPhrase((string proverb) => 
