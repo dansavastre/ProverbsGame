@@ -13,6 +13,9 @@ public class SessionManager : MonoBehaviour
     // TextMeshPro input fields
     public TMP_InputField PlayerEmail;
 
+    // TextMeshPro buttons
+    public Button SessionButton;
+
     // Stores the reference location of the database
     private DatabaseReference dbReference;
 
@@ -25,6 +28,19 @@ public class SessionManager : MonoBehaviour
     {
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        // Make the button inactive
+        SessionButton.gameObject.SetActive(false);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (playerProficiency != null)
+        {
+            // Make the button active
+            SessionButton.gameObject.SetActive(true);
+        }
     }
 
     public void GetPlayerKey()
@@ -50,12 +66,12 @@ public class SessionManager : MonoBehaviour
         };
     }
 
-    public void GetPlayerProficiencies()
+    private void GetPlayerProficiencies()
     {
         dbReference.Child("proficiencies").Child(playerKey)
         .GetValueAsync().ContinueWith(task =>
         {
-            if  (task.IsFaulted)
+            if (task.IsFaulted)
             {
                 Debug.LogError("Task could not be completed.");
                 return;
@@ -65,7 +81,7 @@ public class SessionManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
                 string json = snapshot.GetRawJsonValue();
-                Proficiency playerProficiency = JsonUtility.FromJson<Proficiency>(json);
+                playerProficiency = JsonUtility.FromJson<Proficiency>(json);
                 Debug.Log(json);
             }
         });
