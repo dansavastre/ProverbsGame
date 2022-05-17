@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SessionManager : MonoBehaviour
@@ -19,9 +20,10 @@ public class SessionManager : MonoBehaviour
     // Stores the reference location of the database
     private DatabaseReference dbReference;
 
+    public static Proficiency playerProficiency;
+
     // Stores the player key
     private string playerKey;
-    private Proficiency playerProficiency;
 
     // Start is called before the first frame update
     void Start()
@@ -85,5 +87,10 @@ public class SessionManager : MonoBehaviour
                 Debug.Log(json);
             }
         });
+    }
+
+    public void NextScene()
+    {
+        SceneManager.LoadScene("Database Interaction");
     }
 }
