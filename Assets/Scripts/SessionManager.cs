@@ -91,6 +91,6 @@ public class SessionManager : MonoBehaviour
 
     public void NextScene()
     {
-        SceneManager.LoadScene("Database Interaction");
+        SceneManager.LoadScene("FillBlankGame");
     }
 }

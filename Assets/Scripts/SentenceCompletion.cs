@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -18,9 +19,12 @@ public class SentenceCompletion : MonoBehaviour
     [SerializeField]
     private GameObject nextQuestionButton;
 
-    private static string correctProverb = "Don't look a gifted horse in the mouth";
+    private static Proficiency playerProficiency;
+    private Selector selector;
+    private Proverb nextProverb;
 
-    private string answerProverb = correctProverb;
+    private static string correctProverb;
+    private string answerProverb;
 
     List<string> keyWords = new List<string> { "horse", "mouth" };
     List<string> allWords = new List<string> { "horse", "mouth", "turtle", "Never", "Don't"};
@@ -29,10 +33,22 @@ public class SentenceCompletion : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerProficiency = SessionManager.playerProficiency;
+        selector = new Selector(playerProficiency);
+        nextProverb = selector.GetNextProverb();
+
+        correctProverb = "Don't look a gifted horse in the mouth";
+        answerProverb = correctProverb;
+
         foreach (string v in keyWords)
         {
             answerProverb = answerProverb.Replace(v, "...");
         }
+
+        // foreach (string v in nextProverb.keywords)
+        // {
+        //     answerProverb = answerProverb.Replace(v, "...");
+        // }
 
         for(int i = 0; i < buttonTexts.Count; i++)
         {
@@ -42,6 +58,12 @@ public class SentenceCompletion : MonoBehaviour
         sentence.text = answerProverb;
 
         nextQuestionButton.SetActive(false);
+    }
+
+    private void GetProverb()
+    {
+        correctProverb = nextProverb.phrase;
+        answerProverb = correctProverb;
     }
 
     private void Update()
@@ -131,5 +153,4 @@ public class SentenceCompletion : MonoBehaviour
         Debug.Log("Load next question");
         SceneManager.LoadScene("FillBlankGame");
     }
-
 }
