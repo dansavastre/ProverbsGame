@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-guid: 19b8766d55e795b4085dec3a1bc33372
-=======
-guid: 246b37395a398b945982d8bce82efba5
->>>>>>> sentence-completion-game
+guid: ce51c8e33b734b4db6086586558c53a3
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
