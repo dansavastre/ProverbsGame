@@ -20,15 +20,22 @@ public class SessionManager : MonoBehaviour
     // Stores the reference location of the database
     private DatabaseReference dbReference;
 
-    // Stores the current player proficiency
+    // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
+    public static Proficiency newProficiency;
+    public static int wrongAnswers;
 
     // Stores the player key
-    private string playerKey;
+    private static string playerKey;
 
     // Start is called before the first frame update
     void Start()
     {
+        // Reset the player proficiency
+        playerProficiency = null;
+        newProficiency = new Proficiency();
+        wrongAnswers = 0;
+
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
 
@@ -44,6 +51,21 @@ public class SessionManager : MonoBehaviour
             // Make the button active
             SessionButton.gameObject.SetActive(true);
         }
+    }
+
+    public static void WrongAnswer()
+    {
+        wrongAnswers++;
+    }
+
+    public static void RightAnswer()
+    {
+        wrongAnswers = 0;
+    }
+
+    public static string PlayerKey()
+    {
+        return playerKey;
     }
 
     // Fetches the key of the current player

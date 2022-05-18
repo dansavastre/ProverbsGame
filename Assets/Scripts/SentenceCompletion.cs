@@ -24,6 +24,7 @@ public class SentenceCompletion : MonoBehaviour
 
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
+    public static Proficiency newProficiency;
     private Proverb nextProverb;
     private DatabaseReference dbReference;
     private string currentType;
@@ -40,9 +41,10 @@ public class SentenceCompletion : MonoBehaviour
     {
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         playerProficiency = SessionManager.playerProficiency;
+        newProficiency = SessionManager.newProficiency;
         currentKey = GetNextKey();
 
-        // TODO: Move this to its own script folder in the future
+        // TODO: Move this to its own script file in the future
         // This is hard because of the asynchronous calls to the database
 
         // Goes to the 'proverbs' database table and searches for the key
@@ -190,30 +192,73 @@ public class SentenceCompletion : MonoBehaviour
         if(playerProverb.Equals(correctProverb))
         {
             ResultText.text = "Correct!";
-            switch (currentType)
-            {
-                case "apprentice":
-                    playerProficiency.apprentice.Remove(currentKey);
-                    break;
-                case "journeyman":
-                    playerProficiency.journeyman.Remove(currentKey);
-                    break;
-                case "expert":
-                    playerProficiency.expert.Remove(currentKey);
-                    break;
-                case "master":
-                    playerProficiency.master.Remove(currentKey);
-                    break;
-                default:
-                    Debug.Log("Invalid type.");
-                    break;
-            }
+            UpdateProficiency();
+            SessionManager.RightAnswer();
         }
         else 
         {
             ResultText.text = "Incorrect!";
+            SessionManager.WrongAnswer();
         }
         nextQuestionButton.SetActive(true);
+    }
+
+    private void UpdateProficiency()
+    {
+        switch (currentType)
+        {
+            case "apprentice":
+                playerProficiency.apprentice.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.journeyman.Add(currentKey);
+                    Debug.Log(currentKey + " moved to journeyman!");
+                } else 
+                {
+                    newProficiency.apprentice.Add(currentKey);
+                    Debug.Log(currentKey + " stayed in apprentice...");
+                }
+                break;
+            case "journeyman":
+                playerProficiency.journeyman.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.expert.Add(currentKey);
+                    Debug.Log(currentKey + " moved to expert!");
+                } else 
+                {
+                    newProficiency.apprentice.Add(currentKey);
+                    Debug.Log(currentKey + " moved to apprentice...");
+                }
+                break;
+            case "expert":
+                playerProficiency.expert.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.master.Add(currentKey);
+                    Debug.Log(currentKey + " moved to master!");
+                } else 
+                {
+                    newProficiency.journeyman.Add(currentKey);
+                    Debug.Log(currentKey + " moved to journeyman...");
+                }
+                break;
+            case "master":
+                playerProficiency.master.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.master.Add(currentKey);
+                    Debug.Log(currentKey + " stayed in master!");
+                } else 
+                {
+                    newProficiency.expert.Add(currentKey);
+                    Debug.Log(currentKey + " moved to expert...");
+                }
+                break;
+            default:
+                Debug.Log("Invalid type.");
+                break;
+        }
     }
 
     public void LoadQuestion() 
@@ -221,6 +266,8 @@ public class SentenceCompletion : MonoBehaviour
         // Query the db for the next question and display it to the user using the already implemented methods
         // For now we will just show a message in the console
         if (GetNextKey() == null) {
+            string json = JsonUtility.ToJson(newProficiency);
+            dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
             SceneManager.LoadScene("Menu");
             return;
         }
