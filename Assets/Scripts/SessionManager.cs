@@ -20,6 +20,7 @@ public class SessionManager : MonoBehaviour
     // Stores the reference location of the database
     private DatabaseReference dbReference;
 
+    // Stores the current player proficiency
     public static Proficiency playerProficiency;
 
     // Stores the player key
@@ -45,8 +46,10 @@ public class SessionManager : MonoBehaviour
         }
     }
 
+    // Fetches the key of the current player
     public void GetPlayerKey()
     {
+        // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(PlayerEmail.text)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
         {
@@ -56,20 +59,26 @@ public class SessionManager : MonoBehaviour
                 return;
             }
 
+            // Check to see if there is at least one result
             if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
+                // Unity does not know we expect exactly one result, so we must iterate 
                 foreach (var childSnapshot in args.Snapshot.Children)
                 {
+                    // Get the key of the current database entry
                     playerKey = childSnapshot.Key;
                     Debug.Log(childSnapshot.Key);
+                    // Use this key to fetch the corresponding player proficiency
                     GetPlayerProficiencies();
                 }
             }
         };
     }
 
+    // Fetches the proficiency of a player 
     private void GetPlayerProficiencies()
     {
+        // Goes to the 'proficiencies' database table and searches for the key
         dbReference.Child("proficiencies").Child(playerKey)
         .GetValueAsync().ContinueWith(task =>
         {
@@ -81,7 +90,9 @@ public class SessionManager : MonoBehaviour
             
             else if (task.IsCompleted)
             {
+                // Take a snapshot of the database entry
                 DataSnapshot snapshot = task.Result;
+                // Convert the JSON back to a Proficiency object
                 string json = snapshot.GetRawJsonValue();
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
                 Debug.Log(json);
@@ -89,6 +100,7 @@ public class SessionManager : MonoBehaviour
         });
     }
 
+    // Loads the next scene
     public void NextScene()
     {
         SceneManager.LoadScene("FillBlankGame");
