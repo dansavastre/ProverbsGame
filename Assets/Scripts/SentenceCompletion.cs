@@ -113,7 +113,6 @@ public class SentenceCompletion : MonoBehaviour
             currentType = "master";
         } else 
         {
-            // TODO: This causes an error, switch back to the menu instead
             Debug.Log("Session complete.");
             return null;
         }
@@ -221,6 +220,10 @@ public class SentenceCompletion : MonoBehaviour
     {
         // Query the db for the next question and display it to the user using the already implemented methods
         // For now we will just show a message in the console
+        if (GetNextKey() == null) {
+            SceneManager.LoadScene("Menu");
+            return;
+        }
         Debug.Log("Load next question");
         SceneManager.LoadScene("FillBlankGame");
     }
