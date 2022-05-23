@@ -4,11 +4,11 @@ public class ImageMCQuestion : Question
 {
     private Texture2D image = new Texture2D(2, 2);
 
-    public ImageMCQuestion(string text, Answer[] answers, byte[] imageBytes)
+    public ImageMCQuestion(Answer[] answers, byte[] imageBytes)
     {
-        this.text = text;
+        this.text = "";
         this.answers = answers;
-        this.image.LoadImage(imageBytes);
+        image.LoadImage(imageBytes);
     }
 
     public Texture2D Image
