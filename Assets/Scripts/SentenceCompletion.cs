@@ -1,9 +1,13 @@
+using Firebase;
+using Firebase.Database;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class SentenceCompletion : MonoBehaviour
 {
@@ -18,18 +22,64 @@ public class SentenceCompletion : MonoBehaviour
     [SerializeField]
     private GameObject nextQuestionButton;
 
-    private static string correctProverb = "Don't look a gifted horse in the mouth";
+    // Stores information fetched from the database
+    public static Proficiency playerProficiency;
+    public static Proficiency newProficiency;
+    private Proverb nextProverb;
+    private DatabaseReference dbReference;
+    private string currentType;
+    private string currentKey;
 
-    private string answerProverb = correctProverb;
+    private static string correctProverb;
+    private string answerProverb;
 
-    List<string> keyWords = new List<string> { "horse", "mouth" };
-    List<string> allWords = new List<string> { "horse", "mouth", "turtle", "Never", "Don't"};
+    List<string> allWords;
     public string LastClickedWord;
 
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
-        foreach (string v in keyWords)
+        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+        playerProficiency = SessionManager.playerProficiency;
+        newProficiency = SessionManager.newProficiency;
+        currentKey = GetNextKey();
+
+        // TODO: Move this to its own script file in the future
+        // This is hard because of the asynchronous calls to the database
+
+        // Goes to the 'proverbs' database table and searches for the key
+        await dbReference.Child("proverbs").Child(currentKey)
+        .GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Task could not be completed.");
+                return;
+            }
+            
+            else if (task.IsCompleted)
+            {
+                // Take a snapshot of the database entry
+                DataSnapshot snapshot = task.Result;
+                // Convert the JSON back to a Proverb object
+                string json = snapshot.GetRawJsonValue();
+                nextProverb = JsonUtility.FromJson<Proverb>(json);
+                Debug.Log(json);
+            }
+        });
+
+        // Set the variables
+        correctProverb = nextProverb.phrase;
+        answerProverb = correctProverb;
+
+        // Add the keywords to allwords, and add some flukes
+        allWords = nextProverb.keywords;
+        allWords.Add("frog");
+        allWords.Add("box");
+        allWords.Add("loses");
+        allWords.Add("mediocre");
+
+        foreach (string v in nextProverb.keywords)
         {
             answerProverb = answerProverb.Replace(v, "...");
         }
@@ -42,6 +92,33 @@ public class SentenceCompletion : MonoBehaviour
         sentence.text = answerProverb;
 
         nextQuestionButton.SetActive(false);
+    }
+
+    // Get the key for the next proverb in the session in chronological order
+    private string GetNextKey()
+    {
+        if (playerProficiency.apprentice.Count > 0)
+        {
+            currentKey = playerProficiency.apprentice.First();
+            currentType = "apprentice";
+        } else if (playerProficiency.journeyman.Count > 0)
+        {
+            currentKey = playerProficiency.journeyman.First();
+            currentType = "journeyman";
+        } else if (playerProficiency.expert.Count > 0)
+        {
+            currentKey = playerProficiency.expert.First();
+            currentType = "expert";
+        } else if (playerProficiency.master.Count > 0)
+        {
+            currentKey = playerProficiency.master.First();
+            currentType = "master";
+        } else 
+        {
+            Debug.Log("Session complete.");
+            return null;
+        }
+        return currentKey;
     }
 
     private void Update()
@@ -111,25 +188,90 @@ public class SentenceCompletion : MonoBehaviour
 
     public void CheckAnswer()
     {
-        //Debug.Log(answerProverb.Replace("<u><b>", "").Replace("</u></b>", ""));
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
         if(playerProverb.Equals(correctProverb))
         {
             ResultText.text = "Correct!";
+            UpdateProficiency();
+            SessionManager.RightAnswer();
         }
         else 
         {
             ResultText.text = "Incorrect!";
+            SessionManager.WrongAnswer();
         }
         nextQuestionButton.SetActive(true);
+    }
+
+    private void UpdateProficiency()
+    {
+        switch (currentType)
+        {
+            case "apprentice":
+                playerProficiency.apprentice.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.journeyman.Add(currentKey);
+                    Debug.Log(currentKey + " moved to journeyman!");
+                } else 
+                {
+                    newProficiency.apprentice.Add(currentKey);
+                    Debug.Log(currentKey + " stayed in apprentice...");
+                }
+                break;
+            case "journeyman":
+                playerProficiency.journeyman.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.expert.Add(currentKey);
+                    Debug.Log(currentKey + " moved to expert!");
+                } else 
+                {
+                    newProficiency.apprentice.Add(currentKey);
+                    Debug.Log(currentKey + " moved to apprentice...");
+                }
+                break;
+            case "expert":
+                playerProficiency.expert.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.master.Add(currentKey);
+                    Debug.Log(currentKey + " moved to master!");
+                } else 
+                {
+                    newProficiency.journeyman.Add(currentKey);
+                    Debug.Log(currentKey + " moved to journeyman...");
+                }
+                break;
+            case "master":
+                playerProficiency.master.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.master.Add(currentKey);
+                    Debug.Log(currentKey + " stayed in master!");
+                } else 
+                {
+                    newProficiency.expert.Add(currentKey);
+                    Debug.Log(currentKey + " moved to expert...");
+                }
+                break;
+            default:
+                Debug.Log("Invalid type.");
+                break;
+        }
     }
 
     public void LoadQuestion() 
     {
         // Query the db for the next question and display it to the user using the already implemented methods
         // For now we will just show a message in the console
+        if (GetNextKey() == null) {
+            string json = JsonUtility.ToJson(newProficiency);
+            dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
+            SceneManager.LoadScene("Menu");
+            return;
+        }
         Debug.Log("Load next question");
         SceneManager.LoadScene("FillBlankGame");
     }
-
 }
