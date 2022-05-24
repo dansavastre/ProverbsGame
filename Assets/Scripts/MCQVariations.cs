@@ -12,31 +12,21 @@ using Random = UnityEngine.Random;
 
 public class MCQVariations : MonoBehaviour
 {
-    public Question[] questions;
-    private static List<Question> notAnswered;
-    private Question currentQuestion;
-    private Answer selectedAnswer;
+    [SerializeField] private TextMeshProUGUI factText;
+    [SerializeField] private Button answerButton0, answerButton1, answerButton2, answerButton3;
+    [SerializeField] private TextMeshProUGUI resultText;
+    [SerializeField] private GameObject nextQuestionButton;
+
     private DatabaseReference dbReference;
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
+    private Proverb nextProverb;
     private string currentType;
     private string currentKey;
-    private Proverb nextProverb;
 
-    [SerializeField]
-    private TextMeshProUGUI factText;
-
-    [SerializeField]
-    private TextMeshProUGUI answerText1, answerText2, answerText3, answerText4;
-
-    [SerializeField]
-    private TextMeshProUGUI correctAnswerText, wrongAnswerText;
-
-    [SerializeField]
-    private float delayBetweenQuestions = 1f;
+    private Question currentQuestion;
 
     public enum Modes { ProverbMeaning, MeaningProverb, ExampleSentence}
-
     public Modes gamemode;
 
     async void Start()
@@ -47,49 +37,24 @@ public class MCQVariations : MonoBehaviour
         currentKey = GetNextKey();
 
         await dbReference.Child("proverbs").Child(currentKey)
-            .GetValueAsync().ContinueWith(task =>
+        .GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
             {
-                if (task.IsFaulted)
-                {
-                    Debug.LogError("Task could not be completed.");
-                    return;
-                }
+                Debug.LogError("Task could not be completed.");
+                return;
+            }
 
-                else if (task.IsCompleted)
-                {
-                    // Take a snapshot of the database entry
-                    DataSnapshot snapshot = task.Result;
-                    // Convert the JSON back to a Proverb object
-                    string json = snapshot.GetRawJsonValue();
-                    nextProverb = JsonUtility.FromJson<Proverb>(json);
-                    Debug.Log(json);
-                }
-            });
-
-        //Create question (placeholder)
-        Question qst = new Question();
-        Answer ans1 = new Answer();
-        ans1.text = nextProverb.meaning;
-        ans1.isCorrect = true;
-
-        Answer ans2 = new Answer();
-        ans2.text = "b";
-        ans2.isCorrect = false;
-
-        Answer ans3 = new Answer();
-        ans3.text = "c";
-        ans3.isCorrect = false;
-
-        Answer ans4 = new Answer();
-        ans4.text = "d";
-        ans4.isCorrect = false;
-
-        Answer[] answers = {ans1, ans2, ans3, ans4};
-
-        qst.answers = answers;
-        qst.text = nextProverb.phrase;
-
-        currentQuestion = qst;
+            else if (task.IsCompleted)
+            {
+                // Take a snapshot of the database entry
+                DataSnapshot snapshot = task.Result;
+                // Convert the JSON back to a Proverb object
+                string json = snapshot.GetRawJsonValue();
+                nextProverb = JsonUtility.FromJson<Proverb>(json);
+                Debug.Log(json);
+            }
+        });
 
         if (gamemode == Modes.ExampleSentence)
         {
@@ -102,12 +67,8 @@ public class MCQVariations : MonoBehaviour
             //questions = load questions
         }
 
-
-        // only initialize the notAnswered list at the beginning, not on every scene load
-        if (notAnswered == null || notAnswered.Count == 0)
-            notAnswered = questions.ToList<Question>();
-
         SetCurrentQuestion();
+        nextQuestionButton.SetActive(false);
     }
 
     // Get the key for the next proverb in the session in chronological order
@@ -146,44 +107,138 @@ public class MCQVariations : MonoBehaviour
      */
     private void SetCurrentQuestion()
     {
-        int randomQuestionIndex = Random.Range(0, notAnswered.Count - 1);
-        //currentQuestion = notAnswered[randomQuestionIndex];
+        // Create question and answer objects from proverb
+        currentQuestion = new Question();
+
+        Answer answer0 = new Answer();
+        answer0.text = nextProverb.meaning;
+        answer0.isCorrect = true;
+
+        Answer answer1 = new Answer();
+        answer1.text = nextProverb.otherMeanings[0];
+        answer1.isCorrect = false;
+
+        Answer answer2 = new Answer();
+        answer2.text = nextProverb.otherMeanings[1];
+        answer2.isCorrect = false;
+
+        Answer answer3 = new Answer();
+        answer3.text = nextProverb.otherMeanings[1];
+        answer3.isCorrect = false;
+
+        Answer[] answers = {answer0, answer1, answer2, answer3};
+        currentQuestion.answers = answers;
 
         factText.text = currentQuestion.text;
-        answerText1.text = currentQuestion.answers[0].text;
-        answerText2.text = currentQuestion.answers[1].text;
-        answerText3.text = currentQuestion.answers[2].text;
-        answerText4.text = currentQuestion.answers[3].text;
+        answerButton0.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[0].text;
+        answerButton1.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[1].text;
+        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[2].text;
+        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[3].text;
     }
 
-    IEnumerator TransitionToNextQuestion()
+    /**
+     * Method that deactivates all answer buttons.
+     */
+    private void DeactivateAnswerButtons()
     {
-        notAnswered.Remove(currentQuestion); // remove the question from the list
-
-        yield return new WaitForSeconds(delayBetweenQuestions); // wait for a bit before transitioning to the next question
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // load the scene with the index of our current scene (i.e. restart)
-    }
-
-    public void UserSelected(int index)
-    {
-        if (currentQuestion.answers[index].isCorrect)
-            Debug.Log("CORRECT!");
-        else
-            Debug.Log("WRONG!");
-
-        DisplayFeedback(0);
-        StartCoroutine(TransitionToNextQuestion());
+        answerButton0.interactable = false;
+        answerButton1.interactable = false;
+        answerButton2.interactable = false;
+        answerButton3.interactable = false;
     }
 
     /**
      * Method that displays the feedback after the player answers the question.
      */
-    private void DisplayFeedback(int answerIndex)
+    public void CheckAnswer(int index)
     {
-        if (currentQuestion.answers[answerIndex].isCorrect)
-            correctAnswerText.text = "CORRECT!";
-        else
-            wrongAnswerText.text = "WRONG!";
+        if (currentQuestion.answers[index].isCorrect) 
+        {
+            resultText.text = "Correct!";
+            UpdateProficiency();
+            SessionManager.RightAnswer();
+        }
+        else 
+        {
+            resultText.text = "Incorrect!";
+            SessionManager.WrongAnswer();
+        }
+        DeactivateAnswerButtons();
+        nextQuestionButton.SetActive(true);
+    }
+
+    private void UpdateProficiency()
+    {
+        switch (currentType)
+        {
+            case "apprentice":
+                playerProficiency.apprentice.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.journeyman.Add(currentKey);
+                    Debug.Log(currentKey + " moved to journeyman!");
+                } else 
+                {
+                    newProficiency.apprentice.Add(currentKey);
+                    Debug.Log(currentKey + " stayed in apprentice...");
+                }
+                break;
+            case "journeyman":
+                playerProficiency.journeyman.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.expert.Add(currentKey);
+                    Debug.Log(currentKey + " moved to expert!");
+                } else 
+                {
+                    newProficiency.apprentice.Add(currentKey);
+                    Debug.Log(currentKey + " moved to apprentice...");
+                }
+                break;
+            case "expert":
+                playerProficiency.expert.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.master.Add(currentKey);
+                    Debug.Log(currentKey + " moved to master!");
+                } else 
+                {
+                    newProficiency.journeyman.Add(currentKey);
+                    Debug.Log(currentKey + " moved to journeyman...");
+                }
+                break;
+            case "master":
+                playerProficiency.master.Remove(currentKey);
+                if (SessionManager.wrongAnswers == 0)
+                {
+                    newProficiency.master.Add(currentKey);
+                    Debug.Log(currentKey + " stayed in master!");
+                } else 
+                {
+                    newProficiency.expert.Add(currentKey);
+                    Debug.Log(currentKey + " moved to expert...");
+                }
+                break;
+            default:
+                Debug.Log("Invalid type.");
+                break;
+        }
+    }
+
+    /**
+     * Method that loads the scene again and so loads another question.
+     */
+    public void NextQuestion()
+    {
+        // Query the db for the next question and display it to the user using the already implemented methods
+        // For now we will just show a message in the console
+        if (GetNextKey() == null) {
+            string json = JsonUtility.ToJson(newProficiency);
+            dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
+            SceneManager.LoadScene("Menu");
+            return;
+        }
+        Debug.Log("Load next question");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
