@@ -41,7 +41,7 @@ public class DatabaseManager : MonoBehaviour
         // Create a new key
         string proverbKey = dbReference.Child("proverbs").Push().Key;
         // Create a new proverb
-        Proverb newProverb = new Proverb(Proverb.text, ParseKeywords(Keywords.text), Meaning.text, Example.text, new List<string>{}, new List<string>{}, new List<string>{});
+        Proverb newProverb = new Proverb(Proverb.text, ParseKeywords(Keywords.text), Meaning.text, Example.text, "", new List<string>{}, new List<string>{}, new List<string>{});
         // Convert the proverb to JSON
         string proverbJson = JsonUtility.ToJson(newProverb);
         // Store the proverb in the database

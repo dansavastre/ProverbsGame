@@ -11,16 +11,11 @@ using UnityEngine.SceneManagement;
 
 public class SentenceCompletion : MonoBehaviour
 {
-    [SerializeField]
-    private TextMeshProUGUI sentence;
-    [SerializeField]
-    private TextMeshProUGUI ResultText;
-    [SerializeField]
-    private List<GameObject> buttons;
-    [SerializeField]
-    private List<TextMeshProUGUI> buttonTexts;
-    [SerializeField]
-    private GameObject nextQuestionButton;
+    [SerializeField] private TextMeshProUGUI sentence;
+    [SerializeField] private List<GameObject> buttons;
+    [SerializeField] private List<TextMeshProUGUI> buttonTexts;
+    [SerializeField] private TextMeshProUGUI resultText;
+    [SerializeField] private GameObject nextQuestionButton;
 
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
@@ -191,13 +186,13 @@ public class SentenceCompletion : MonoBehaviour
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
         if(playerProverb.Equals(correctProverb))
         {
-            ResultText.text = "Correct!";
+            resultText.text = "Correct!";
             UpdateProficiency();
             SessionManager.RightAnswer();
         }
         else 
         {
-            ResultText.text = "Incorrect!";
+            resultText.text = "Incorrect!";
             SessionManager.WrongAnswer();
         }
         nextQuestionButton.SetActive(true);
@@ -272,6 +267,6 @@ public class SentenceCompletion : MonoBehaviour
             return;
         }
         Debug.Log("Load next question");
-        SceneManager.LoadScene("FillBlankGame");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
