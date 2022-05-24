@@ -6,18 +6,9 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEngine.SceneManagement;
-
-using Firebase;
-using Firebase.Database;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class MCQVariations : MonoBehaviour
 {
@@ -28,15 +19,18 @@ public class MCQVariations : MonoBehaviour
     private DatabaseReference dbReference;
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
+    private string currentType;
+    private string currentKey;
+    private Proverb nextProverb;
 
     [SerializeField]
-    private Text factText;
+    private TextMeshProUGUI factText;
 
     [SerializeField]
     private TextMeshProUGUI answerText1, answerText2, answerText3, answerText4;
 
     [SerializeField]
-    private Text correctAnswerText, wrongAnswerText;
+    private TextMeshProUGUI correctAnswerText, wrongAnswerText;
 
     [SerializeField]
     private float delayBetweenQuestions = 1f;
@@ -72,6 +66,7 @@ public class MCQVariations : MonoBehaviour
                 }
             });
 
+        //Create question (placeholder)
         Question qst = new Question();
         Answer ans1 = new Answer();
         ans1.text = nextProverb.meaning;
@@ -92,6 +87,9 @@ public class MCQVariations : MonoBehaviour
         Answer[] answers = {ans1, ans2, ans3, ans4};
 
         qst.answers = answers;
+        qst.text = nextProverb.phrase;
+
+        currentQuestion = qst;
 
         if (gamemode == Modes.ExampleSentence)
         {
@@ -149,7 +147,7 @@ public class MCQVariations : MonoBehaviour
     private void SetCurrentQuestion()
     {
         int randomQuestionIndex = Random.Range(0, notAnswered.Count - 1);
-        currentQuestion = notAnswered[randomQuestionIndex];
+        //currentQuestion = notAnswered[randomQuestionIndex];
 
         factText.text = currentQuestion.text;
         answerText1.text = currentQuestion.answers[0].text;
