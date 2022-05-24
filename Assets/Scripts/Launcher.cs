@@ -41,4 +41,13 @@ public class Launcher : MonoBehaviourPunCallbacks {
         errorText.text = "Room Creation Failed: " + message;
         MenuManager.Instance.OpenMenu("Error");
     }
+
+    public void LeaveRoom() {
+        PhotonNetwork.LeaveRoom();
+        MenuManager.Instance.OpenMenu("Loading");
+    }
+
+    public override void OnLeftLobby() {
+        MenuManager.Instance.OpenMenu("Title");
+    }
 }
