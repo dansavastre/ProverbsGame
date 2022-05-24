@@ -1,3 +1,5 @@
+using Firebase;
+using Firebase.Database;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,12 +8,26 @@ using System.Linq;
 using TMPro;
 using UnityEngine.SceneManagement;
 
+using Firebase;
+using Firebase.Database;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 public class MCQVariations : MonoBehaviour
 {
     public Question[] questions;
     private static List<Question> notAnswered;
     private Question currentQuestion;
     private Answer selectedAnswer;
+    private DatabaseReference dbReference;
+    public static Proficiency playerProficiency;
+    public static Proficiency newProficiency;
 
     [SerializeField]
     private Text factText;
@@ -29,9 +45,55 @@ public class MCQVariations : MonoBehaviour
 
     public Modes gamemode;
 
-    private void Start()
+    async void Start()
     {
-        if(gamemode == Modes.ExampleSentence)
+        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+        playerProficiency = SessionManager.playerProficiency;
+        newProficiency = SessionManager.newProficiency;
+        currentKey = GetNextKey();
+
+        await dbReference.Child("proverbs").Child(currentKey)
+            .GetValueAsync().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("Task could not be completed.");
+                    return;
+                }
+
+                else if (task.IsCompleted)
+                {
+                    // Take a snapshot of the database entry
+                    DataSnapshot snapshot = task.Result;
+                    // Convert the JSON back to a Proverb object
+                    string json = snapshot.GetRawJsonValue();
+                    nextProverb = JsonUtility.FromJson<Proverb>(json);
+                    Debug.Log(json);
+                }
+            });
+
+        Question qst = new Question();
+        Answer ans1 = new Answer();
+        ans1.text = nextProverb.meaning;
+        ans1.isCorrect = true;
+
+        Answer ans2 = new Answer();
+        ans2.text = "b";
+        ans2.isCorrect = false;
+
+        Answer ans3 = new Answer();
+        ans3.text = "c";
+        ans3.isCorrect = false;
+
+        Answer ans4 = new Answer();
+        ans4.text = "d";
+        ans4.isCorrect = false;
+
+        Answer[] answers = {ans1, ans2, ans3, ans4};
+
+        qst.answers = answers;
+
+        if (gamemode == Modes.ExampleSentence)
         {
             //questions = load questions
         }else if(gamemode == Modes.MeaningProverb)
@@ -48,6 +110,37 @@ public class MCQVariations : MonoBehaviour
             notAnswered = questions.ToList<Question>();
 
         SetCurrentQuestion();
+    }
+
+    // Get the key for the next proverb in the session in chronological order
+    private string GetNextKey()
+    {
+        if (playerProficiency.apprentice.Count > 0)
+        {
+            currentKey = playerProficiency.apprentice.First();
+            currentType = "apprentice";
+        }
+        else if (playerProficiency.journeyman.Count > 0)
+        {
+            currentKey = playerProficiency.journeyman.First();
+            currentType = "journeyman";
+        }
+        else if (playerProficiency.expert.Count > 0)
+        {
+            currentKey = playerProficiency.expert.First();
+            currentType = "expert";
+        }
+        else if (playerProficiency.master.Count > 0)
+        {
+            currentKey = playerProficiency.master.First();
+            currentType = "master";
+        }
+        else
+        {
+            Debug.Log("Session complete.");
+            return null;
+        }
+        return currentKey;
     }
 
     /**
