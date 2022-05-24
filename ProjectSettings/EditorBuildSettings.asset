@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FillBlankGame.unity
     guid: 3ceac13bc2428734d9011e5c46da099f
+  - enabled: 1
+    path: Assets/Scenes/RecognizeImages.unity
+    guid: 62d4742ce6119384983b68a286b11043
   m_configObjects: {}

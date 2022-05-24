@@ -125,7 +125,6 @@ public class SessionManager : MonoBehaviour
     // Loads the next scene
     public void NextScene()
     {
-        SceneManager.LoadScene("FillBlankGame");
-        //SceneManager.LoadScene("MCQVariation");
+        SceneManager.LoadScene("RecognizeImages");
     }
 }

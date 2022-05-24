@@ -8,7 +8,7 @@ public class ImageMCQuestion : Question
     {
         this.text = "";
         this.answers = answers;
-        image.LoadImage(imageBytes);
+        //image.LoadImage(imageBytes);
     }
 
     public Texture2D Image

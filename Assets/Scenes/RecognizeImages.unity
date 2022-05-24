@@ -622,14 +622,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a929f3204a8cc549bb69e5323125fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  question: {fileID: 1310134708}
   image: {fileID: 689247322}
   answerButton0: {fileID: 1591219589}
   answerButton1: {fileID: 324516918}
   answerButton2: {fileID: 128465628}
   answerButton3: {fileID: 1759394062}
+  resultText: {fileID: 174113382}
   nextQuestionButton: {fileID: 2090833226}
-  correctOrWrongAnswerText: {fileID: 174113382}
 --- !u!224 &1187421181 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3254944445771754655, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
@@ -1013,7 +1012,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1034219354}
         m_TargetAssemblyTypeName: RecognizingImageGameManager, Assembly-CSharp
-        m_MethodName: UserSelectedNextQuestion
+        m_MethodName: NextQuestion
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1069,12 +1068,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 1034219350}
     m_Modifications:
     - target: {fileID: 619844315033874708, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 619844315033874708, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1034219354}
     - target: {fileID: 619844315033874708, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: UserSelectedThird
+      value: CheckAnswer
+      objectReference: {fileID: 0}
+    - target: {fileID: 619844315033874708, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3254944445771754655, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
       propertyPath: m_Pivot.x
@@ -1161,24 +1168,40 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4770154330536243806, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770154330536243806, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1034219354}
     - target: {fileID: 4770154330536243806, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: UserSelectedSecond
+      value: CheckAnswer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770154330536243806, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5478440614275914458, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
       propertyPath: m_Name
       value: MCQAnswersButtons
       objectReference: {fileID: 0}
     - target: {fileID: 6490451315887339510, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6490451315887339510, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1034219354}
     - target: {fileID: 6490451315887339510, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: UserSelectedFourth
+      value: CheckAnswer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6490451315887339510, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8168632605566471272, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
       propertyPath: m_Enabled
@@ -1189,8 +1212,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8168632605566471272, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168632605566471272, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1034219354}
+    - target: {fileID: 8168632605566471272, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CheckAnswer
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
