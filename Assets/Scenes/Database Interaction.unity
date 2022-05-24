@@ -2074,7 +2074,6 @@ MonoBehaviour:
   KeywordsText: {fileID: 943214759}
   MeaningText: {fileID: 815253497}
   ExampleText: {fileID: 538048939}
-  proverbID: -N1sWun7aYI7-TyYZQRz
 --- !u!4 &1224738359
 Transform:
   m_ObjectHideFlags: 0

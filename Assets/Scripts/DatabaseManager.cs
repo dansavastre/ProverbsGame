@@ -41,7 +41,7 @@ public class DatabaseManager : MonoBehaviour
         // Create a new key
         string proverbKey = dbReference.Child("proverbs").Push().Key;
         // Create a new proverb
-        Proverb newProverb = new Proverb(Proverb.text, ParseKeywords(Keywords.text), Meaning.text, Example.text);
+        Proverb newProverb = new Proverb(Proverb.text, ParseKeywords(Keywords.text), Meaning.text, Example.text, new List<string>{}, new List<string>{}, new List<string>{});
         // Convert the proverb to JSON
         string proverbJson = JsonUtility.ToJson(newProverb);
         // Store the proverb in the database
@@ -133,21 +133,22 @@ public class DatabaseManager : MonoBehaviour
     // Start a coroutine for each bit of data to make sure everything is loaded
     public void GetProverbInfo()
     {
+        // Coroutine for retrieving the proverb
         StartCoroutine(GetPhrase((string proverb) => 
         {
             ProverbText.text = "Proverb: " + proverb;
         }));
-
+        // Coroutine for retrieving the keywords
         StartCoroutine(GetKeywords((string keywords) => 
         {
             KeywordsText.text = "Keywords: " + keywords;
         }));
-
+        // Coroutine for retrieving the meaning
         StartCoroutine(GetMeaning((string meaning) => 
         {
             MeaningText.text = "Meaning: " + meaning;
         }));
-
+        // Coroutine for retrieving the example
         StartCoroutine(GetExample((string example) => 
         {
             ExampleText.text = "Example: " + example;
