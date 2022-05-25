@@ -120,11 +120,28 @@ public class SessionManager : MonoBehaviour
         });
     }
 
-    // Loads the next scene
+    // Loads the first scene
     public void NextScene()
     {
-        SceneManager.LoadScene("FillBlanks");
-        // SceneManager.LoadScene("MultipleChoice");
-        // SceneManager.LoadScene("RecognizeImage");
+        if (playerProficiency.apprentice.Count > 0)
+        {
+            SceneManager.LoadScene("RecognizeImage");
+        }
+        else if (playerProficiency.journeyman.Count > 0)
+        {
+            SceneManager.LoadScene("MultipleChoice");
+        }
+        else if (playerProficiency.expert.Count > 0)
+        {
+            SceneManager.LoadScene("FillBlanks");
+        }
+        else if (playerProficiency.master.Count > 0)
+        {
+            SceneManager.LoadScene("MultipleChoice");
+        }
+        else
+        {
+            Debug.Log("No proverbs available.");
+        }
     }
 }

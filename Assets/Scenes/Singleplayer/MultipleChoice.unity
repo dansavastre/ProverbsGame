@@ -187,8 +187,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1185331186}
-        m_TargetAssemblyTypeName: MCQVariations, Assembly-CSharp
-        m_MethodName: NextQuestion
+        m_TargetAssemblyTypeName: SingleplayerManager, Assembly-CSharp
+        m_MethodName: LoadQuestion
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -591,12 +591,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questionText: {fileID: 2077129859}
+  resultText: {fileID: 1089021092}
+  nextQuestionButton: {fileID: 344344810}
   answerButton0: {fileID: 1702616293}
   answerButton1: {fileID: 1702616292}
   answerButton2: {fileID: 1702616291}
   answerButton3: {fileID: 1702616289}
-  resultText: {fileID: 1089021092}
-  nextQuestionButton: {fileID: 344344810}
   gamemode: 0
 --- !u!1 &1366854084
 GameObject:

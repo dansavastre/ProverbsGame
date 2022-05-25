@@ -622,13 +622,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a929f3204a8cc549bb69e5323125fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  questionText: {fileID: 1310134708}
+  resultText: {fileID: 174113382}
+  nextQuestionButton: {fileID: 2090833226}
   image: {fileID: 689247322}
   answerButton0: {fileID: 1591219589}
   answerButton1: {fileID: 324516918}
   answerButton2: {fileID: 128465628}
   answerButton3: {fileID: 1759394062}
-  resultText: {fileID: 174113382}
-  nextQuestionButton: {fileID: 2090833226}
 --- !u!224 &1187421181 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3254944445771754655, guid: c8ede238bf2faf744be648e7fd1b5b2b, type: 3}
@@ -1011,8 +1012,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1034219354}
-        m_TargetAssemblyTypeName: RecognizeImageManager, Assembly-CSharp
-        m_MethodName: NextQuestion
+        m_TargetAssemblyTypeName: SingleplayerManager, Assembly-CSharp
+        m_MethodName: LoadQuestion
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

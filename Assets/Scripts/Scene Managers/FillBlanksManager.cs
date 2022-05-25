@@ -9,39 +9,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class FillBlanksManager : MonoBehaviour
+public class FillBlanksManager : SingleplayerManager
 {
     // UI elements
-    [SerializeField] private TextMeshProUGUI sentence;
     [SerializeField] private List<GameObject> buttons;
     [SerializeField] private List<TextMeshProUGUI> buttonTexts;
-    [SerializeField] private TextMeshProUGUI resultText;
-    [SerializeField] private GameObject nextQuestionButton;
 
-    // Stores information fetched from the database
-    public static Proficiency playerProficiency;
-    public static Proficiency newProficiency;
-    private Proverb nextProverb;
-    private DatabaseReference dbReference;
-    private string currentType;
-    private string currentKey;
-
+    // Variables
     private static string correctProverb;
     private string answerProverb;
-
     List<string> allWords;
     public string LastClickedWord;
 
     // Start is called before the first frame update
     async void Start()
     {
-        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-        playerProficiency = SessionManager.playerProficiency;
-        newProficiency = SessionManager.newProficiency;
-        currentKey = GetNextKey();
-
-        // TODO: Move this to its own script file in the future
-        // This is hard because of the asynchronous calls to the database
+        base.Start();
 
         // Goes to the 'proverbs' database table and searches for the key
         await dbReference.Child("proverbs").Child(currentKey)
@@ -85,47 +68,18 @@ public class FillBlanksManager : MonoBehaviour
             buttonTexts[i].text = allWords[i];
         }
 
-        sentence.text = answerProverb;
-
-        nextQuestionButton.SetActive(false);
-    }
-
-    // Get the key for the next proverb in the session in chronological order
-    private string GetNextKey()
-    {
-        if (playerProficiency.apprentice.Count > 0)
-        {
-            currentKey = playerProficiency.apprentice.First();
-            currentType = "apprentice";
-        } else if (playerProficiency.journeyman.Count > 0)
-        {
-            currentKey = playerProficiency.journeyman.First();
-            currentType = "journeyman";
-        } else if (playerProficiency.expert.Count > 0)
-        {
-            currentKey = playerProficiency.expert.First();
-            currentType = "expert";
-        } else if (playerProficiency.master.Count > 0)
-        {
-            currentKey = playerProficiency.master.First();
-            currentType = "master";
-        } else 
-        {
-            Debug.Log("Session complete.");
-            return null;
-        }
-        return currentKey;
+        questionText.text = answerProverb;
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            var wordIndex = TMP_TextUtilities.FindIntersectingWord(sentence, Input.mousePosition, null);
+            var wordIndex = TMP_TextUtilities.FindIntersectingWord(questionText, Input.mousePosition, null);
 
             if (wordIndex != -1)
             {
-                LastClickedWord = sentence.textInfo.wordInfo[wordIndex].GetWord();
+                LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
 
                 if (allWords.Contains(LastClickedWord))
                 {
@@ -149,7 +103,7 @@ public class FillBlanksManager : MonoBehaviour
     {
         word = "<u><b>" + word + "</u></b>";
         answerProverb = ReplaceFirst(answerProverb, "...", word);
-        sentence.text = answerProverb;
+        questionText.text = answerProverb;
     }
 
     private void removeWord(string word)
@@ -161,7 +115,7 @@ public class FillBlanksManager : MonoBehaviour
         }
         word = "<u><b>" + word + "</u></b>";
         answerProverb = ReplaceFirst(answerProverb, word, "...");
-        sentence.text = answerProverb;
+        questionText.text = answerProverb;
     }
 
     public string ReplaceFirst(string text, string search, string replace)
@@ -182,92 +136,11 @@ public class FillBlanksManager : MonoBehaviour
         }
     }
 
+    // Display the feedback after the player answers the question
     public void CheckAnswer()
     {
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
-        if(playerProverb.Equals(correctProverb))
-        {
-            resultText.text = "Correct!";
-            UpdateProficiency();
-            SessionManager.RightAnswer();
-        }
-        else 
-        {
-            resultText.text = "Incorrect!";
-            SessionManager.WrongAnswer();
-        }
-        nextQuestionButton.SetActive(true);
-    }
-
-    private void UpdateProficiency()
-    {
-        switch (currentType)
-        {
-            case "apprentice":
-                playerProficiency.apprentice.Remove(currentKey);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    newProficiency.journeyman.Add(currentKey);
-                    Debug.Log(currentKey + " moved to journeyman!");
-                } else 
-                {
-                    newProficiency.apprentice.Add(currentKey);
-                    Debug.Log(currentKey + " stayed in apprentice...");
-                }
-                break;
-            case "journeyman":
-                playerProficiency.journeyman.Remove(currentKey);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    newProficiency.expert.Add(currentKey);
-                    Debug.Log(currentKey + " moved to expert!");
-                } else 
-                {
-                    newProficiency.apprentice.Add(currentKey);
-                    Debug.Log(currentKey + " moved to apprentice...");
-                }
-                break;
-            case "expert":
-                playerProficiency.expert.Remove(currentKey);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    newProficiency.master.Add(currentKey);
-                    Debug.Log(currentKey + " moved to master!");
-                } else 
-                {
-                    newProficiency.journeyman.Add(currentKey);
-                    Debug.Log(currentKey + " moved to journeyman...");
-                }
-                break;
-            case "master":
-                playerProficiency.master.Remove(currentKey);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    newProficiency.master.Add(currentKey);
-                    Debug.Log(currentKey + " stayed in master!");
-                } else 
-                {
-                    newProficiency.expert.Add(currentKey);
-                    Debug.Log(currentKey + " moved to expert...");
-                }
-                break;
-            default:
-                Debug.Log("Invalid type.");
-                break;
-        }
-    }
-
-    public void LoadQuestion() 
-    {
-        // Query the db for the next question and display it to the user using the already implemented methods
-        // For now we will just show a message in the console
-        if (GetNextKey() == null) {
-            string json = JsonUtility.ToJson(newProficiency);
-            dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
-            SceneManager.LoadScene("Menu");
-            return;
-        }
-        Debug.Log("Load next question");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        DisplayFeedback(playerProverb.Equals(correctProverb));
+        // TODO: Disable the ability to click and check new answers
     }
 }
