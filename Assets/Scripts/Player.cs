@@ -13,4 +13,21 @@ public class Player
         this.email = email;
         this.proficiency = proficiency;
     }
+
+    /**
+     * Method that checks the equality of the Player object with another object.
+     */
+    public override bool Equals(object obj) {
+        if (obj == null)
+            return false;
+        if (obj.GetType().Equals(this.GetType()))
+            return false;
+        if (obj == this)
+            return true;
+        
+        Player other = (Player)obj;
+        return this.playerName == other.playerName 
+            && this.email == other.email 
+            && this.proficiency == other.proficiency;
+    }
 }
