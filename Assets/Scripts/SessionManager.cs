@@ -11,11 +11,9 @@ using UnityEngine.UI;
 
 public class SessionManager : MonoBehaviour
 {
-    // TextMeshPro input fields
-    public TMP_InputField PlayerEmail;
-
-    // TextMeshPro buttons
-    public Button SessionButton;
+    // UI elements
+    [SerializeField] public TMP_InputField PlayerEmail;
+    [SerializeField] public Button SessionButton;
 
     // Stores the reference location of the database
     private DatabaseReference dbReference;
@@ -122,9 +120,28 @@ public class SessionManager : MonoBehaviour
         });
     }
 
-    // Loads the next scene
+    // Loads the first scene
     public void NextScene()
     {
-        SceneManager.LoadScene("RecognizeImages");
+        if (playerProficiency.apprentice.Count > 0)
+        {
+            SceneManager.LoadScene("RecognizeImage");
+        }
+        else if (playerProficiency.journeyman.Count > 0)
+        {
+            SceneManager.LoadScene("MultipleChoice");
+        }
+        else if (playerProficiency.expert.Count > 0)
+        {
+            SceneManager.LoadScene("FillBlanks");
+        }
+        else if (playerProficiency.master.Count > 0)
+        {
+            SceneManager.LoadScene("MultipleChoice");
+        }
+        else
+        {
+            Debug.Log("No proverbs available.");
+        }
     }
 }
