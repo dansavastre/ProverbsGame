@@ -14,12 +14,15 @@ public class MultipleChoiceManager : SingleplayerManager
     // UI elements
     [SerializeField] private Button answerButton0, answerButton1, answerButton2, answerButton3;
 
-    public enum Modes { ProverbMeaning, MeaningProverb, ExampleSentence}
-    public Modes gamemode;
+    public enum Mode { ProverbMeaning, MeaningProverb, ExampleSentence}
+    public Mode gamemode;
 
     async void Start()
     {
         base.Start();
+
+        if (currentType == "journeyman") gamemode = Mode.ProverbMeaning;
+        else gamemode = Mode.ExampleSentence;
 
         // Goes to the 'proverbs' database table and searches for the key
         await dbReference.Child("proverbs").Child(currentKey)
@@ -42,20 +45,32 @@ public class MultipleChoiceManager : SingleplayerManager
             }
         });
 
-        if (gamemode == Modes.ExampleSentence)
+        SetCurrentQuestion();
+
+        if (gamemode == Mode.ProverbMeaning)
         {
-            //questions = load questions
+            currentQuestion.text = nextProverb.phrase;
+            currentQuestion.answers[0].text = nextProverb.meaning;
+            currentQuestion.answers[1].text = nextProverb.otherMeanings[0];
+            currentQuestion.answers[2].text = nextProverb.otherMeanings[1];
+            currentQuestion.answers[3].text = nextProverb.otherMeanings[1];
         } 
-        else if (gamemode == Modes.MeaningProverb)
-        {
-            //questions = load questions
-        }
         else 
         {
-            //questions = load questions
+            if (gamemode == Mode.MeaningProverb) currentQuestion.text = nextProverb.meaning;
+            else currentQuestion.text = nextProverb.example;
+            currentQuestion.answers[0].text = nextProverb.phrase;
+            currentQuestion.answers[1].text = nextProverb.otherPhrases[0];
+            currentQuestion.answers[2].text = nextProverb.otherPhrases[1];
+            currentQuestion.answers[3].text = nextProverb.otherPhrases[1];
         }
 
-        SetCurrentQuestion();
+        // Set the question and button texts
+        questionText.text = currentQuestion.text;
+        answerButton0.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[0].text;
+        answerButton1.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[1].text;
+        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[2].text;
+        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[3].text;
     }
 
     // Load the proverb into a question
@@ -65,30 +80,16 @@ public class MultipleChoiceManager : SingleplayerManager
         currentQuestion = new Question();
 
         Answer answer0 = new Answer();
-        answer0.text = nextProverb.meaning;
         answer0.isCorrect = true;
-
         Answer answer1 = new Answer();
-        answer1.text = nextProverb.otherMeanings[0];
         answer1.isCorrect = false;
-
         Answer answer2 = new Answer();
-        answer2.text = nextProverb.otherMeanings[1];
         answer2.isCorrect = false;
-
         Answer answer3 = new Answer();
-        answer3.text = nextProverb.otherMeanings[1];
         answer3.isCorrect = false;
 
         Answer[] answers = {answer0, answer1, answer2, answer3};
         currentQuestion.answers = answers;
-
-        // Set the question and button texts
-        questionText.text = currentQuestion.text;
-        answerButton0.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[0].text;
-        answerButton1.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[1].text;
-        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[2].text;
-        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[3].text;
     }
 
     // Deactivate all answer buttons
