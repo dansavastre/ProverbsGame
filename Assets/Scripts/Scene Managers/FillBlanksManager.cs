@@ -9,8 +9,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class SentenceCompletion : MonoBehaviour
+public class FillBlanksManager : MonoBehaviour
 {
+    // UI elements
     [SerializeField] private TextMeshProUGUI sentence;
     [SerializeField] private List<GameObject> buttons;
     [SerializeField] private List<TextMeshProUGUI> buttonTexts;

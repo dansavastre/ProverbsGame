@@ -11,11 +11,9 @@ using UnityEngine.UI;
 
 public class SessionManager : MonoBehaviour
 {
-    // TextMeshPro input fields
-    public TMP_InputField PlayerEmail;
-
-    // TextMeshPro buttons
-    public Button SessionButton;
+    // UI elements
+    [SerializeField] public TMP_InputField PlayerEmail;
+    [SerializeField] public Button SessionButton;
 
     // Stores the reference location of the database
     private DatabaseReference dbReference;
@@ -125,8 +123,8 @@ public class SessionManager : MonoBehaviour
     // Loads the next scene
     public void NextScene()
     {
-        // SceneManager.LoadScene("FillBlankGame");
-        SceneManager.LoadScene("MCQVariation");
-        // SceneManager.LoadScene("RecognizeImages");
+        SceneManager.LoadScene("FillBlanks");
+        // SceneManager.LoadScene("MultipleChoice");
+        // SceneManager.LoadScene("RecognizeImage");
     }
 }

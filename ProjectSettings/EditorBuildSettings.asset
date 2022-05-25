@@ -12,12 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 63ddc795d44241743bfb0580af442bed
   - enabled: 1
-    path: Assets/Scenes/MCQVariation.unity
+    path: Assets/Scenes/Singleplayer/MultipleChoice.unity
     guid: 86dc8b8eee83f0d47b913e7effb9ce78
   - enabled: 1
-    path: Assets/Scenes/FillBlankGame.unity
+    path: Assets/Scenes/Singleplayer/FillBlanks.unity
     guid: 3ceac13bc2428734d9011e5c46da099f
   - enabled: 1
-    path: Assets/Scenes/RecognizeImages.unity
+    path: Assets/Scenes/Singleplayer/RecognizeImage.unity
     guid: 62d4742ce6119384983b68a286b11043
   m_configObjects: {}

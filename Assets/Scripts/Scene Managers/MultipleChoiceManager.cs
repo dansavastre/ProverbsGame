@@ -1,22 +1,23 @@
 using Firebase;
 using Firebase.Database;
+using System;
 using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using System;
+using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Random = UnityEngine.Random;
 
-public class MCQVariations : MonoBehaviour
+public class MultipleChoiceManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI factText;
+    // UI elements
+    [SerializeField] private TextMeshProUGUI questionText;
     [SerializeField] private Button answerButton0, answerButton1, answerButton2, answerButton3;
     [SerializeField] private TextMeshProUGUI resultText;
     [SerializeField] private GameObject nextQuestionButton;
 
+    // Stores information fetched from the database
     private DatabaseReference dbReference;
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
@@ -36,6 +37,10 @@ public class MCQVariations : MonoBehaviour
         newProficiency = SessionManager.newProficiency;
         currentKey = GetNextKey();
 
+        // TODO: Move this to its own script file in the future
+        // This is hard because of the asynchronous calls to the database
+
+        // Goes to the 'proverbs' database table and searches for the key
         await dbReference.Child("proverbs").Child(currentKey)
         .GetValueAsync().ContinueWith(task =>
         {
@@ -102,9 +107,7 @@ public class MCQVariations : MonoBehaviour
         return currentKey;
     }
 
-    /**
-     * Method that returns a random unanswered question.
-     */
+    // Load the proverb into a question
     private void SetCurrentQuestion()
     {
         // Create question and answer objects from proverb
@@ -129,16 +132,15 @@ public class MCQVariations : MonoBehaviour
         Answer[] answers = {answer0, answer1, answer2, answer3};
         currentQuestion.answers = answers;
 
-        factText.text = currentQuestion.text;
+        // Set the question and button texts
+        questionText.text = currentQuestion.text;
         answerButton0.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[0].text;
         answerButton1.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[1].text;
         answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[2].text;
         answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[3].text;
     }
 
-    /**
-     * Method that deactivates all answer buttons.
-     */
+    // Deactivate all answer buttons
     private void DeactivateAnswerButtons()
     {
         answerButton0.interactable = false;
@@ -147,9 +149,7 @@ public class MCQVariations : MonoBehaviour
         answerButton3.interactable = false;
     }
 
-    /**
-     * Method that displays the feedback after the player answers the question.
-     */
+    // Display the feedback after the player answers the question
     public void CheckAnswer(int index)
     {
         if (currentQuestion.answers[index].isCorrect) 
@@ -167,6 +167,7 @@ public class MCQVariations : MonoBehaviour
         nextQuestionButton.SetActive(true);
     }
 
+    // Update the player proficiency into a new object
     private void UpdateProficiency()
     {
         switch (currentType)
@@ -225,13 +226,11 @@ public class MCQVariations : MonoBehaviour
         }
     }
 
-    /**
-     * Method that loads the scene again and so loads another question.
-     */
+    // Load the next scene and thus question
     public void NextQuestion()
     {
-        // Query the db for the next question and display it to the user using the already implemented methods
-        // For now we will just show a message in the console
+        // Query the db for the next question and display it to the user using the already 
+        // implemented methods, for now we will just show a message in the console
         if (GetNextKey() == null) {
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);

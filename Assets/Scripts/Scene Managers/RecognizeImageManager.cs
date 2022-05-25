@@ -11,37 +11,40 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class RecognizingImageGameManager : MonoBehaviour
+public class RecognizeImageManager : MonoBehaviour
 {
+    // UI elements
     [SerializeField] private RawImage image;
+    [SerializeField] private TextMeshProUGUI questionText;
     [SerializeField] private Button answerButton0, answerButton1, answerButton2, answerButton3;
     [SerializeField] private TextMeshProUGUI resultText;
     [SerializeField] private GameObject nextQuestionButton;
 
     // Stores information fetched from the database
+    private DatabaseReference dbReference;
+    private StorageReference storageRef;
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
     private Proverb nextProverb;
-    private DatabaseReference dbReference;
-    private StorageReference storageRef;
     private string currentImage;
     private string currentType;
     private string currentKey;
 
     private byte[] fileContents;
-    private Question question;
+    private Question currentQuestion;
 
     // Start is called before the first frame update.
     private async void Start()
     {
-        // Get a reference to the storage service, using the default Firebase App
-        storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
-
         dbReference  = FirebaseDatabase.DefaultInstance.RootReference;
         playerProficiency = SessionManager.playerProficiency;
         newProficiency = SessionManager.newProficiency;
         currentKey = GetNextKey();
 
+        // TODO: Move this to its own script file in the future
+        // This is hard because of the asynchronous calls to the database
+
+        // Goes to the 'proverbs' database table and searches for the key
         await dbReference.Child("proverbs").Child(currentKey)
         .GetValueAsync().ContinueWith(task =>
         {
@@ -62,7 +65,10 @@ public class RecognizingImageGameManager : MonoBehaviour
             }
         });
 
-        // Example reference for retrieving an image
+        // Get a reference to the storage service, using the default Firebase App
+        storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
+
+        // Reference for retrieving an image
         StorageReference imageRef = storageRef.Child("proverbs/" + nextProverb.image);
         Debug.Log("proverbs/" + nextProverb.image);
 
@@ -116,34 +122,39 @@ public class RecognizingImageGameManager : MonoBehaviour
         return currentKey;
     }
 
-    /**
-     * Method randomly loading the next question from the question list.
-     */
+    // Load the proverb into a question
     private void SetCurrentQuestion()
     {
+        // Create question and answer objects from proverb
+        currentQuestion = new Question();
         Answer answer0 = new Answer();
         answer0.text = nextProverb.phrase;
         answer0.isCorrect = true;
+
         Answer answer1 = new Answer();
         answer1.text = nextProverb.otherPhrases[0];
         answer1.isCorrect = false;
+
         Answer answer2 = new Answer();
         answer2.text = nextProverb.otherPhrases[1];
         answer2.isCorrect = false;
-        Answer answer3 = answer2;
-        Answer[] answers = new[] {answer0, answer1, answer2, answer3};
-        question = new Question();
-        question.answers = answers;
 
-        answerButton0.GetComponentInChildren<TextMeshProUGUI>().text = question.answers[0].text;
-        answerButton1.GetComponentInChildren<TextMeshProUGUI>().text = question.answers[1].text;
-        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = question.answers[2].text;
-        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = question.answers[3].text;
+        Answer answer3 = new Answer();
+        answer3.text = nextProverb.otherPhrases[1];
+        answer3.isCorrect = false;
+
+        Answer[] answers = {answer0, answer1, answer2, answer3};
+        currentQuestion.answers = answers;
+
+        // Set the question and button texts
+        questionText.text = currentQuestion.text;
+        answerButton0.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[0].text;
+        answerButton1.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[1].text;
+        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[2].text;
+        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[3].text;
     }
 
-    /**
-     * Method that deactivates all answer buttons.
-     */
+    // Deactivate all answer buttons
     private void DeactivateAnswerButtons()
     {
         answerButton0.interactable = false;
@@ -152,12 +163,10 @@ public class RecognizingImageGameManager : MonoBehaviour
         answerButton3.interactable = false;
     }
 
-    /**
-     * Method that displays the feedback after the player answers the question.
-     */
+    // Display the feedback after the player answers the question
     public void CheckAnswer(int index)
     {
-        if (question.answers[index].isCorrect)
+        if (currentQuestion.answers[index].isCorrect)
         {
             resultText.text = "Correct!";
             UpdateProficiency();
@@ -171,6 +180,7 @@ public class RecognizingImageGameManager : MonoBehaviour
         nextQuestionButton.SetActive(true);
     }
 
+    // Update the player proficiency into a new object
     private void UpdateProficiency()
     {
         switch (currentType)
@@ -229,13 +239,11 @@ public class RecognizingImageGameManager : MonoBehaviour
         }
     }
 
-    /**
-     * Method that loads the scene again and so loads another question.
-     */
+    // Load the next scene and thus question
     public void NextQuestion()
     {
-        // Query the db for the next question and display it to the user using the already implemented methods
-        // For now we will just show a message in the console
+        // Query the db for the next question and display it to the user using the already 
+        // implemented methods, for now we will just show a message in the console
         if (GetNextKey() == null) {
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
