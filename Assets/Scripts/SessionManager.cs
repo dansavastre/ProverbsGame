@@ -12,6 +12,10 @@ using UnityEngine.UI;
 public class SessionManager : MonoBehaviour
 {
     // UI elements
+    [SerializeField] public TextMeshProUGUI ApprenticeCount;
+    [SerializeField] public TextMeshProUGUI JourneymanCount;
+    [SerializeField] public TextMeshProUGUI ExpertCount;
+    [SerializeField] public TextMeshProUGUI MasterCount;
     [SerializeField] public TMP_InputField PlayerEmail;
     [SerializeField] public Button SessionButton;
 
@@ -69,6 +73,31 @@ public class SessionManager : MonoBehaviour
     // Fetches the key of the current player
     public void GetPlayerKey()
     {
+        // DateTime time = new DateTime(2020, 12, 25);
+        // string bucketKey = dbReference.Child("buckets").Push().Key;
+        // Bucket newBucket = new Bucket(2);
+        // string bucketJson = JsonUtility.ToJson(newBucket);
+        // dbReference.Child("buckets").Child(bucketKey)
+        // .SetRawJsonValueAsync(bucketJson).ContinueWith(task => {
+        //     if (task.IsCompleted)
+        //     {
+        //         dbReference.Child("buckets").Child(bucketKey).UpdateChildrenAsync(new Dictionary<string, object> { {"utcTimestamp", ServerValue.Timestamp} });
+        //     }
+        // });
+
+        dbReference.Child("buckets").Child("-N3-OpZkdpQHMEGc_Lr7")
+        .GetValueAsync().ContinueWith(task => {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                string json = snapshot.GetRawJsonValue();
+                Bucket bucket = JsonUtility.FromJson<Bucket>(json);
+                Debug.Log(json);
+                DateTime time = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                bucket.lastAnswered = time.AddMilliseconds(bucket.utcTimestamp);
+            }
+        });
+        
         // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(PlayerEmail.text)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
