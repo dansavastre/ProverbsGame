@@ -10,6 +10,8 @@ public class SentenceCompletion : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI sentence;
     [SerializeField]
+    private Transform keywordBoard;
+    [SerializeField]
     private TextMeshProUGUI ResultText;
     [SerializeField]
     private List<GameObject> buttons;
@@ -18,13 +20,15 @@ public class SentenceCompletion : MonoBehaviour
     [SerializeField]
     private GameObject nextQuestionButton;
 
+    [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab; 
+
     private static string correctProverb = "Don't look a gifted horse in the mouth";
 
     private string answerProverb = correctProverb;
 
     List<string> keyWords = new List<string> { "horse", "mouth" };
     List<string> allWords = new List<string> { "horse", "mouth", "turtle", "Never", "Don't"};
-    public string LastClickedWord;
+    private string LastClickedWord;
 
     // Start is called before the first frame update
     void Start()
@@ -34,9 +38,16 @@ public class SentenceCompletion : MonoBehaviour
             answerProverb = answerProverb.Replace(v, "...");
         }
 
-        for(int i = 0; i < buttonTexts.Count; i++)
+        for (int i = 0; i < allWords.Count; i++)
         {
-            buttonTexts[i].text = allWords[i];
+            Button newButton = Instantiate(fillInTheBlanksAnswerButtonPrefab, keywordBoard, false);
+            newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
+            int xPos = (i % 3 - 1) * 230;
+            int yPos = -(i / 3) * 100;
+            newButton.transform.localPosition = new Vector3(xPos, yPos);
+            newButton.name = "AnswerButton" + i;
+            int x = i;
+            newButton.onClick.AddListener(() => buttonPressed(x));
         }
 
         sentence.text = answerProverb;
@@ -104,8 +115,8 @@ public class SentenceCompletion : MonoBehaviour
     {
         if(canInput(answerProverb, "...")) 
         {
-            inputWord(buttonTexts[index].text);
-            buttons[index].SetActive(false);
+            inputWord(keywordBoard.GetComponentsInChildren<Button>()[index].GetComponentInChildren<TextMeshProUGUI>().text);
+            keywordBoard.GetComponentsInChildren<Button>()[index].enabled = false;
         }
     }
 
