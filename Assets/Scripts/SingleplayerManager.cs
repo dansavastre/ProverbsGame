@@ -1,13 +1,10 @@
 using Firebase;
 using Firebase.Database;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Random = System.Random;
 
 public class SingleplayerManager : MonoBehaviour
 {
@@ -26,6 +23,7 @@ public class SingleplayerManager : MonoBehaviour
 
     // Variables
     protected Question currentQuestion;
+    private Random random;
     
     // Start is called before the first frame update
     protected void Start()
@@ -33,7 +31,8 @@ public class SingleplayerManager : MonoBehaviour
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         playerProficiency = SessionManager.playerProficiency;
         newProficiency = SessionManager.newProficiency;
-        
+
+        random = new Random();
         GetNextKey();
         nextQuestionButton.SetActive(false);
     }
@@ -87,22 +86,22 @@ public class SingleplayerManager : MonoBehaviour
     {
         if (playerProficiency.apprentice.Count > 0)
         {
-            currentKey = playerProficiency.apprentice.First();
+            currentKey = playerProficiency.apprentice.ElementAt(random.Next(0, playerProficiency.apprentice.Count));
             currentType = "apprentice";
         }
         else if (playerProficiency.journeyman.Count > 0)
         {
-            currentKey = playerProficiency.journeyman.First();
+            currentKey = playerProficiency.journeyman.ElementAt(random.Next(0, playerProficiency.journeyman.Count));
             currentType = "journeyman";
         }
         else if (playerProficiency.expert.Count > 0)
         {
-            currentKey = playerProficiency.expert.First();
+            currentKey = playerProficiency.expert.ElementAt(random.Next(0, playerProficiency.expert.Count));
             currentType = "expert";
         }
         else if (playerProficiency.master.Count > 0)
         {
-            currentKey = playerProficiency.master.First();
+            currentKey = playerProficiency.master.ElementAt(random.Next(0, playerProficiency.master.Count));
             currentType = "master";
         }
         else
@@ -114,6 +113,8 @@ public class SingleplayerManager : MonoBehaviour
     }
 
     // Update the player proficiency into a new object
+    // TODO I think having only 1 wrong answer and moving back isn't really fair. As a should have, we should improve this.
+    // TODO Maybe using a HashSet is better, as removing from a list based on element takes much longer
     protected void UpdateProficiency()
     {
         switch (currentType)
