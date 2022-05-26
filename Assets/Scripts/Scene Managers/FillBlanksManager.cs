@@ -15,10 +15,8 @@ public class FillBlanksManager : SingleplayerManager
     private Transform keywordBoard;
     [SerializeField]
     private TextMeshProUGUI ResultText;
-    // [SerializeField]
-    // private List<GameObject> buttons;
-    // [SerializeField]
-    // private List<TextMeshProUGUI> buttonTexts;
+    [SerializeField] private List<Button> Buttons;
+    [SerializeField] private List<TextMeshProUGUI> ButtonsTexts;
 
     [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab;
 
@@ -26,7 +24,7 @@ public class FillBlanksManager : SingleplayerManager
     private static string correctProverb;
     private string answerProverb;
     List<string> allWords;
-    public string LastClickedWord;
+    private string LastClickedWord;
 
     // Start is called before the first frame update
     async void Start()
@@ -94,6 +92,7 @@ public class FillBlanksManager : SingleplayerManager
             if (wordIndex != -1)
             {
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
+                Debug.Log(LastClickedWord);
 
                 if (allWords.Contains(LastClickedWord))
                 {
@@ -122,9 +121,10 @@ public class FillBlanksManager : SingleplayerManager
 
     private void removeWord(string word)
     {
-        for(int i = 0 ; i < buttonTexts.Count; i++) {
-            if(buttonTexts[i].text.Equals(word)) {
-                buttons[i].SetActive(true);
+        Button[] buttons = keywordBoard.GetComponentsInChildren<Button>();
+        for(int i = 0 ; i < buttons.Length; i++) {
+            if(buttons[i].GetComponentInChildren<TextMeshProUGUI>().text.Equals(word)) {
+                buttons[i].interactable = true;
             }
         }
         word = "<u><b>" + word + "</u></b>";
@@ -146,7 +146,7 @@ public class FillBlanksManager : SingleplayerManager
         if(canInput(answerProverb, "...")) 
         {
             inputWord(keywordBoard.GetComponentsInChildren<Button>()[index].GetComponentInChildren<TextMeshProUGUI>().text);
-            keywordBoard.GetComponentsInChildren<Button>()[index].enabled = false;
+            keywordBoard.GetComponentsInChildren<Button>()[index].interactable = false;
         }
     }
 
