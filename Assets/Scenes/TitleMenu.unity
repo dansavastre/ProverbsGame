@@ -380,7 +380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &274613788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 327425478}
   - component: {fileID: 327425477}
   m_Layer: 5
-  m_Name: StartRoomButton
+  m_Name: StartGameButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -502,7 +502,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1038659714}
         m_TargetAssemblyTypeName: Launcher, Assembly-CSharp
-        m_MethodName: LeaveRoom
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2900,6 +2900,7 @@ MonoBehaviour:
   playerListContent: {fileID: 2045440347}
   roomListItemPrefab: {fileID: 4839989428055499263, guid: b73ef3d58ee7ce24fb11b11c82a65473, type: 3}
   playerListItemPrefab: {fileID: 8297469300105054214, guid: 7d65520c49cefce4ba35e131b6cbb2c2, type: 3}
+  startGameButton: {fileID: 327425475}
 --- !u!114 &1038659715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3204,7 +3205,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1145737424
 MonoBehaviour:
   m_ObjectHideFlags: 0
