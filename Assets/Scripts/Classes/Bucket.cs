@@ -4,12 +4,26 @@ using System.Collections.Generic;
 
 public class Bucket
 {
-    public int count;
-    public DateTime lastAnswered;
-    public long utcTimestamp;
+    public string key;
+    public int stage;
+    public long timestamp;
 
-    public Bucket(int count)
+    public Bucket(string key, int stage, long timestamp)
     {
-        this.count = count;
+        this.key = key;
+        this.stage = stage;
+        this.timestamp = timestamp;
+    }
+
+    public override bool Equals(object obj)
+    {
+        var bucket = obj as Bucket;
+
+        if (bucket == null)
+        {
+            return false;
+        }
+
+        return this.key.Equals(bucket.key);
     }
 }

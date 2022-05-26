@@ -73,7 +73,6 @@ public class SessionManager : MonoBehaviour
     // Fetches the key of the current player
     public void GetPlayerKey()
     {
-        // DateTime time = new DateTime(2020, 12, 25);
         // string bucketKey = dbReference.Child("buckets").Push().Key;
         // Bucket newBucket = new Bucket(2);
         // string bucketJson = JsonUtility.ToJson(newBucket);
@@ -85,18 +84,21 @@ public class SessionManager : MonoBehaviour
         //     }
         // });
 
-        dbReference.Child("buckets").Child("-N3-OpZkdpQHMEGc_Lr7")
-        .GetValueAsync().ContinueWith(task => {
-            if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                string json = snapshot.GetRawJsonValue();
-                Bucket bucket = JsonUtility.FromJson<Bucket>(json);
-                Debug.Log(json);
-                DateTime time = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                bucket.lastAnswered = time.AddMilliseconds(bucket.utcTimestamp);
-            }
-        });
+        // dbReference.Child("proficiencies").Child("-N1xmI6cMhyArIYw1Kgd").Child("master").Child("-N1sWun7aYI7-TyYZQRz")
+        // .UpdateChildrenAsync(new Dictionary<string, object> { {"utcTimestamp", ServerValue.Timestamp}, {"count", 2} });
+
+        // dbReference.Child("buckets").Child("-N3-OpZkdpQHMEGc_Lr7")
+        // .GetValueAsync().ContinueWith(task => {
+        //     if (task.IsCompleted)
+        //     {
+        //         DataSnapshot snapshot = task.Result;
+        //         string json = snapshot.GetRawJsonValue();
+        //         Bucket bucket = JsonUtility.FromJson<Bucket>(json);
+        //         Debug.Log(json);
+        //         DateTime time = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        //         bucket.lastAnswered = time.AddMilliseconds(bucket.utcTimestamp);
+        //     }
+        // });
         
         // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(PlayerEmail.text)
