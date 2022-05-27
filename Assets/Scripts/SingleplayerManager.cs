@@ -87,22 +87,22 @@ public class SingleplayerManager : MonoBehaviour
     {
         if (playerProficiency.apprentice.Count > 0)
         {
-            currentKey = playerProficiency.apprentice.First();
+            currentKey = playerProficiency.apprentice.First().key;
             currentType = "apprentice";
         }
         else if (playerProficiency.journeyman.Count > 0)
         {
-            currentKey = playerProficiency.journeyman.First();
+            currentKey = playerProficiency.journeyman.First().key;
             currentType = "journeyman";
         }
         else if (playerProficiency.expert.Count > 0)
         {
-            currentKey = playerProficiency.expert.First();
+            currentKey = playerProficiency.expert.First().key;
             currentType = "expert";
         }
         else if (playerProficiency.master.Count > 0)
         {
-            currentKey = playerProficiency.master.First();
+            currentKey = playerProficiency.master.First().key;
             currentType = "master";
         }
         else
@@ -116,53 +116,86 @@ public class SingleplayerManager : MonoBehaviour
     // Update the player proficiency into a new object
     protected void UpdateProficiency()
     {
+        Bucket currentBucket;
         switch (currentType)
         {
             case "apprentice":
-                playerProficiency.apprentice.Remove(currentKey);
+                currentBucket = playerProficiency.apprentice.Find(x => x.key == currentKey);
+                playerProficiency.apprentice.Remove(currentBucket);
                 if (SessionManager.wrongAnswers == 0)
                 {
-                    newProficiency.journeyman.Add(currentKey);
-                    Debug.Log(currentKey + " moved to journeyman!");
+                    currentBucket.stage++;
+                    if (currentBucket.stage >= 4)
+                    {
+                        newProficiency.journeyman.Add(currentBucket);
+                        Debug.Log(currentKey + " stage upgraded, moved to journeyman!");
+                    } else
+                    {
+                        newProficiency.apprentice.Add(currentBucket);
+                        Debug.Log(currentKey + " stage upgraded, stayed in apprentice!");
+                    }
                 } else 
                 {
-                    newProficiency.apprentice.Add(currentKey);
-                    Debug.Log(currentKey + " stayed in apprentice...");
+                    if (currentBucket.stage > 0) currentBucket.stage--;
+
+                    newProficiency.apprentice.Add(currentBucket);
+                    Debug.Log(currentKey + " stage downgraded, stayed in apprentice...");
                 }
                 break;
             case "journeyman":
-                playerProficiency.journeyman.Remove(currentKey);
+                currentBucket = playerProficiency.journeyman.Find(x => x.key == currentKey);
+                playerProficiency.journeyman.Remove(currentBucket);
                 if (SessionManager.wrongAnswers == 0)
                 {
-                    newProficiency.expert.Add(currentKey);
-                    Debug.Log(currentKey + " moved to expert!");
+                    currentBucket.stage++;
+                    if (currentBucket.stage >= 6)
+                    {
+                        newProficiency.expert.Add(currentBucket);
+                        Debug.Log(currentKey + " stage upgraded, moved to expert!");
+                    } else
+                    {
+                        newProficiency.journeyman.Add(currentBucket);
+                        Debug.Log(currentKey + " stage upgraded, stayed in journeyman!");
+                    }
                 } else 
                 {
-                    newProficiency.apprentice.Add(currentKey);
-                    Debug.Log(currentKey + " moved to apprentice...");
+                    currentBucket.stage--;
+                    if (currentBucket.stage < 4)
+                    {
+                        newProficiency.apprentice.Add(currentBucket);
+                        Debug.Log(currentKey + " stage downgraded, moved to apprentice...");
+                    } else
+                    {
+                        newProficiency.journeyman.Add(currentBucket);
+                        Debug.Log(currentKey + " stage downgraded, stayed in journeyman...");
+                    }
                 }
                 break;
             case "expert":
-                playerProficiency.expert.Remove(currentKey);
+                currentBucket = playerProficiency.expert.Find(x => x.key == currentKey);
+                playerProficiency.expert.Remove(currentBucket);
                 if (SessionManager.wrongAnswers == 0)
                 {
-                    newProficiency.master.Add(currentKey);
-                    Debug.Log(currentKey + " moved to master!");
+                    currentBucket.stage++;
+                    newProficiency.master.Add(currentBucket);
+                    Debug.Log(currentKey + " stage upgraded, moved to master!");
                 } else 
                 {
-                    newProficiency.journeyman.Add(currentKey);
-                    Debug.Log(currentKey + " moved to journeyman...");
+                    currentBucket.stage--;
+                    newProficiency.journeyman.Add(currentBucket);
+                    Debug.Log(currentKey + " stage downgraded, moved to journeyman...");
                 }
                 break;
             case "master":
-                playerProficiency.master.Remove(currentKey);
+                currentBucket = playerProficiency.master.Find(x => x.key == currentKey);
+                playerProficiency.master.Remove(currentBucket);
                 if (SessionManager.wrongAnswers == 0)
                 {
-                    newProficiency.master.Add(currentKey);
-                    Debug.Log(currentKey + " stayed in master!");
+                    newProficiency.master.Add(currentBucket);
+                    Debug.Log(currentKey + " stage unchanged, stayed in master!");
                 } else 
                 {
-                    newProficiency.expert.Add(currentKey);
+                    newProficiency.expert.Add(currentBucket);
                     Debug.Log(currentKey + " moved to expert...");
                 }
                 break;

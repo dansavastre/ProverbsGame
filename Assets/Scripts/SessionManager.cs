@@ -73,33 +73,6 @@ public class SessionManager : MonoBehaviour
     // Fetches the key of the current player
     public void GetPlayerKey()
     {
-        // string bucketKey = dbReference.Child("buckets").Push().Key;
-        // Bucket newBucket = new Bucket(2);
-        // string bucketJson = JsonUtility.ToJson(newBucket);
-        // dbReference.Child("buckets").Child(bucketKey)
-        // .SetRawJsonValueAsync(bucketJson).ContinueWith(task => {
-        //     if (task.IsCompleted)
-        //     {
-        //         dbReference.Child("buckets").Child(bucketKey).UpdateChildrenAsync(new Dictionary<string, object> { {"utcTimestamp", ServerValue.Timestamp} });
-        //     }
-        // });
-
-        // dbReference.Child("proficiencies").Child("-N1xmI6cMhyArIYw1Kgd").Child("master").Child("-N1sWun7aYI7-TyYZQRz")
-        // .UpdateChildrenAsync(new Dictionary<string, object> { {"utcTimestamp", ServerValue.Timestamp}, {"count", 2} });
-
-        // dbReference.Child("buckets").Child("-N3-OpZkdpQHMEGc_Lr7")
-        // .GetValueAsync().ContinueWith(task => {
-        //     if (task.IsCompleted)
-        //     {
-        //         DataSnapshot snapshot = task.Result;
-        //         string json = snapshot.GetRawJsonValue();
-        //         Bucket bucket = JsonUtility.FromJson<Bucket>(json);
-        //         Debug.Log(json);
-        //         DateTime time = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        //         bucket.lastAnswered = time.AddMilliseconds(bucket.utcTimestamp);
-        //     }
-        // });
-        
         // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(PlayerEmail.text)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
