@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Singleplayer/RecognizeImage.unity
     guid: 62d4742ce6119384983b68a286b11043
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer/FillBlankMulti.unity
+    guid: 8556b82a251d78149bc0c6002330c719
   m_configObjects: {}
