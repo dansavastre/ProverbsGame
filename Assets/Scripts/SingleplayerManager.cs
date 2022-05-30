@@ -128,6 +128,32 @@ public class SingleplayerManager : MonoBehaviour
                     if (currentBucket.stage >= 4)
                     {
                         newProficiency.journeyman.Add(currentBucket);
+                        // Goes to the 'proficiencies' database table and searches for the bucket
+                        // dbReference.Child("proficiencies").Child(SessionManager.PlayerKey())
+                        // .Child("apprentice").OrderByChild("key").EqualTo(currentBucket.key)
+                        // .ValueChanged += (object sender, ValueChangedEventArgs args) =>
+                        // {
+                        //     if (args.DatabaseError != null)
+                        //     {
+                        //         Debug.LogError(args.DatabaseError.Message);
+                        //         return;
+                        //     }
+
+                        //     // Check to see if there is at least one result
+                        //     if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
+                        //     {
+                        //         // Unity does not know we expect exactly one result, so we must iterate 
+                        //         foreach (var childSnapshot in args.Snapshot.Children)
+                        //         {
+                        //             // Get the key of the current database entry
+                        //             string bucketKey = childSnapshot.Key;
+                        //             Debug.Log(childSnapshot.Key);
+                        //             string json = JsonUtility.ToJson(currentBucket);
+                        //             dbReference.Child("proficiencies").Child(SessionManager.PlayerKey())
+                        //             .Child("apprentice").Child(bucketKey).SetRawJsonValueAsync(json);
+                        //         }
+                        //     }
+                        // };
                         Debug.Log(currentKey + " stage upgraded, moved to journeyman!");
                     } else
                     {

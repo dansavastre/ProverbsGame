@@ -27,6 +27,16 @@ public class SessionManager : MonoBehaviour
     public static Proficiency newProficiency;
     public static int wrongAnswers;
 
+    private TimeSpan[] waitingPeriod = 
+    {
+        new TimeSpan(),             // Always
+        new TimeSpan(2, 0, 0),      // After 2 hours
+        new TimeSpan(4, 0, 0),      // After 4 hours
+        new TimeSpan(8, 0, 0),      // After 8 hours
+        new TimeSpan(1, 0, 0, 0),   // After 1 day
+        new TimeSpan(2, 0, 0, 0)    // After 2 days
+    };
+
     // Stores the player key
     private static string playerKey;
 
@@ -120,8 +130,37 @@ public class SessionManager : MonoBehaviour
                 string json = snapshot.GetRawJsonValue();
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
                 Debug.Log(json);
+                RemoveTimedProverbs();
             }
         });
+    }
+
+    // Remove proverbs from the session list that have been questioned recently
+    private void RemoveTimedProverbs()
+    {
+        playerProficiency.apprentice = LoopProverbs(playerProficiency.apprentice);
+        playerProficiency.journeyman = LoopProverbs(playerProficiency.journeyman);
+        playerProficiency.expert = LoopProverbs(playerProficiency.expert);
+        playerProficiency.master = LoopProverbs(playerProficiency.master);
+    }
+
+    // Loops over the given list and adds buckets to the result that have passed the waiting period
+    private List<Bucket> LoopProverbs(List<Bucket> list)
+    {
+        List<Bucket> result = new List<Bucket>{};
+        foreach (Bucket b in list)
+        {
+            DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            date = date.AddMilliseconds(b.timestamp);
+            TimeSpan interval = DateTime.Now - date;
+            Debug.Log("Timestamp: " + b.timestamp + ", Date: " + date.ToString());
+            if (interval.CompareTo(waitingPeriod[b.stage - 1]) >= 0) 
+            {
+                result.Add(b);
+                Debug.Log("Added: " + b.key);
+            }
+        }
+        return result;
     }
 
     // Loads the first scene
