@@ -51,12 +51,12 @@ public class SessionManager : MonoBehaviour
         }
     }
 
-    public static void WrongAnswer()
+    public static void WrongAnswer()    // TODO what if the same question is answered wrong multiple times
     {
         wrongAnswers++;
     }
 
-    public static void RightAnswer()
+    public static void RightAnswer()    // TODO why is this set to zero?
     {
         wrongAnswers = 0;
     }
