@@ -195,6 +195,7 @@ public class SingleplayerManager : MonoBehaviour
                     Debug.Log(currentKey + " stage unchanged, stayed in master!");
                 } else 
                 {
+                    currentBucket.stage--;
                     newProficiency.expert.Add(currentBucket);
                     Debug.Log(currentKey + " moved to expert...");
                 }
