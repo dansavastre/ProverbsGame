@@ -40,12 +40,17 @@ public class SingleplayerManager : MonoBehaviour
     {
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         playerProficiency = SessionManager.playerProficiency;
+        
         random = new Random();
+        
+        // Have all proficiencies in one list 
         allProficiencies.AddRange(playerProficiency.apprentice);
         allProficiencies.AddRange(playerProficiency.journeyman);
         allProficiencies.AddRange(playerProficiency.expert);
         allProficiencies.AddRange(playerProficiency.master);
         allProficiencies.OrderBy(item => random.Next());
+        
+        // containing update proficiencies
         newProficiency = SessionManager.newProficiency;
         
         GetNextKey();
@@ -59,20 +64,21 @@ public class SingleplayerManager : MonoBehaviour
         {
             resultText.text = "Correct!";
             UpdateProficiency();
-            SessionManager.RightAnswer();
+            SessionManager.RightAnswer();   // TODO we need to change this implementation
         }
         else // TODO why is proficiency not updated here? If it should be updated, same if condition as above is needed.
         {
             resultText.text = "Incorrect!";
+            // wrong question should be repeated after 3 other questions are repeated
             if (allProficiencies.Count >= 3)
             {
                 allProficiencies.AddAfter(allProficiencies.First.Next.Next, currentBucket);
             }
-            else
+            else    // if there aren't many questions left, add the wrong answered question at the end
             {
                 allProficiencies.AddLast(currentBucket);
             }
-            SessionManager.WrongAnswer();   // TODO I don't think needed anymore
+            SessionManager.WrongAnswer();   // TODO we need to change this implementation
         }
         nextQuestionButton.SetActive(true);
     }
@@ -107,8 +113,9 @@ public class SingleplayerManager : MonoBehaviour
     // Get the key for the next proverb in the session in chronological order
     protected void GetNextKey()
     {
+        // select first bucket as allProficiencies list is already randomized
         currentBucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;
-        if (currentBucket == null)
+        if (currentBucket == null)  // session is completed in this case
         {
             Debug.Log("Session complete.");
             currentKey = null;
@@ -137,6 +144,7 @@ public class SingleplayerManager : MonoBehaviour
     }
 
     // Update the player proficiency into a new object
+    // TODO change implementation if necessary
     protected void UpdateProficiency()
     {
         Bucket currentBucket;
@@ -255,9 +263,12 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
     
+    /**
+     * <summary>Get the proficiency type of the stage</summary>
+     */
     private string GetTypeOfStage(int stage)
     {
-        switch (stage)    // Add currentBucket to its new proficiency list
+        switch (stage)
         {
             case <= 3:
                 return "apprentice";
