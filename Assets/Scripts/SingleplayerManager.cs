@@ -128,21 +128,6 @@ public class SingleplayerManager : MonoBehaviour
         {
             currentKey = currentBucket.key;
             currentType = GetTypeOfStage(currentBucket.stage);
-            switch (currentType)
-            {
-                case "apprentice":
-                    SceneManager.LoadScene("RecognizeImage");
-                    break;
-                case "journeyman":
-                    SceneManager.LoadScene("MultipleChoice");
-                    break;
-                case "expert":
-                    SceneManager.LoadScene("FillBlanks");
-                    break;
-                case "master":
-                    SceneManager.LoadScene("MultipleChoice");
-                    break;
-            }
         }
     }
 
