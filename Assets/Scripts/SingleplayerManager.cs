@@ -38,6 +38,9 @@ public class SingleplayerManager : MonoBehaviour
     // Start is called before the first frame update
     protected void Start()
     {
+        allProficiencies = new LinkedList<Bucket>();
+        alreadyAnsweredQuesitonSet = new HashSet<Bucket>();
+
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         playerProficiency = SessionManager.playerProficiency;
         
