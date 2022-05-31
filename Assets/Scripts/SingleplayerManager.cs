@@ -18,7 +18,10 @@ public class SingleplayerManager : MonoBehaviour
 
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
-    public static Proficiency newProficiency;
+    public static Proficiency copiedProficiency;
+    // public static Proficiency newProficiency;
+    protected List<List<Bucket>> playerProficiencyList;
+    protected List<List<Bucket>> copiedProficiencyList;
     protected DatabaseReference dbReference;
     protected Proverb nextProverb;
     protected string currentType;
@@ -32,7 +35,22 @@ public class SingleplayerManager : MonoBehaviour
     {
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         playerProficiency = SessionManager.playerProficiency;
-        newProficiency = SessionManager.newProficiency;
+        copiedProficiency = SessionManager.copiedProficiency;
+        // newProficiency = SessionManager.newProficiency;
+
+        playerProficiencyList = new List<List<Bucket>> {
+            playerProficiency.apprentice, 
+            playerProficiency.journeyman,
+            playerProficiency.expert,
+            playerProficiency.master
+        };
+
+        copiedProficiencyList = new List<List<Bucket>> {
+            copiedProficiency.apprentice, 
+            copiedProficiency.journeyman,
+            copiedProficiency.expert,
+            copiedProficiency.master
+        };
         
         GetNextKey();
         nextQuestionButton.SetActive(false);
@@ -75,11 +93,20 @@ public class SingleplayerManager : MonoBehaviour
                 SceneManager.LoadScene("MultipleChoice");
                 break;
             default:
-                string json = JsonUtility.ToJson(newProficiency);
+                string json = JsonUtility.ToJson(copiedProficiency);
                 dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
                 SceneManager.LoadScene("Menu");
                 break;
         }
+    }
+
+    // Quit the session and return to the start menu
+    public void QuitSession()
+    {
+        Debug.Log("Quitting session.");
+        string json = JsonUtility.ToJson(copiedProficiency);
+        dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
+        SceneManager.LoadScene("Menu");
     }
 
     // Get the key for the next proverb in the session in chronological order
@@ -116,119 +143,48 @@ public class SingleplayerManager : MonoBehaviour
     // Update the player proficiency into a new object
     protected void UpdateProficiency()
     {
-        Bucket currentBucket;
         switch (currentType)
         {
             case "apprentice":
-                currentBucket = playerProficiency.apprentice.Find(x => x.key == currentKey);
-                playerProficiency.apprentice.Remove(currentBucket);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    currentBucket.stage++;
-                    if (currentBucket.stage >= 4)
-                    {
-                        newProficiency.journeyman.Add(currentBucket);
-                        // Goes to the 'proficiencies' database table and searches for the bucket
-                        // dbReference.Child("proficiencies").Child(SessionManager.PlayerKey())
-                        // .Child("apprentice").OrderByChild("key").EqualTo(currentBucket.key)
-                        // .ValueChanged += (object sender, ValueChangedEventArgs args) =>
-                        // {
-                        //     if (args.DatabaseError != null)
-                        //     {
-                        //         Debug.LogError(args.DatabaseError.Message);
-                        //         return;
-                        //     }
-
-                        //     // Check to see if there is at least one result
-                        //     if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
-                        //     {
-                        //         // Unity does not know we expect exactly one result, so we must iterate 
-                        //         foreach (var childSnapshot in args.Snapshot.Children)
-                        //         {
-                        //             // Get the key of the current database entry
-                        //             string bucketKey = childSnapshot.Key;
-                        //             Debug.Log(childSnapshot.Key);
-                        //             string json = JsonUtility.ToJson(currentBucket);
-                        //             dbReference.Child("proficiencies").Child(SessionManager.PlayerKey())
-                        //             .Child("apprentice").Child(bucketKey).SetRawJsonValueAsync(json);
-                        //         }
-                        //     }
-                        // };
-                        Debug.Log(currentKey + " stage upgraded, moved to journeyman!");
-                    } else
-                    {
-                        newProficiency.apprentice.Add(currentBucket);
-                        Debug.Log(currentKey + " stage upgraded, stayed in apprentice!");
-                    }
-                } else 
-                {
-                    if (currentBucket.stage > 0) currentBucket.stage--;
-
-                    newProficiency.apprentice.Add(currentBucket);
-                    Debug.Log(currentKey + " stage downgraded, stayed in apprentice...");
-                }
+                SharedUpdate(0);
                 break;
             case "journeyman":
-                currentBucket = playerProficiency.journeyman.Find(x => x.key == currentKey);
-                playerProficiency.journeyman.Remove(currentBucket);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    currentBucket.stage++;
-                    if (currentBucket.stage >= 6)
-                    {
-                        newProficiency.expert.Add(currentBucket);
-                        Debug.Log(currentKey + " stage upgraded, moved to expert!");
-                    } else
-                    {
-                        newProficiency.journeyman.Add(currentBucket);
-                        Debug.Log(currentKey + " stage upgraded, stayed in journeyman!");
-                    }
-                } else 
-                {
-                    currentBucket.stage--;
-                    if (currentBucket.stage < 4)
-                    {
-                        newProficiency.apprentice.Add(currentBucket);
-                        Debug.Log(currentKey + " stage downgraded, moved to apprentice...");
-                    } else
-                    {
-                        newProficiency.journeyman.Add(currentBucket);
-                        Debug.Log(currentKey + " stage downgraded, stayed in journeyman...");
-                    }
-                }
+                SharedUpdate(1);
                 break;
             case "expert":
-                currentBucket = playerProficiency.expert.Find(x => x.key == currentKey);
-                playerProficiency.expert.Remove(currentBucket);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    currentBucket.stage++;
-                    newProficiency.master.Add(currentBucket);
-                    Debug.Log(currentKey + " stage upgraded, moved to master!");
-                } else 
-                {
-                    currentBucket.stage--;
-                    newProficiency.journeyman.Add(currentBucket);
-                    Debug.Log(currentKey + " stage downgraded, moved to journeyman...");
-                }
+                SharedUpdate(2);
                 break;
             case "master":
-                currentBucket = playerProficiency.master.Find(x => x.key == currentKey);
-                playerProficiency.master.Remove(currentBucket);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    newProficiency.master.Add(currentBucket);
-                    Debug.Log(currentKey + " stage unchanged, stayed in master!");
-                } else 
-                {
-                    currentBucket.stage--;
-                    newProficiency.expert.Add(currentBucket);
-                    Debug.Log(currentKey + " moved to expert...");
-                }
+                SharedUpdate(3);
                 break;
             default:
                 Debug.Log("Invalid type.");
                 break;
         }
+    }
+
+    // Helper function for updating the player proficiency
+    private void SharedUpdate(int index)
+    {
+        Bucket currentBucket = playerProficiencyList[index].Find(x => x.key == currentKey);
+        playerProficiencyList[index].Remove(currentBucket);
+        copiedProficiencyList[index].Remove(currentBucket);
+        long time = (long) DateTime.Now.ToUniversalTime()
+        .Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+        Debug.Log(time);
+        currentBucket.timestamp = time;
+        if (SessionManager.wrongAnswers == 0 && currentBucket.stage < 7)
+        {
+            currentBucket.stage++;
+            Debug.Log(currentKey + " stage upgraded!");
+        } else if (SessionManager.wrongAnswers != 0 && currentBucket.stage > 0)
+        {
+            currentBucket.stage--;
+            Debug.Log(currentKey + " stage downgraded...");
+        }
+        if (currentBucket.stage <= 3) copiedProficiency.apprentice.Add(currentBucket);
+        else if (currentBucket.stage <= 5) copiedProficiency.journeyman.Add(currentBucket);
+        else if (currentBucket.stage == 6) copiedProficiency.expert.Add(currentBucket);
+        else copiedProficiency.master.Add(currentBucket);
     }
 }
