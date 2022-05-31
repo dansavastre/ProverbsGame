@@ -169,10 +169,12 @@ public class SingleplayerManager : MonoBehaviour
         Bucket currentBucket = playerProficiencyList[index].Find(x => x.key == currentKey);
         playerProficiencyList[index].Remove(currentBucket);
         copiedProficiencyList[index].Remove(currentBucket);
+        // Update the timestamp of the bucket to now
         long time = (long) DateTime.Now.ToUniversalTime()
         .Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
         Debug.Log(time);
         currentBucket.timestamp = time;
+        // Check if we should go up or down a stage
         if (SessionManager.wrongAnswers == 0 && currentBucket.stage < 7)
         {
             currentBucket.stage++;
@@ -182,6 +184,7 @@ public class SingleplayerManager : MonoBehaviour
             currentBucket.stage--;
             Debug.Log(currentKey + " stage downgraded...");
         }
+        // Add bucket to the proficiency that corresponds to its stage
         if (currentBucket.stage <= 3) copiedProficiency.apprentice.Add(currentBucket);
         else if (currentBucket.stage <= 5) copiedProficiency.journeyman.Add(currentBucket);
         else if (currentBucket.stage == 6) copiedProficiency.expert.Add(currentBucket);
