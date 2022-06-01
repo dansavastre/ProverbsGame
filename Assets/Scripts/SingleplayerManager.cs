@@ -70,13 +70,26 @@ public class SingleplayerManager : MonoBehaviour
         allProficiencies.AddRange(playerProficiency.journeyman);
         allProficiencies.AddRange(playerProficiency.expert);
         allProficiencies.AddRange(playerProficiency.master);
-        allProficiencies.OrderBy(item => random.Next());
+        allProficiencies = Shuffle(allProficiencies.ToList());
         
         // containing update proficiencies
         // newProficiency = SessionManager.newProficiency;
         
         GetNextKey();
         nextQuestionButton.SetActive(false);
+    }
+
+    private LinkedList<T> Shuffle<T>(IList<T> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = random.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+
+        return new LinkedList<T>(list);
     }
 
     // Display the feedback after the player answers the question
@@ -91,6 +104,7 @@ public class SingleplayerManager : MonoBehaviour
         else 
         {
             resultText.text = "Incorrect!";
+            allProficiencies.Remove(currentBucket);
             // wrong question should be repeated after 3 other questions are repeated
             if (allProficiencies.Count >= 3)
             {
@@ -162,7 +176,7 @@ public class SingleplayerManager : MonoBehaviour
     // Update the player proficiency into a new object
     protected void UpdateProficiency()
     {
-        Bucket currentBucket;
+        // Bucket currentBucket;
         switch (currentType)
         {
             case "apprentice":
@@ -188,6 +202,7 @@ public class SingleplayerManager : MonoBehaviour
     private void SharedUpdate(int index)
     {
         // Bucket currentBucket = playerProficiencyList[index].Find(x => x.key == currentKey);
+        allProficiencies.Remove(currentBucket);
         playerProficiencyList[index].Remove(currentBucket);
         copiedProficiencyList[index].Remove(currentBucket);
         // Update the timestamp of the bucket to now
