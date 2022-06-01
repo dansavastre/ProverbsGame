@@ -24,6 +24,7 @@ public class SessionManager : MonoBehaviour
 
     // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
+    public static Proficiency copiedProficiency;
     public static Proficiency newProficiency;
     public static int wrongAnswers;
 
@@ -45,6 +46,7 @@ public class SessionManager : MonoBehaviour
     {
         // Reset the player proficiency
         playerProficiency = null;
+        copiedProficiency = null;
         newProficiency = new Proficiency();
         wrongAnswers = 0;
 
@@ -129,6 +131,7 @@ public class SessionManager : MonoBehaviour
                 // Convert the JSON back to a Proficiency object
                 string json = snapshot.GetRawJsonValue();
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
+                copiedProficiency = JsonUtility.FromJson<Proficiency>(json);
                 Debug.Log(json);
                 RemoveTimedProverbs();
             }
