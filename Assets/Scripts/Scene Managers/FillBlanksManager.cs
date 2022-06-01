@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class FillBlanksManager : SingleplayerManager
 {
@@ -62,10 +63,26 @@ public class FillBlanksManager : SingleplayerManager
         allWords.Add("box");
         allWords.Add("loses");
         allWords.Add("mediocre");
+        allWords.Add("frog");
+        allWords.Add("box");
+        allWords.Add("loses");
+        allWords.Add("mediocre");
+        allWords.Add("frog");
+        allWords.Add("box");
+        allWords.Add("loses");
+        allWords.Add("mediocre");
 
         foreach (string v in nextProverb.keywords)
         {
             answerProverb = answerProverb.Replace(v, "...");
+        }
+
+        for (int i = 0; i < allWords.Count; i++)
+        {
+            string temp = allWords[i];
+            int randomIndex = Random.Range(i, allWords.Count);
+            allWords[i] = allWords[randomIndex];
+            allWords[randomIndex] = temp;
         }
 
         for (int i = 0; i < allWords.Count; i++)
