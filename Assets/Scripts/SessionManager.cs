@@ -168,19 +168,19 @@ public class SessionManager : MonoBehaviour
     {
         if (playerProficiency.apprentice.Count > 0)
         {
-            SceneManager.LoadScene("RecognizeImage");
+            SceneManager.LoadScene("FormSentence");
         }
         else if (playerProficiency.journeyman.Count > 0)
         {
-            SceneManager.LoadScene("MultipleChoice");
+            SceneManager.LoadScene("FormSentence");
         }
         else if (playerProficiency.expert.Count > 0)
         {
-            SceneManager.LoadScene("FillBlanks");
+            SceneManager.LoadScene("FormSentence");
         }
         else if (playerProficiency.master.Count > 0)
         {
-            SceneManager.LoadScene("MultipleChoice");
+            SceneManager.LoadScene("FormSentence");
         }
         else
         {

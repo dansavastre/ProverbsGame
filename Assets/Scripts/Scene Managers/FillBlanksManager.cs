@@ -63,14 +63,6 @@ public class FillBlanksManager : SingleplayerManager
         allWords.Add("box");
         allWords.Add("loses");
         allWords.Add("mediocre");
-        allWords.Add("frog");
-        allWords.Add("box");
-        allWords.Add("loses");
-        allWords.Add("mediocre");
-        allWords.Add("frog");
-        allWords.Add("box");
-        allWords.Add("loses");
-        allWords.Add("mediocre");
 
         foreach (string v in nextProverb.keywords)
         {

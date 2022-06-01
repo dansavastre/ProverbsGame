@@ -254,7 +254,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 560862404}
-        m_TargetAssemblyTypeName: SentenceCompletion, Assembly-CSharp
+        m_TargetAssemblyTypeName: SingleplayerManager, Assembly-CSharp
         m_MethodName: LoadQuestion
         m_Mode: 1
         m_Arguments:
@@ -417,7 +417,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 780890543}
   - {fileID: 1841492732}
   - {fileID: 1328290778}
   - {fileID: 787498344}
@@ -440,7 +439,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 560862399}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2939fc238be52948a1b0080da2efeae, type: 3}
+  m_Script: {fileID: 11500000, guid: b205c2c01fbae5f49acd06cc3f8c6745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   questionText: {fileID: 1841492733}
@@ -536,7 +535,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 560862404}
-        m_TargetAssemblyTypeName: SentenceCompletion, Assembly-CSharp
+        m_TargetAssemblyTypeName: FormSentenceManager, Assembly-CSharp
         m_MethodName: CheckAnswer
         m_Mode: 1
         m_Arguments:
@@ -1143,7 +1142,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 560862403}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1197,7 +1196,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 60
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
