@@ -187,7 +187,7 @@ public class SingleplayerManager : MonoBehaviour
     // TODO check this. Can we remove one list from the attributes?
     private void SharedUpdate(int index)
     {
-        Bucket currentBucket = playerProficiencyList[index].Find(x => x.key == currentKey);
+        // Bucket currentBucket = playerProficiencyList[index].Find(x => x.key == currentKey);
         playerProficiencyList[index].Remove(currentBucket);
         copiedProficiencyList[index].Remove(currentBucket);
         // Update the timestamp of the bucket to now
@@ -206,10 +206,26 @@ public class SingleplayerManager : MonoBehaviour
             Debug.Log(currentKey + " stage downgraded...");
         }
         // Add bucket to the proficiency that corresponds to its stage
-        if (currentBucket.stage <= 3) copiedProficiency.apprentice.Add(currentBucket);
-        else if (currentBucket.stage <= 5) copiedProficiency.journeyman.Add(currentBucket);
-        else if (currentBucket.stage == 6) copiedProficiency.expert.Add(currentBucket);
-        else copiedProficiency.master.Add(currentBucket);
+        // if (currentBucket.stage <= 3) copiedProficiency.apprentice.Add(currentBucket);
+        // else if (currentBucket.stage <= 5) copiedProficiency.journeyman.Add(currentBucket);
+        // else if (currentBucket.stage == 6) copiedProficiency.expert.Add(currentBucket);
+        // else copiedProficiency.master.Add(currentBucket);
+        string newType = GetTypeOfStage(currentBucket.stage);
+        switch (newType)
+        {
+            case "apprentice":
+                copiedProficiency.apprentice.Add(currentBucket);
+                break;
+            case "journeyman":
+                copiedProficiency.journeyman.Add(currentBucket);
+                break;
+            case "expert":
+                copiedProficiency.expert.Add(currentBucket);
+                break;
+            case "master":
+                copiedProficiency.master.Add(currentBucket);
+                break;
+        }
     }
     
     /**
