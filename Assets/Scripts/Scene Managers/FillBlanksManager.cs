@@ -11,10 +11,8 @@ using UnityEngine.SceneManagement;
 
 public class FillBlanksManager : SingleplayerManager
 {
-    [SerializeField]
-    private Transform keywordBoard;
-    [SerializeField]
-    private TextMeshProUGUI ResultText;
+    [SerializeField] private Transform keywordBoard;
+    [SerializeField] private TextMeshProUGUI ResultText;
     [SerializeField] private List<Button> Buttons;
     [SerializeField] private List<TextMeshProUGUI> ButtonsTexts;
 

@@ -131,7 +131,7 @@ public class SessionManager : MonoBehaviour
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
                 newProficiency = JsonUtility.FromJson<Proficiency>(json);
                 Debug.Log(json);
-                RemoveTimedProverbs();
+                // RemoveTimedProverbs();
             }
         });
     }
