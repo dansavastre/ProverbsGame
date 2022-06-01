@@ -60,10 +60,6 @@ public class MultipleChoiceManager : SingleplayerManager
                 numbers[i] = random;
             }
         }
-        Debug.Log(numbers[0]);
-        Debug.Log(numbers[1]);
-        Debug.Log(numbers[2]);
-        Debug.Log(numbers[3]);
 
         SetCurrentQuestion(numbers[0]);
 
@@ -122,8 +118,6 @@ public class MultipleChoiceManager : SingleplayerManager
 
         answers[correct].isCorrect = true;
         currentQuestion.answers = answers;
-        Debug.Log(currentQuestion.answers[correct].isCorrect);
-        Debug.Log(correct);
     }
 
     // Deactivate all answer buttons
@@ -138,7 +132,6 @@ public class MultipleChoiceManager : SingleplayerManager
     // Display the feedback after the player answers the question
     public void CheckAnswer(int index)
     {
-        Debug.Log(index);
         DeactivateAnswerButtons();
         base.DisplayFeedback(currentQuestion.answers[index].isCorrect);
     }
