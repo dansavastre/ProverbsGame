@@ -64,6 +64,13 @@ public class SessionManager : MonoBehaviour
         {
             // Make the button active
             SessionButton.gameObject.SetActive(true);
+
+            //
+            DisplayProverbCount();
+            ApprenticeCount.ForceMeshUpdate(true);
+            JourneymanCount.ForceMeshUpdate(true);
+            ExpertCount.ForceMeshUpdate(true);
+            MasterCount.ForceMeshUpdate(true);
         }
     }
 
@@ -109,6 +116,15 @@ public class SessionManager : MonoBehaviour
                 }
             }
         };
+    }
+
+    // Displays the number of proverbs in each proficiency bucket
+    private void DisplayProverbCount() 
+    {
+        ApprenticeCount.text = playerProficiency.apprentice.Count.ToString();
+        JourneymanCount.text = playerProficiency.journeyman.Count.ToString();
+        ExpertCount.text = playerProficiency.expert.Count.ToString();
+        MasterCount.text = playerProficiency.master.Count.ToString();
     }
 
     // Fetches the proficiency of a player 
