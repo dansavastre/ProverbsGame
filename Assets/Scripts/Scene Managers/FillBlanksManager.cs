@@ -27,7 +27,7 @@ public class FillBlanksManager : SingleplayerManager
     private string LastClickedWord;
 
     // Start is called before the first frame update
-    async void Start()
+    protected async override void Start()
     {
         base.Start();
 

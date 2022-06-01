@@ -18,7 +18,7 @@ public class MultipleChoiceManager : SingleplayerManager
     public enum Mode { ProverbMeaning, MeaningProverb, ExampleSentence}
     public Mode gamemode;
 
-    async void Start()
+    protected async override void Start()
     {
         base.Start();
 

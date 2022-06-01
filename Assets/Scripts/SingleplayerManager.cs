@@ -18,25 +18,24 @@ public class SingleplayerManager : MonoBehaviour
 
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
-    public static Proficiency copiedProficiency;
-    // public static Proficiency newProficiency;
+    public static Proficiency newProficiency;
     protected List<List<Bucket>> playerProficiencyList;
-    protected List<List<Bucket>> copiedProficiencyList;
+    protected List<List<Bucket>> newProficiencyList;
     protected DatabaseReference dbReference;
     protected Proverb nextProverb;
     protected string currentType;
     protected string currentKey;
+    protected int currentStage;
 
     // Variables
     protected Question currentQuestion;
     
     // Start is called before the first frame update
-    protected void Start()
+    protected virtual void Start()
     {
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         playerProficiency = SessionManager.playerProficiency;
-        copiedProficiency = SessionManager.copiedProficiency;
-        // newProficiency = SessionManager.newProficiency;
+        newProficiency = SessionManager.newProficiency;
 
         playerProficiencyList = new List<List<Bucket>> {
             playerProficiency.apprentice, 
@@ -45,11 +44,11 @@ public class SingleplayerManager : MonoBehaviour
             playerProficiency.master
         };
 
-        copiedProficiencyList = new List<List<Bucket>> {
-            copiedProficiency.apprentice, 
-            copiedProficiency.journeyman,
-            copiedProficiency.expert,
-            copiedProficiency.master
+        newProficiencyList = new List<List<Bucket>> {
+            newProficiency.apprentice, 
+            newProficiency.journeyman,
+            newProficiency.expert,
+            newProficiency.master
         };
         
         GetNextKey();
@@ -78,22 +77,31 @@ public class SingleplayerManager : MonoBehaviour
     {
         Debug.Log("Load next question.");
         GetNextKey();
-        switch (currentType)
+        switch (currentStage)
         {
-            case "apprentice":
+            case 1:
                 SceneManager.LoadScene("RecognizeImage");
                 break;
-            case "journeyman":
+            case 2:
                 SceneManager.LoadScene("MultipleChoice");
                 break;
-            case "expert":
+            case 3:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            case 4:
                 SceneManager.LoadScene("FillBlanks");
                 break;
-            case "master":
+            case 5:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            case 6:
+                SceneManager.LoadScene("FillBlanks");
+                break;
+            case 7:
                 SceneManager.LoadScene("MultipleChoice");
                 break;
             default:
-                string json = JsonUtility.ToJson(copiedProficiency);
+                string json = JsonUtility.ToJson(newProficiency);
                 dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
                 SceneManager.LoadScene("Menu");
                 break;
@@ -104,7 +112,7 @@ public class SingleplayerManager : MonoBehaviour
     public void QuitSession()
     {
         Debug.Log("Quitting session.");
-        string json = JsonUtility.ToJson(copiedProficiency);
+        string json = JsonUtility.ToJson(newProficiency);
         dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
         SceneManager.LoadScene("Menu");
     }
@@ -115,27 +123,32 @@ public class SingleplayerManager : MonoBehaviour
         if (playerProficiency.apprentice.Count > 0)
         {
             currentKey = playerProficiency.apprentice.First().key;
+            currentStage = playerProficiency.apprentice.First().stage;
             currentType = "apprentice";
         }
         else if (playerProficiency.journeyman.Count > 0)
         {
             currentKey = playerProficiency.journeyman.First().key;
+            currentStage = playerProficiency.journeyman.First().stage;
             currentType = "journeyman";
         }
         else if (playerProficiency.expert.Count > 0)
         {
             currentKey = playerProficiency.expert.First().key;
+            currentStage = playerProficiency.expert.First().stage;
             currentType = "expert";
         }
         else if (playerProficiency.master.Count > 0)
         {
             currentKey = playerProficiency.master.First().key;
+            currentStage = playerProficiency.master.First().stage;
             currentType = "master";
         }
         else
         {
             Debug.Log("Session complete.");
             currentKey = null;
+            currentStage = -1;
             currentType = "none";
         }
     }
@@ -168,7 +181,7 @@ public class SingleplayerManager : MonoBehaviour
     {
         Bucket currentBucket = playerProficiencyList[index].Find(x => x.key == currentKey);
         playerProficiencyList[index].Remove(currentBucket);
-        copiedProficiencyList[index].Remove(currentBucket);
+        newProficiencyList[index].Remove(currentBucket);
         // Update the timestamp of the bucket to now
         long time = (long) DateTime.Now.ToUniversalTime()
         .Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -185,9 +198,9 @@ public class SingleplayerManager : MonoBehaviour
             Debug.Log(currentKey + " stage downgraded...");
         }
         // Add bucket to the proficiency that corresponds to its stage
-        if (currentBucket.stage <= 3) copiedProficiency.apprentice.Add(currentBucket);
-        else if (currentBucket.stage <= 5) copiedProficiency.journeyman.Add(currentBucket);
-        else if (currentBucket.stage == 6) copiedProficiency.expert.Add(currentBucket);
-        else copiedProficiency.master.Add(currentBucket);
+        if (currentBucket.stage <= 3) newProficiency.apprentice.Add(currentBucket);
+        else if (currentBucket.stage <= 5) newProficiency.journeyman.Add(currentBucket);
+        else if (currentBucket.stage == 6) newProficiency.expert.Add(currentBucket);
+        else newProficiency.master.Add(currentBucket);
     }
 }
