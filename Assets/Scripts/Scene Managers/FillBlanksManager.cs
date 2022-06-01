@@ -69,6 +69,7 @@ public class FillBlanksManager : SingleplayerManager
             answerProverb = answerProverb.Replace(v, "...");
         }
 
+        //Shuffling list of words
         for (int i = 0; i < allWords.Count; i++)
         {
             string temp = allWords[i];

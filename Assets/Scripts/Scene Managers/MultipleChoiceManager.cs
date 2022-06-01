@@ -47,6 +47,7 @@ public class MultipleChoiceManager : SingleplayerManager
             }
         });
 
+        //Create randomized list of question positions
         int[] numbers = { -1, -1, -1, -1 };
         for (int i = 0; i < 4; i++)
         {

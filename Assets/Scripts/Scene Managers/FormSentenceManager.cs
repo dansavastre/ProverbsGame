@@ -70,6 +70,7 @@ public class FormSentenceManager : SingleplayerManager
         allWords.Add("loses");
         allWords.Add("mediocre");
 
+        //Shuffling list of words
         for (int i = 0; i < allWords.Count; i++)
         {
             string temp = allWords[i];
@@ -161,9 +162,8 @@ public class FormSentenceManager : SingleplayerManager
     // Display the feedback after the player answers the question
     public void CheckAnswer()
     {
+        //Do string manipulation to verify that the sentences are the same or not
         string playerProverb = answerProverb.Replace(" ", "");
-        Debug.Log(playerProverb.ToLower());
-        Debug.Log(correctProverb.ToLower().Replace(" ", ""));
 
         DisplayFeedback(playerProverb.ToLower().Equals(correctProverb.ToLower().Replace(" ", "")));
         // TODO: Disable the ability to click and check new answers
