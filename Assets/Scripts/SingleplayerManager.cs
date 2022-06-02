@@ -46,90 +46,6 @@ public class SingleplayerManager : MonoBehaviour
         nextQuestionButton.SetActive(false);
     }
 
-    // Display the feedback after the player answers the question
-    protected void DisplayFeedback(bool correct)
-    {
-        if (correct)
-        {
-            resultText.text = "Correct!";
-            UpdateProficiency();
-
-            // TODO: we need to change this implementation
-            SessionManager.RightAnswer();
-        }
-        else 
-        {
-            resultText.text = "Incorrect!";
-            allProficiencies.Remove(currentBucket);
-            // Wrongly answered question should be repeated after 3 other questions are shown
-            if (allProficiencies.Count >= 3)
-            {
-                allProficiencies.AddAfter(allProficiencies.First.Next.Next, currentBucket);
-            }
-            // If there aren't many questions left, add the wrongly answered question at the end
-            else
-            {
-                allProficiencies.AddLast(currentBucket);
-            }
-
-            // TODO: we need to change this implementation
-            SessionManager.WrongAnswer();
-        }
-        nextQuestionButton.SetActive(true);
-    }
-
-    // Load the next question
-    public void LoadQuestion() 
-    {
-        Debug.Log("Load next question.");
-        GetNextKey();
-        if (currentBucket == null) 
-        {
-            string json = JsonUtility.ToJson(newProficiency);
-            dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
-            SceneManager.LoadScene("Menu");
-            return;
-        }
-        switch (currentBucket.stage)
-        {
-            case 1:
-                SceneManager.LoadScene("RecognizeImage");
-                break;
-            case 2:
-                SceneManager.LoadScene("MultipleChoice");
-                break;
-            case 3:
-                SceneManager.LoadScene("MultipleChoice");
-                break;
-            case 4:
-                SceneManager.LoadScene("FillBlanks");
-                break;
-            case 5:
-                SceneManager.LoadScene("MultipleChoice");
-                break;
-            case 6:
-                SceneManager.LoadScene("FillBlanks");
-                break;
-            case 7:
-                SceneManager.LoadScene("MultipleChoice");
-                break;
-            default:
-                string json = JsonUtility.ToJson(newProficiency);
-                dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
-                SceneManager.LoadScene("Menu");
-                break;
-        }
-    }
-
-    // Quit the session and return to the start menu
-    public void QuitSession()
-    {
-        Debug.Log("Quitting session.");
-        string json = JsonUtility.ToJson(newProficiency);
-        dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
-        SceneManager.LoadScene("Menu");
-    }
-
     // Get the key for the next proverb in the session in chronological order
     protected void GetNextKey()
     {
@@ -143,6 +59,26 @@ public class SingleplayerManager : MonoBehaviour
         }
         // Otherwise we fetch the next type
         else currentType = GetTypeOfStage(currentBucket.stage);
+    }
+
+    // Display the feedback after the player answers the question
+    protected void DisplayFeedback(bool correct)
+    {
+        if (correct)
+        {
+            resultText.text = "Correct!";
+            UpdateProficiency();
+        }
+        else 
+        {
+            resultText.text = "Incorrect!";
+            dictionary[currentBucket]++;
+            allProficiencies.Remove(currentBucket);
+            // Wrongly answered questions are repeated after other questions are shown
+            if (allProficiencies.Count >= 3) allProficiencies.AddAfter(allProficiencies.First.Next.Next, currentBucket);
+            else allProficiencies.AddLast(currentBucket);
+        }
+        nextQuestionButton.SetActive(true);
     }
 
     // Update the player proficiency into a new object
@@ -178,21 +114,19 @@ public class SingleplayerManager : MonoBehaviour
     }
 
     // Helper function for updating the player proficiency
-    // TODO check this. Can we remove one list from the attributes?
     private void SharedUpdate(int index)
     {
         allProficiencies.Remove(currentBucket);
         // Update the timestamp of the bucket to now
         long time = (long) DateTime.Now.ToUniversalTime()
         .Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
-        Debug.Log(time);
         currentBucket.timestamp = time;
         // Check if we should go up or down a stage
-        if (SessionManager.wrongAnswers == 0 && currentBucket.stage < 7)
+        if (dictionary[currentBucket] == 0 && currentBucket.stage < 7)
         {
             currentBucket.stage++;
             Debug.Log(currentBucket.key + " stage upgraded!");
-        } else if (SessionManager.wrongAnswers != 0 && currentBucket.stage > 0)
+        } else if (dictionary[currentBucket] != 0 && currentBucket.stage > 0)
         {
             currentBucket.stage--;
             Debug.Log(currentBucket.key + " stage downgraded...");
@@ -220,9 +154,7 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
     
-    /**
-     * <summary>Get the proficiency type of the stage</summary>
-     */
+    // Get the proficiency type corresponding to the stage
     private string GetTypeOfStage(int stage)
     {
         switch (stage)
@@ -235,6 +167,58 @@ public class SingleplayerManager : MonoBehaviour
                 return "expert";
             case >= 7:
                 return "master";
+        }
+    }
+
+    // Quit the session and return to the start menu
+    public void QuitSession()
+    {
+        Debug.Log("Quitting session.");
+        string json = JsonUtility.ToJson(newProficiency);
+        dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
+        SceneManager.LoadScene("Menu");
+    }
+
+    // Load the next question
+    public void LoadQuestion() 
+    {
+        Debug.Log("Load next question.");
+        GetNextKey();
+        if (currentBucket == null) 
+        {
+            string json = JsonUtility.ToJson(newProficiency);
+            dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
+            SceneManager.LoadScene("Menu");
+            return;
+        }
+        switch (currentBucket.stage)
+        {
+            case 1:
+                SceneManager.LoadScene("RecognizeImage");
+                break;
+            case 2:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            case 3:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            case 4:
+                SceneManager.LoadScene("FillBlanks");
+                break;
+            case 5:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            case 6:
+                SceneManager.LoadScene("FillBlanks");
+                break;
+            case 7:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            default:
+                string json = JsonUtility.ToJson(newProficiency);
+                dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
+                SceneManager.LoadScene("Menu");
+                break;
         }
     }
 }
