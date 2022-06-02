@@ -90,14 +90,8 @@ public class MultipleChoiceManager : SingleplayerManager
         for (int i = 0; i < 4; i++)
         {
             int random = Random.Range(0, 4);
-            if (numbers.Contains(random))
-            {
-                i--;
-            }
-            else
-            {
-                numbers[i] = random;
-            }
+            if (numbers.Contains(random)) i--;
+            else numbers[i] = random;
         }
 
         SetCurrentQuestion(numbers[0]);
