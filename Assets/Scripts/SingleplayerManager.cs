@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Firebase;
 using Firebase.Database;
 using System;
@@ -7,10 +5,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 using Random = System.Random;
 
 public class SingleplayerManager : MonoBehaviour
@@ -28,21 +26,19 @@ public class SingleplayerManager : MonoBehaviour
     protected DatabaseReference dbReference;
     protected Proverb nextProverb;
     protected string currentType;
-    protected string currentKey;
     protected Bucket currentBucket;
-    protected int currentStage;
 
     // Variables
     protected Question currentQuestion;
     private Random random;
     private LinkedList<Bucket> allProficiencies;
-    private HashSet<Bucket> alreadyAnsweredQuesitonSet;
+    private HashSet<Bucket> alreadyAnsweredQuestionSet;
     
     // Start is called before the first frame update
     protected virtual void Start()
     {
         allProficiencies = new LinkedList<Bucket>();
-        alreadyAnsweredQuesitonSet = new HashSet<Bucket>();
+        alreadyAnsweredQuestionSet = new HashSet<Bucket>();
 
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         playerProficiency = SessionManager.playerProficiency;
@@ -71,13 +67,11 @@ public class SingleplayerManager : MonoBehaviour
         allProficiencies.AddRange(playerProficiency.master);
         allProficiencies = Shuffle(allProficiencies.ToList());
         
-        // containing update proficiencies
-        // newProficiency = SessionManager.newProficiency;
-        
         GetNextKey();
         nextQuestionButton.SetActive(false);
     }
 
+    // Randomly shuffle the items in the given list
     private LinkedList<T> Shuffle<T>(IList<T> list)
     {
         int n = list.Count;
@@ -98,22 +92,27 @@ public class SingleplayerManager : MonoBehaviour
         {
             resultText.text = "Correct!";
             UpdateProficiency();
+
+            // TODO: we need to change this implementation
             SessionManager.RightAnswer();
         }
         else 
         {
             resultText.text = "Incorrect!";
             allProficiencies.Remove(currentBucket);
-            // wrong question should be repeated after 3 other questions are repeated
+            // Wrongly answered question should be repeated after 3 other questions are shown
             if (allProficiencies.Count >= 3)
             {
                 allProficiencies.AddAfter(allProficiencies.First.Next.Next, currentBucket);
             }
-            else    // if there aren't many questions left, add the wrong answered question at the end
+            // If there aren't many questions left, add the wrongly answered question at the end
+            else
             {
                 allProficiencies.AddLast(currentBucket);
             }
-            SessionManager.WrongAnswer();   // TODO we need to change this implementation
+
+            // TODO: we need to change this implementation
+            SessionManager.WrongAnswer();
         }
         nextQuestionButton.SetActive(true);
     }
@@ -123,7 +122,14 @@ public class SingleplayerManager : MonoBehaviour
     {
         Debug.Log("Load next question.");
         GetNextKey();
-        switch (currentStage)
+        if (currentBucket == null) 
+        {
+            string json = JsonUtility.ToJson(newProficiency);
+            dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
+            SceneManager.LoadScene("Menu");
+            return;
+        }
+        switch (currentBucket.stage)
         {
             case 1:
                 SceneManager.LoadScene("RecognizeImage");
@@ -166,20 +172,16 @@ public class SingleplayerManager : MonoBehaviour
     // Get the key for the next proverb in the session in chronological order
     protected void GetNextKey()
     {
-        // select first bucket as allProficiencies list is already randomized
+        // Select first bucket from shuffled allProficiencies list
         currentBucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;
-        if (currentBucket == null)  // session is completed in this case
+        // The session is complete if there are no proverbs left
+        if (currentBucket == null) 
         {
             Debug.Log("Session complete.");
-            currentKey = null;
-            currentStage = -1;
             currentType = "none";
         }
-        else
-        {
-            currentKey = currentBucket.key;
-            currentType = GetTypeOfStage(currentBucket.stage);
-        }
+        // Otherwise we fetch the next type
+        else currentType = GetTypeOfStage(currentBucket.stage);
     }
 
     // Update the player proficiency into a new object
@@ -210,7 +212,6 @@ public class SingleplayerManager : MonoBehaviour
     // TODO check this. Can we remove one list from the attributes?
     private void SharedUpdate(int index)
     {
-        // Bucket currentBucket = playerProficiencyList[index].Find(x => x.key == currentKey);
         allProficiencies.Remove(currentBucket);
         playerProficiencyList[index].Remove(currentBucket);
         newProficiencyList[index].Remove(currentBucket);
@@ -223,31 +224,31 @@ public class SingleplayerManager : MonoBehaviour
         if (SessionManager.wrongAnswers == 0 && currentBucket.stage < 7)
         {
             currentBucket.stage++;
-            Debug.Log(currentKey + " stage upgraded!");
+            Debug.Log(currentBucket.key + " stage upgraded!");
         } else if (SessionManager.wrongAnswers != 0 && currentBucket.stage > 0)
         {
             currentBucket.stage--;
-            Debug.Log(currentKey + " stage downgraded...");
+            Debug.Log(currentBucket.key + " stage downgraded...");
         }
         // Add bucket to the proficiency that corresponds to its stage
-        // if (currentBucket.stage <= 3) copiedProficiency.apprentice.Add(currentBucket);
-        // else if (currentBucket.stage <= 5) copiedProficiency.journeyman.Add(currentBucket);
-        // else if (currentBucket.stage == 6) copiedProficiency.expert.Add(currentBucket);
-        // else copiedProficiency.master.Add(currentBucket);
+        // if (currentBucket.stage <= 3) newProficiency.apprentice.Add(currentBucket);
+        // else if (currentBucket.stage <= 5) newProficiency.journeyman.Add(currentBucket);
+        // else if (currentBucket.stage == 6) newProficiency.expert.Add(currentBucket);
+        // else newProficiency.master.Add(currentBucket);
         string newType = GetTypeOfStage(currentBucket.stage);
         switch (newType)
         {
             case "apprentice":
-                copiedProficiency.apprentice.Add(currentBucket);
+                newProficiency.apprentice.Add(currentBucket);
                 break;
             case "journeyman":
-                copiedProficiency.journeyman.Add(currentBucket);
+                newProficiency.journeyman.Add(currentBucket);
                 break;
             case "expert":
-                copiedProficiency.expert.Add(currentBucket);
+                newProficiency.expert.Add(currentBucket);
                 break;
             case "master":
-                copiedProficiency.master.Add(currentBucket);
+                newProficiency.master.Add(currentBucket);
                 break;
         }
     }
@@ -275,7 +276,7 @@ public class SingleplayerManager : MonoBehaviour
     // // TODO check this more thoroughly
     // protected void UpdateProficiency(bool questionAnsweredCorrectly)
     // {
-    //     if (alreadyAnsweredQuesitonSet.Contains(currentBucket)) { return;}  // If this bucket was already moved during this session, don't move it again
+    //     if (alreadyAnsweredQuestionSet.Contains(currentBucket)) { return;}  // If this bucket was already moved during this session, don't move it again
     //     
     //     switch (currentType)    // remove currentBucket from the proficiency list that contained it
     //         {
