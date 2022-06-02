@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class RecognizeImageManager : SingleplayerManager
 {
@@ -81,25 +82,42 @@ public class RecognizeImageManager : SingleplayerManager
     // Load the proverb into a question
     private void SetCurrentQuestion()
     {
+        int[] numbers = { -1, -1, -1, -1 };
+        for (int i = 0; i < 4; i++)
+        {
+            int random = Random.Range(0, 4);
+            if (numbers.Contains(random))
+            {
+                i--;
+            }
+            else
+            {
+                numbers[i] = random;
+            }
+        }
         // Create question and answer objects from proverb
         currentQuestion = new Question();
         Answer answer0 = new Answer();
-        answer0.text = nextProverb.phrase;
-        answer0.isCorrect = true;
+        answer0.isCorrect = false;
 
         Answer answer1 = new Answer();
-        answer1.text = nextProverb.otherPhrases[0];
         answer1.isCorrect = false;
 
         Answer answer2 = new Answer();
-        answer2.text = nextProverb.otherPhrases[1];
         answer2.isCorrect = false;
 
         Answer answer3 = new Answer();
-        answer3.text = nextProverb.otherPhrases[1];
         answer3.isCorrect = false;
 
         Answer[] answers = {answer0, answer1, answer2, answer3};
+
+        answers[numbers[0]].isCorrect = true;
+
+        answers[numbers[0]].text = nextProverb.meaning;
+        answers[numbers[1]].text = nextProverb.otherPhrases[0];
+        answers[numbers[2]].text = nextProverb.otherPhrases[1];
+        answers[numbers[3]].text = nextProverb.otherPhrases[1];
+
         currentQuestion.answers = answers;
 
         // Set the question and button texts
@@ -107,7 +125,7 @@ public class RecognizeImageManager : SingleplayerManager
         answerButton0.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[0].text;
         answerButton1.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[1].text;
         answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[2].text;
-        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[3].text;
+        answerButton3.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[3].text;
     }
 
     // Deactivate all answer buttons
