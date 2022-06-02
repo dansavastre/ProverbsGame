@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour {
     public static MenuManager Instance;
@@ -30,5 +31,13 @@ public class MenuManager : MonoBehaviour {
 
     public void CloseMenu(Menu menu) {
         menu.Close();
+    }
+
+    public void OpenFIBScene() {
+        SceneManager.LoadScene("FillInBlanks");
+    }
+
+    public void OpenMMScene() {
+        SceneManager.LoadScene("MeaningMatching");
     }
 }

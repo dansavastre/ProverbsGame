@@ -20,4 +20,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Singleplayer/RecognizeImage.unity
     guid: 62d4742ce6119384983b68a286b11043
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer/TitleMenu.unity
+    guid: 931dec943d418f8448b854ab1cc3a299
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer/FillInBlanks.unity
+    guid: 482efb976eea5754ea09e2faafb7d234
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer/MeaningMatching.unity
+    guid: b83125fe8f450c34a9451fe4e0c72415
   m_configObjects: {}
