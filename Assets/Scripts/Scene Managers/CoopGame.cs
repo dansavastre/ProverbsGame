@@ -15,6 +15,8 @@ public class CoopGame : SingleplayerManager
     // UI elements
     [SerializeField] private List<GameObject> buttons;
     [SerializeField] private List<TextMeshProUGUI> buttonTexts;
+    [SerializeField] private Transform keywordBoard;
+    [SerializeField] private Button dragDropButtonPrefab;
 
     // Variables
     private static string correctProverb;
@@ -64,10 +66,23 @@ public class CoopGame : SingleplayerManager
             answerProverb = answerProverb.Replace(v, "...");
         }
 
-        for(int i = 0; i < buttonTexts.Count; i++)
+        // for(int i = 0; i < buttonTexts.Count; i++)
+        // {
+        //     buttonTexts[i].text = allWords[i];
+        // }
+
+        for (int i = 0; i < allWords.Count; i++)
         {
-            buttonTexts[i].text = allWords[i];
+            Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
+            newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
+            int xPos = (i % 3 - 1) * 230;
+            int yPos = -(i / 3) * 100;
+            newButton.transform.localPosition = new Vector3(xPos, yPos);
+            newButton.name = "AnswerButton" + i;
+            int x = i;
+            newButton.onClick.AddListener(() => buttonPressed(x));
         }
+
 
         questionText.text = answerProverb;
     }
