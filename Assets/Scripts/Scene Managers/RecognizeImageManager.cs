@@ -30,7 +30,7 @@ public class RecognizeImageManager : SingleplayerManager
         base.Start();
 
         // Goes to the 'proverbs' database table and searches for the key
-        await dbReference.Child("proverbs").Child(currentKey)
+        await dbReference.Child("proverbs").Child(currentBucket.key)
         .GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)

@@ -34,12 +34,12 @@ public class MultipleChoiceManager : SingleplayerManager
 
         image.enabled = false;
 
-        if (currentStage == 2) gamemode = Mode.ProverbMeaning;
-        else if (currentStage == 3) gamemode = Mode.MeaningProverb;
+        if (currentBucket.stage == 2) gamemode = Mode.ProverbMeaning;
+        else if (currentBucket.stage == 3) gamemode = Mode.MeaningProverb;
         else gamemode = Mode.ExampleSentence;
 
         // Goes to the 'proverbs' database table and searches for the key
-        await dbReference.Child("proverbs").Child(currentKey)
+        await dbReference.Child("proverbs").Child(currentBucket.key)
         .GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
