@@ -24,7 +24,6 @@ public class SessionManager : MonoBehaviour
 
     // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
-    public static Proficiency copiedProficiency;
     public static Proficiency newProficiency;
     public static int wrongAnswers;
 
@@ -46,8 +45,7 @@ public class SessionManager : MonoBehaviour
     {
         // Reset the player proficiency
         playerProficiency = null;
-        copiedProficiency = null;
-        newProficiency = new Proficiency();
+        newProficiency = null;
         wrongAnswers = 0;
 
         // Get the root reference location of the database
@@ -74,12 +72,12 @@ public class SessionManager : MonoBehaviour
         }
     }
 
-    public static void WrongAnswer()
+    public static void WrongAnswer()    // TODO what if the same question is answered wrong multiple times
     {
         wrongAnswers++;
     }
 
-    public static void RightAnswer()
+    public static void RightAnswer()    // TODO why is this set to zero?
     {
         wrongAnswers = 0;
     }
@@ -147,9 +145,9 @@ public class SessionManager : MonoBehaviour
                 // Convert the JSON back to a Proficiency object
                 string json = snapshot.GetRawJsonValue();
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
-                copiedProficiency = JsonUtility.FromJson<Proficiency>(json);
+                newProficiency = JsonUtility.FromJson<Proficiency>(json);
                 Debug.Log(json);
-                RemoveTimedProverbs();
+                // RemoveTimedProverbs();
             }
         });
     }
