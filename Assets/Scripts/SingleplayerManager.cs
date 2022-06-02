@@ -9,7 +9,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
-using Random = System.Random;
 
 public class SingleplayerManager : MonoBehaviour
 {
@@ -28,7 +27,6 @@ public class SingleplayerManager : MonoBehaviour
 
     // Variables
     protected Question currentQuestion;
-    private Random random;
     private LinkedList<Bucket> allProficiencies;
     private Dictionary<Bucket, int> dictionary;
     
@@ -41,53 +39,11 @@ public class SingleplayerManager : MonoBehaviour
         newProficiency = SessionManager.newProficiency;
 
         // Initialize new variables
-        allProficiencies = new LinkedList<Bucket>();
-        random = new Random();
-        
-        // Add all proficiencies to one list 
-        allProficiencies.AddRange(playerProficiency.apprentice);
-        allProficiencies.AddRange(playerProficiency.journeyman);
-        allProficiencies.AddRange(playerProficiency.expert);
-        allProficiencies.AddRange(playerProficiency.master);
-
-        Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
-
-        allProficiencies = Shuffle(allProficiencies.ToList());
-
-        Debug.Log("Post-shuffle: " + LinkedString(allProficiencies));
-
-        // Create a dictionary to keep track of wrong answers
-        List<int> ints = new List<int>(new int[allProficiencies.Count]);
-        dictionary = new Dictionary<Bucket, int>(allProficiencies
-        .Zip(ints, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v));
+        allProficiencies = SessionManager.allProficiencies;
+        dictionary = SessionManager.dictionary;
         
         GetNextKey();
         nextQuestionButton.SetActive(false);
-    }
-
-    // Print for debugging
-    private string LinkedString(LinkedList<Bucket> list)
-    {
-        string result = "[";
-        foreach (Bucket b in list)
-        {
-            result += "{Key: " + b.key + ", Stage: " + b.stage + "}, ";
-        }
-        return result + "]";
-    }
-
-    // Randomly shuffle the items in the given list
-    private LinkedList<T> Shuffle<T>(IList<T> list)
-    {
-        int n = list.Count;
-        while (n > 1)
-        {
-            n--;
-            int k = random.Next(n + 1);
-            (list[k], list[n]) = (list[n], list[k]);
-        }
-
-        return new LinkedList<T>(list);
     }
 
     // Display the feedback after the player answers the question

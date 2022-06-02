@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using Random = System.Random;
 
 public class SessionManager : MonoBehaviour
 {
@@ -26,6 +28,10 @@ public class SessionManager : MonoBehaviour
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
     public static int wrongAnswers;
+
+    private Random random;
+    public static LinkedList<Bucket> allProficiencies;
+    public static Dictionary<Bucket, int> dictionary;
 
     private TimeSpan[] waitingPeriod = 
     {
@@ -47,6 +53,8 @@ public class SessionManager : MonoBehaviour
         playerProficiency = null;
         newProficiency = null;
         wrongAnswers = 0;
+        allProficiencies = new LinkedList<Bucket>();
+        random = new Random();
 
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
@@ -148,8 +156,54 @@ public class SessionManager : MonoBehaviour
                 newProficiency = JsonUtility.FromJson<Proficiency>(json);
                 Debug.Log(json);
                 // RemoveTimedProverbs();
+                InitList();
             }
         });
+    }
+
+    private void InitList()
+    {
+        // Add all proficiencies to one list 
+        allProficiencies.AddRange(playerProficiency.apprentice);
+        allProficiencies.AddRange(playerProficiency.journeyman);
+        allProficiencies.AddRange(playerProficiency.expert);
+        allProficiencies.AddRange(playerProficiency.master);
+
+        Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
+
+        allProficiencies = Shuffle(allProficiencies.ToList());
+
+        Debug.Log("Post-shuffle: " + LinkedString(allProficiencies));
+
+        // Create a dictionary to keep track of wrong answers
+        List<int> ints = new List<int>(new int[allProficiencies.Count]);
+        dictionary = new Dictionary<Bucket, int>(allProficiencies
+        .Zip(ints, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v));
+    }
+
+    // Print for debugging
+    private string LinkedString(LinkedList<Bucket> list)
+    {
+        string result = "[";
+        foreach (Bucket b in list)
+        {
+            result += "{Key: " + b.key + ", Stage: " + b.stage + "}, ";
+        }
+        return result + "]";
+    }
+
+    // Randomly shuffle the items in the given list
+    private LinkedList<T> Shuffle<T>(IList<T> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = random.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+
+        return new LinkedList<T>(list);
     }
 
     // Remove proverbs from the session list that have been questioned recently
