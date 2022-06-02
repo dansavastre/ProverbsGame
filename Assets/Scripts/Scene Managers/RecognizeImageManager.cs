@@ -25,7 +25,7 @@ public class RecognizeImageManager : SingleplayerManager
     private byte[] fileContents;
 
     // Start is called before the first frame update.
-    async void Start()
+    protected async override void Start()
     {
         base.Start();
 

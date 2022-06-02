@@ -12,10 +12,8 @@ using Random = UnityEngine.Random;
 
 public class FillBlanksManager : SingleplayerManager
 {
-    [SerializeField]
-    private Transform keywordBoard;
-    [SerializeField]
-    private TextMeshProUGUI ResultText;
+    [SerializeField] private Transform keywordBoard;
+    [SerializeField] private TextMeshProUGUI ResultText;
     [SerializeField] private List<Button> Buttons;
     [SerializeField] private List<TextMeshProUGUI> ButtonsTexts;
 
@@ -28,7 +26,7 @@ public class FillBlanksManager : SingleplayerManager
     private string LastClickedWord;
 
     // Start is called before the first frame update
-    async void Start()
+    protected async override void Start()
     {
         base.Start();
 
