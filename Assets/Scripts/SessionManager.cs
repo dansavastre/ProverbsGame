@@ -24,7 +24,6 @@ public class SessionManager : MonoBehaviour
 
     // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
-    public static Proficiency copiedProficiency;
     public static Proficiency newProficiency;
     public static int wrongAnswers;
 
@@ -46,8 +45,7 @@ public class SessionManager : MonoBehaviour
     {
         // Reset the player proficiency
         playerProficiency = null;
-        copiedProficiency = null;
-        newProficiency = new Proficiency();
+        newProficiency = null;
         wrongAnswers = 0;
 
         // Get the root reference location of the database
@@ -64,6 +62,13 @@ public class SessionManager : MonoBehaviour
         {
             // Make the button active
             SessionButton.gameObject.SetActive(true);
+
+            //
+            DisplayProverbCount();
+            ApprenticeCount.ForceMeshUpdate(true);
+            JourneymanCount.ForceMeshUpdate(true);
+            ExpertCount.ForceMeshUpdate(true);
+            MasterCount.ForceMeshUpdate(true);
         }
     }
 
@@ -111,6 +116,15 @@ public class SessionManager : MonoBehaviour
         };
     }
 
+    // Displays the number of proverbs in each proficiency bucket
+    private void DisplayProverbCount() 
+    {
+        ApprenticeCount.text = playerProficiency.apprentice.Count.ToString();
+        JourneymanCount.text = playerProficiency.journeyman.Count.ToString();
+        ExpertCount.text = playerProficiency.expert.Count.ToString();
+        MasterCount.text = playerProficiency.master.Count.ToString();
+    }
+
     // Fetches the proficiency of a player 
     private void GetPlayerProficiencies()
     {
@@ -131,9 +145,9 @@ public class SessionManager : MonoBehaviour
                 // Convert the JSON back to a Proficiency object
                 string json = snapshot.GetRawJsonValue();
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
-                copiedProficiency = JsonUtility.FromJson<Proficiency>(json);
+                newProficiency = JsonUtility.FromJson<Proficiency>(json);
                 Debug.Log(json);
-                RemoveTimedProverbs();
+                // RemoveTimedProverbs();
             }
         });
     }
