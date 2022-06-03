@@ -19,13 +19,13 @@ public class CoopGame : SingleplayerManager
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private Button dragDropButtonPrefab;
     [SerializeField] private Canvas canvas;
+    private List<bool> buttonIndices;
 
     // Variables
     private static string correctProverb;
     private string answerProverb;
     List<string> allWords;
     public string LastClickedWord;
-    private List<string> buttonIndices;
 
     // Start is called before the first frame update
     async void Start()
@@ -76,21 +76,14 @@ public class CoopGame : SingleplayerManager
         //     buttonTexts[i].text = allWords[i];
         // }
 
-        buttonIndices = new List<string>(capacity:15);
+        buttonIndices = new List<bool>();
         for (int i = 0; i < allWords.Count; i++)
         {
-            Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
-            newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
-            int xPos = (i % 3 - 1) * 230;
-            int yPos = -(i / 3) * 70;
-            newButton.transform.localPosition = new Vector3(xPos, yPos);
-            newButton.name = "AnswerButton" + i;
-            newButton.GetComponent<DragDrop>().canvas = canvas;
-            newButton.GetComponent<DragDrop>().startingPosition = newButton.transform.localPosition;
+            CreateButton(i, allWords[i]);
         }
-
-
+        
         questionText.text = answerProverb;
+        CreateButton(allWords.Count, "TEST");
     }
 
     private void Update()
@@ -166,8 +159,27 @@ public class CoopGame : SingleplayerManager
         // TODO: Disable the ability to click and check new answers
     }
 
-    public void createButtonForReceivedKeyword(string Text)
+    public void CreateButtonForReceivedKeyword(string text)
     {
-        
+        int index = 0;
+        while (index < buttonIndices.Count && buttonIndices[index])
+        {
+            index++;
+        }
+
+        CreateButton(index, text);
+    }
+
+    private void CreateButton(int i, string text)
+    {
+        Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
+        newButton.GetComponentInChildren<TextMeshProUGUI>().text = text;
+        int xPos = (i % 3 - 1) * 230;
+        int yPos = -(i / 3) * 70;
+        newButton.transform.localPosition = new Vector3(xPos, yPos);
+        newButton.name = "AnswerButton" + i;
+        newButton.GetComponent<DragDrop>().canvas = canvas;
+        newButton.GetComponent<DragDrop>().startingPosition = newButton.transform.localPosition;
+        buttonIndices.Add(true);
     }
 }
