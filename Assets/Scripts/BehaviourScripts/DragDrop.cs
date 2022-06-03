@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
@@ -10,6 +12,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
+    public Vector3 startingPosition;
 
     private void Awake()
     {
@@ -17,12 +20,42 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-    }
+    public void OnPointerDown(PointerEventData eventData) { }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        // Snap button back to starting position if not placed on a player
+        List<RaycastResult> result = RaycastMouse();
+        if (result.Count > 1)
+        {
+            foreach (var r in result)
+            {
+                if (r.gameObject.GetComponentInChildren<TextMeshProUGUI>().text.Contains("Player"))
+                {
+                    return;
+                }
+                GetComponent<RectTransform>().anchoredPosition = startingPosition;
+            }
+        }
+        else
+        {
+            GetComponent<RectTransform>().anchoredPosition = startingPosition;
+        }
+    }
+    
+    public List<RaycastResult> RaycastMouse(){
+         
+        PointerEventData pointerData = new PointerEventData (EventSystem.current)
+        {
+            pointerId = -1,
+        };
+         
+        pointerData.position = Input.mousePosition;
+ 
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+
+        return results;
     }
 
     public void OnBeginDrag(PointerEventData eventData)

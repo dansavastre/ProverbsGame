@@ -25,6 +25,7 @@ public class CoopGame : SingleplayerManager
     private string answerProverb;
     List<string> allWords;
     public string LastClickedWord;
+    private List<string> buttonIndices;
 
     // Start is called before the first frame update
     async void Start()
@@ -75,6 +76,7 @@ public class CoopGame : SingleplayerManager
         //     buttonTexts[i].text = allWords[i];
         // }
 
+        buttonIndices = new List<string>(capacity:15);
         for (int i = 0; i < allWords.Count; i++)
         {
             Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
@@ -84,7 +86,7 @@ public class CoopGame : SingleplayerManager
             newButton.transform.localPosition = new Vector3(xPos, yPos);
             newButton.name = "AnswerButton" + i;
             newButton.GetComponent<DragDrop>().canvas = canvas;
-            newButton.onClick.AddListener(delegate { Debug.Log("hi"); });
+            newButton.GetComponent<DragDrop>().startingPosition = newButton.transform.localPosition;
         }
 
 
@@ -162,5 +164,10 @@ public class CoopGame : SingleplayerManager
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
         DisplayFeedback(playerProverb.Equals(correctProverb));
         // TODO: Disable the ability to click and check new answers
+    }
+
+    public void createButtonForReceivedKeyword(string Text)
+    {
+        
     }
 }
