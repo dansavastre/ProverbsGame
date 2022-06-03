@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -17,6 +18,7 @@ public class CoopGame : SingleplayerManager
     [SerializeField] private List<TextMeshProUGUI> buttonTexts;
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private Button dragDropButtonPrefab;
+    [SerializeField] private Canvas canvas;
 
     // Variables
     private static string correctProverb;
@@ -27,41 +29,43 @@ public class CoopGame : SingleplayerManager
     // Start is called before the first frame update
     async void Start()
     {
-        base.Start();
+        // base.Start();
 
         // Goes to the 'proverbs' database table and searches for the key
-        await dbReference.Child("proverbs").Child(currentKey)
-        .GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsFaulted)
-            {
-                Debug.LogError("Task could not be completed.");
-                return;
-            }
-            
-            else if (task.IsCompleted)
-            {
-                // Take a snapshot of the database entry
-                DataSnapshot snapshot = task.Result;
-                // Convert the JSON back to a Proverb object
-                string json = snapshot.GetRawJsonValue();
-                nextProverb = JsonUtility.FromJson<Proverb>(json);
-                Debug.Log(json);
-            }
-        });
+        // await dbReference.Child("proverbs").Child(currentKey)
+        // .GetValueAsync().ContinueWith(task =>
+        // {
+        //     if (task.IsFaulted)
+        //     {
+        //         Debug.LogError("Task could not be completed.");
+        //         return;
+        //     }
+        //     
+        //     else if (task.IsCompleted)
+        //     {
+        //         // Take a snapshot of the database entry
+        //         DataSnapshot snapshot = task.Result;
+        //         // Convert the JSON back to a Proverb object
+        //         string json = snapshot.GetRawJsonValue();
+        //         nextProverb = JsonUtility.FromJson<Proverb>(json);
+        //         Debug.Log(json);
+        //     }
+        // });
+        questionText.text = "Don't look a gift horse in the mouth";
+        allWords = new List<string>(new[] { "gift", "horse", "mouth" });
 
         // Set the variables
-        correctProverb = nextProverb.phrase;
+        correctProverb = "Don't look a gift horse in the mouth";
         answerProverb = correctProverb;
 
         // Add the keywords to allwords, and add some flukes
-        allWords = nextProverb.keywords;
+        // allWords = nextProverb.keywords;
         allWords.Add("frog");
         allWords.Add("box");
         allWords.Add("loses");
         allWords.Add("mediocre");
 
-        foreach (string v in nextProverb.keywords)
+        foreach (string v in allWords)
         {
             answerProverb = answerProverb.Replace(v, "...");
         }
@@ -76,11 +80,11 @@ public class CoopGame : SingleplayerManager
             Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
             newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
             int xPos = (i % 3 - 1) * 230;
-            int yPos = -(i / 3) * 100;
+            int yPos = -(i / 3) * 70;
             newButton.transform.localPosition = new Vector3(xPos, yPos);
             newButton.name = "AnswerButton" + i;
-            int x = i;
-            newButton.onClick.AddListener(() => buttonPressed(x));
+            newButton.GetComponent<DragDrop>().canvas = canvas;
+            newButton.onClick.AddListener(delegate { Debug.Log("hi"); });
         }
 
 
@@ -89,20 +93,20 @@ public class CoopGame : SingleplayerManager
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            var wordIndex = TMP_TextUtilities.FindIntersectingWord(questionText, Input.mousePosition, null);
-
-            if (wordIndex != -1)
-            {
-                LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
-
-                if (allWords.Contains(LastClickedWord))
-                {
-                    removeWord(LastClickedWord);
-                }
-            }
-        }
+        // if (Input.GetMouseButtonDown(0))
+        // {
+        //     var wordIndex = TMP_TextUtilities.FindIntersectingWord(questionText, Input.mousePosition, null);
+        //
+        //     if (wordIndex != -1)
+        //     {
+        //         LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
+        //
+        //         if (allWords.Contains(LastClickedWord))
+        //         {
+        //             removeWord(LastClickedWord);
+        //         }
+        //     }
+        // }
     }
 
     public bool canInput(string text, string search)
