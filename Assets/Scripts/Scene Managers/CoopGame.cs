@@ -108,6 +108,7 @@ public class CoopGame : SingleplayerManager
                 if (allWords.Contains(LastClickedWord))
                 {
                     removeWord(LastClickedWord);
+                    CreateButtonForReceivedKeyword(LastClickedWord);
                 }
             }
         }
@@ -137,8 +138,9 @@ public class CoopGame : SingleplayerManager
                 buttons[i].SetActive(true);
             }
         }
-        word = "<u><b>" + word + "</u></b>";
-        answerProverb = ReplaceFirst(answerProverb, word, "...");
+        word = "<u>" + word + "</u>";
+        answerProverb = questionText.text;
+        answerProverb = ReplaceFirst(answerProverb, word, "<u>BLANK</u>");
         questionText.text = answerProverb;
     }
 
@@ -188,6 +190,7 @@ public class CoopGame : SingleplayerManager
         newButton.transform.localPosition = new Vector3(xPos, yPos);
         newButton.name = "AnswerButton" + i;
         newButton.GetComponent<DragDrop>().canvas = canvas;
+        newButton.GetComponent<DragDrop>().proverbText = questionText;
         newButton.GetComponent<DragDrop>().startingPosition = newButton.transform.localPosition;
         buttonIndices.Add(true);
     }

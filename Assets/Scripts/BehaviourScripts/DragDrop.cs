@@ -4,11 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-<<<<<<< HEAD
 using TMPro;
-=======
 using UnityEngine.UI;
->>>>>>> 64b14b06d40ef2e3153cff488bd815c754bfc216
 
 public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
@@ -85,7 +82,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         canvasGroup.alpha = 1f;
         int wordIndex = TMP_TextUtilities.FindIntersectingWord(proverbText, Input.mousePosition, null);
         string[] splits = proverbText.text.Split(" ");
-        splits[wordIndex] = draggedButtonText;
+        splits[wordIndex] = "<u>" + draggedButtonText + "</u>";
         proverbText.text = string.Join(" ", splits);
         Destroy(eventData.pointerDrag, 0);
 
