@@ -67,7 +67,7 @@ public class CoopGame : SingleplayerManager
 
         foreach (string v in allWords)
         {
-            answerProverb = answerProverb.Replace(v, "...");
+            answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
         }
 
         // for(int i = 0; i < buttonTexts.Count; i++)
@@ -84,6 +84,7 @@ public class CoopGame : SingleplayerManager
             newButton.transform.localPosition = new Vector3(xPos, yPos);
             newButton.name = "AnswerButton" + i;
             newButton.GetComponent<DragDrop>().canvas = canvas;
+            newButton.GetComponent<DragDrop>().proverbText = questionText;
             newButton.onClick.AddListener(delegate { Debug.Log("hi"); });
         }
 
@@ -93,20 +94,20 @@ public class CoopGame : SingleplayerManager
 
     private void Update()
     {
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     var wordIndex = TMP_TextUtilities.FindIntersectingWord(questionText, Input.mousePosition, null);
-        //
-        //     if (wordIndex != -1)
-        //     {
-        //         LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
-        //
-        //         if (allWords.Contains(LastClickedWord))
-        //         {
-        //             removeWord(LastClickedWord);
-        //         }
-        //     }
-        // }
+        if (Input.GetMouseButtonDown(0))
+        {
+            var wordIndex = TMP_TextUtilities.FindIntersectingWord(questionText, Input.mousePosition, null);
+
+            if (wordIndex != -1)
+            {
+                LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
+
+                if (allWords.Contains(LastClickedWord))
+                {
+                    removeWord(LastClickedWord);
+                }
+            }
+        }
     }
 
     public bool canInput(string text, string search)

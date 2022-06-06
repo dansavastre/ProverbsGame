@@ -1571,6 +1571,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 799108316}
     m_Modifications:
+    - target: {fileID: 1748840965418256045, guid: a438d03717113e64381ee9783a1a79fc, type: 3}
+      propertyPath: m_text
+      value: Player 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748840965418256045, guid: a438d03717113e64381ee9783a1a79fc, type: 3}
+      propertyPath: m_fontSize
+      value: 71.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748840965418256045, guid: a438d03717113e64381ee9783a1a79fc, type: 3}
+      propertyPath: m_isRightToLeft
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1748840966593167841, guid: a438d03717113e64381ee9783a1a79fc, type: 3}
       propertyPath: m_Name
       value: Player1
