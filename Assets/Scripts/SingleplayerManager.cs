@@ -78,6 +78,7 @@ public class SingleplayerManager : MonoBehaviour
         {
             resultText.text = "Incorrect!";
             dictionary[currentBucket]++;
+            Debug.Log("Mistakes: " + dictionary[currentBucket].ToString());
             allProficiencies.Remove(currentBucket);
             // Wrongly answered questions are repeated after other questions are shown
             if (allProficiencies.Count >= 3) allProficiencies.AddAfter(allProficiencies.First.Next.Next, currentBucket);
@@ -130,11 +131,11 @@ public class SingleplayerManager : MonoBehaviour
         if (dictionary[currentBucket] == 0 && currentBucket.stage < 7)
         {
             currentBucket.stage++;
-            Debug.Log(currentBucket.key + " stage upgraded!");
+            Debug.Log(currentBucket.key + " stage upgraded to " + currentBucket.stage.ToString());
         } else if (dictionary[currentBucket] > 0 && currentBucket.stage > 1)
         {
             currentBucket.stage = ChangeStage(currentBucket.stage, dictionary[currentBucket]);
-            Debug.Log(currentBucket.key + " stage downgraded...");
+            Debug.Log(currentBucket.key + " stage downgraded to " + currentBucket.stage.ToString());
         }
         // Add bucket to the proficiency that corresponds to its stage
         string newType = GetTypeOfStage(currentBucket.stage);
