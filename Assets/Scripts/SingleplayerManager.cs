@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using Random = UnityEngine.Random;
 
 public class SingleplayerManager : MonoBehaviour
 {
@@ -191,7 +192,7 @@ public class SingleplayerManager : MonoBehaviour
         }
         for (int i = 0; i < numbers.Length; i++)
         {
-            int random = this.random.Next(0, numbers.Length);
+            int random = Random.Range(0, numbers.Length);
             if (numbers.Contains(random))
             {
                 i--;
