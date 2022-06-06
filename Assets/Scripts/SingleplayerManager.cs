@@ -17,6 +17,9 @@ public class SingleplayerManager : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI questionText;
     [SerializeField] protected TextMeshProUGUI resultText;
     [SerializeField] protected GameObject nextQuestionButton;
+    [SerializeField] protected Button answerButtonPrefab;
+    [SerializeField] protected RectTransform answerBoard;
+    [SerializeField] protected List<Button> answerButtons;
 
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
@@ -251,6 +254,97 @@ public class SingleplayerManager : MonoBehaviour
                 newProficiency.master.Add(currentBucket);
                 break;
         }
+    }
+    
+    /**
+     * <summary>currentQuestion attribute gets initialized and written with right values.
+     * Randomization is used to randomize order of answers. In addition, a flexible number of answer buttons is possible.
+     * </summary>
+     * <param name="correctAnswer">The correct answer</param>
+     * <param name="wrongAnswers">The wrong answers</param>
+     */
+    public void SetCurrentQuestion(string correctAnswer, List<string> wrongAnswers)
+    {
+        answerButtons = new List<Button>();
+        // randomize order of the answers with help of numbers
+        int[] numbers = new int[wrongAnswers.Count + 1]; // there are 1 + len(other phrases) answers
+        for (var i = 0; i < numbers.Length; i++)
+        {
+            numbers[i] = -1;
+        }
+        for (int i = 0; i < numbers.Length; i++)
+        {
+            int random = this.random.Next(0, numbers.Length);
+            if (numbers.Contains(random))
+            {
+                i--;
+            }
+            else
+            {
+                numbers[i] = random;
+            }
+        }
+        // Create question and answer objects from proverb
+        currentQuestion = new Question();
+        Answer answer0 = new Answer();
+        answer0.isCorrect = false;
+
+        Answer answer1 = new Answer();
+        answer1.isCorrect = false;
+
+        Answer answer2 = new Answer();
+        answer2.isCorrect = false;
+
+        Answer answer3 = new Answer();
+        answer3.isCorrect = false;
+
+        Answer[] answers = {answer0, answer1, answer2, answer3};
+
+        answers[numbers[0]].isCorrect = true;   // number[0] gives the index of correct answer in the "answers" array
+        answers[numbers[0]].text = correctAnswer; // meaning is the correct answer
+        for (int i = 1; i < numbers.Length; i++)
+        {
+            answers[numbers[i]].text = wrongAnswers[i-1];
+        }
+
+        currentQuestion.answers = answers;
+
+        // Set the question and create the answer buttons
+        for (int i = 0; i < numbers.Length; i++)
+        {
+            CreateButton(i);
+        }
+    }
+    
+    /**
+     * <summary>Function that creates the buttons containing the possible answers to the multiple choice questions.</summary>
+     * <param name="answerIndex">The answer the button should contain is at answerIndex in currentQuestion.answers.</param>
+     */
+    private void CreateButton(int answerIndex)
+    {
+        Button newButton = Instantiate(answerButtonPrefab, answerBoard, false);
+        // Set position
+        int yPos = -answerIndex * 75 + 20;
+        var transform1 = newButton.transform;
+        transform1.localPosition = new Vector3(transform1.localPosition.x, yPos);
+        // set name, text, and callback
+        newButton.name = "Answer" + answerIndex;
+        newButton.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[answerIndex].text;
+        newButton.onClick.AddListener(() => CheckAnswer(answerIndex));
+        answerButtons.Add(newButton);
+    }
+    
+    // Display the feedback after the player answers the question
+    public void CheckAnswer(int index)
+    {
+        DisplayFeedback(currentQuestion.answers[index].isCorrect);
+        DeactivateAnswerButtons();
+    }
+    
+    // Deactivate all answer buttons
+    private void DeactivateAnswerButtons()
+    {
+        answerButtons.ForEach(delegate(Button button) { button.interactable = false; });
     }
     
     /**

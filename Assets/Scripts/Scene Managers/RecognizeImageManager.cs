@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,6 @@ public class RecognizeImageManager : SingleplayerManager
 {
     // UI elements
     [SerializeField] private RawImage image;
-    [SerializeField] private Button answerButton0, answerButton1, answerButton2, answerButton3;
 
     // Stores information fetched from the database
     private StorageReference storageRef;
@@ -39,7 +39,7 @@ public class RecognizeImageManager : SingleplayerManager
                 return;
             }
             
-            else if (task.IsCompleted)
+            if (task.IsCompleted)
             {
                 // Take a snapshot of the database entry
                 DataSnapshot snapshot = task.Result;
@@ -76,71 +76,6 @@ public class RecognizeImageManager : SingleplayerManager
             }
         });
         
-        SetCurrentQuestion();
-    }
-
-    // Load the proverb into a question
-    private void SetCurrentQuestion()
-    {
-        int[] numbers = { -1, -1, -1, -1 };
-        for (int i = 0; i < 4; i++)
-        {
-            int random = Random.Range(0, 4);
-            if (numbers.Contains(random))
-            {
-                i--;
-            }
-            else
-            {
-                numbers[i] = random;
-            }
-        }
-        // Create question and answer objects from proverb
-        currentQuestion = new Question();
-        Answer answer0 = new Answer();
-        answer0.isCorrect = false;
-
-        Answer answer1 = new Answer();
-        answer1.isCorrect = false;
-
-        Answer answer2 = new Answer();
-        answer2.isCorrect = false;
-
-        Answer answer3 = new Answer();
-        answer3.isCorrect = false;
-
-        Answer[] answers = {answer0, answer1, answer2, answer3};
-
-        answers[numbers[0]].isCorrect = true;
-
-        answers[numbers[0]].text = nextProverb.meaning;
-        answers[numbers[1]].text = nextProverb.otherPhrases[0];
-        answers[numbers[2]].text = nextProverb.otherPhrases[1];
-        answers[numbers[3]].text = nextProverb.otherPhrases[1];
-
-        currentQuestion.answers = answers;
-
-        // Set the question and button texts
-        questionText.text = currentQuestion.text;
-        answerButton0.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[0].text;
-        answerButton1.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[1].text;
-        answerButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[2].text;
-        answerButton3.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[3].text;
-    }
-
-    // Deactivate all answer buttons
-    private void DeactivateAnswerButtons()
-    {
-        answerButton0.interactable = false;
-        answerButton1.interactable = false;
-        answerButton2.interactable = false;
-        answerButton3.interactable = false;
-    }
-
-    // Display the feedback after the player answers the question
-    public void CheckAnswer(int index)
-    {
-        base.DisplayFeedback(currentQuestion.answers[index].isCorrect);
-        DeactivateAnswerButtons();
+        SetCurrentQuestion(nextProverb.phrase, nextProverb.otherPhrases);
     }
 }
