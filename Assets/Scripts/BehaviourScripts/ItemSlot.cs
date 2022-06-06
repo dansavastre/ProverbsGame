@@ -16,7 +16,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                 GetComponent<RectTransform>().anchoredPosition;
 
             string draggedButtonText = eventData.pointerDrag.GetComponentInChildren<TextMeshProUGUI>().text; 
-            Debug.Log(draggedButtonText);
+            // Debug.Log(draggedButtonText);
         }
     }
 }
