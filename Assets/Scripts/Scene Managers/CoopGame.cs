@@ -79,18 +79,18 @@ public class CoopGame : SingleplayerManager
         buttonIndices = new List<bool>();
         for (int i = 0; i < allWords.Count; i++)
         {
-            Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
-            newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
-            int xPos = (i % 3 - 1) * 230;
-            int yPos = -(i / 3) * 70;
-            newButton.transform.localPosition = new Vector3(xPos, yPos);
-            newButton.name = "AnswerButton" + i;
-            newButton.GetComponent<DragDrop>().canvas = canvas;
-            newButton.GetComponent<DragDrop>().proverbText = questionText;
-            newButton.onClick.AddListener(delegate { Debug.Log("hi"); });
+            //Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
+            //newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
+            //int xPos = (i % 3 - 1) * 230;
+            //int yPos = -(i / 3) * 70;
+            //newButton.transform.localPosition = new Vector3(xPos, yPos);
+            //newButton.name = "AnswerButton" + i;
+            //newButton.GetComponent<DragDrop>().canvas = canvas;
+            //newButton.GetComponent<DragDrop>().proverbText = questionText;
+            //newButton.onClick.AddListener(delegate { Debug.Log("hi"); });
             CreateButton(i, allWords[i]);
         }
-        
+
         questionText.text = answerProverb;
         CreateButton(allWords.Count, "TEST");
     }

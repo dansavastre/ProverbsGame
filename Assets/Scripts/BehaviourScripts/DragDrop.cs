@@ -82,9 +82,13 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         canvasGroup.alpha = 1f;
         int wordIndex = TMP_TextUtilities.FindIntersectingWord(proverbText, Input.mousePosition, null);
         string[] splits = proverbText.text.Split(" ");
-        splits[wordIndex] = "<u>" + draggedButtonText + "</u>";
-        proverbText.text = string.Join(" ", splits);
-        Destroy(eventData.pointerDrag, 0);
+
+        if (wordIndex > -1)
+        {
+            splits[wordIndex] = "<u>" + draggedButtonText + "</u>";
+            proverbText.text = string.Join(" ", splits);
+            Destroy(eventData.pointerDrag, 0);
+        }
 
         //proverbText.textInfo.wordInfo[wordIndex].textComponent.text = "AAAA";
         //Debug.Log(proverbText.textInfo);
