@@ -27,8 +27,13 @@ public class SingleplayerManager : MonoBehaviour
 
     // Variables
     protected Question currentQuestion;
-    private LinkedList<Bucket> allProficiencies;
-    private Dictionary<Bucket, int> dictionary;
+    private static LinkedList<Bucket> allProficiencies;
+    private static Dictionary<Bucket, int> dictionary;
+
+    private const int apprenticeStage = 3;
+    private const int journeymanStage = 5;
+    private const int expertStage = 6;
+    private const int masterStage = 7;
     
     // Start is called before the first frame update
     protected virtual void Start()
@@ -90,22 +95,22 @@ public class SingleplayerManager : MonoBehaviour
             case "apprentice":
                 playerProficiency.apprentice.Remove(currentBucket);
                 newProficiency.apprentice.Remove(currentBucket);
-                SharedUpdate(0);
+                SharedUpdate();
                 break;
             case "journeyman":
                 playerProficiency.journeyman.Remove(currentBucket);
                 newProficiency.journeyman.Remove(currentBucket);
-                SharedUpdate(1);
+                SharedUpdate();
                 break;
             case "expert":
                 playerProficiency.expert.Remove(currentBucket);
                 newProficiency.expert.Remove(currentBucket);
-                SharedUpdate(2);
+                SharedUpdate();
                 break;
             case "master":
                 playerProficiency.master.Remove(currentBucket);
                 newProficiency.master.Remove(currentBucket);
-                SharedUpdate(3);
+                SharedUpdate();
                 break;
             default:
                 Debug.Log("Invalid type.");
@@ -114,7 +119,7 @@ public class SingleplayerManager : MonoBehaviour
     }
 
     // Helper function for updating the player proficiency
-    private void SharedUpdate(int index)
+    private void SharedUpdate()
     {
         allProficiencies.Remove(currentBucket);
         // Update the timestamp of the bucket to now
@@ -126,16 +131,12 @@ public class SingleplayerManager : MonoBehaviour
         {
             currentBucket.stage++;
             Debug.Log(currentBucket.key + " stage upgraded!");
-        } else if (dictionary[currentBucket] != 0 && currentBucket.stage > 0)
+        } else if (dictionary[currentBucket] > 0 && currentBucket.stage > 1)
         {
-            currentBucket.stage--;
+            currentBucket.stage = ChangeStage(currentBucket.stage, dictionary[currentBucket]);
             Debug.Log(currentBucket.key + " stage downgraded...");
         }
         // Add bucket to the proficiency that corresponds to its stage
-        // if (currentBucket.stage <= 3) newProficiency.apprentice.Add(currentBucket);
-        // else if (currentBucket.stage <= 5) newProficiency.journeyman.Add(currentBucket);
-        // else if (currentBucket.stage == 6) newProficiency.expert.Add(currentBucket);
-        // else newProficiency.master.Add(currentBucket);
         string newType = GetTypeOfStage(currentBucket.stage);
         switch (newType)
         {
@@ -153,19 +154,33 @@ public class SingleplayerManager : MonoBehaviour
                 break;
         }
     }
+
+    // Helper function for checking how many stages the proverb should go down
+    private int ChangeStage(int stage, int mistakes)
+    {
+        switch (stage)
+        {
+            case <= journeymanStage:
+                return Math.Max(1, stage - mistakes);
+            case expertStage:
+                return Math.Max(apprenticeStage + 1, stage - mistakes);
+            case >= masterStage:
+                return Math.Max(journeymanStage + 1, stage - mistakes);
+        }
+    }
     
     // Get the proficiency type corresponding to the stage
     private string GetTypeOfStage(int stage)
     {
         switch (stage)
         {
-            case <= 3:
+            case <= apprenticeStage:
                 return "apprentice";
-            case > 3 and <= 5:
+            case > apprenticeStage and <= journeymanStage:
                 return "journeyman";
-            case 6:
+            case expertStage:
                 return "expert";
-            case >= 7:
+            case >= masterStage:
                 return "master";
         }
     }

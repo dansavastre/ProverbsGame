@@ -126,7 +126,6 @@ public class SessionManager : MonoBehaviour
                 Debug.LogError("Task could not be completed.");
                 return;
             }
-            
             else if (task.IsCompleted)
             {
                 // Take a snapshot of the database entry
