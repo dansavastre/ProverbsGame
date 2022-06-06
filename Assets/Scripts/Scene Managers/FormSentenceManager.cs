@@ -12,13 +12,10 @@ using Random = UnityEngine.Random;
 
 public class FormSentenceManager : SingleplayerManager
 {
-    [SerializeField]
-    private Transform keywordBoard;
-    [SerializeField]
-    private TextMeshProUGUI ResultText;
+    [SerializeField] private Transform keywordBoard;
+    [SerializeField] private TextMeshProUGUI ResultText;
     [SerializeField] private List<Button> Buttons;
     [SerializeField] private List<TextMeshProUGUI> ButtonsTexts;
-
     [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab;
 
     // Variables
@@ -28,7 +25,7 @@ public class FormSentenceManager : SingleplayerManager
     private string LastClickedWord;
 
     // Start is called before the first frame update
-    async void Start()
+    protected async override void Start()
     {
         base.Start();
 
@@ -70,7 +67,7 @@ public class FormSentenceManager : SingleplayerManager
         allWords.Add("loses");
         allWords.Add("mediocre");
 
-        //Shuffling list of words
+        // Shuffling list of words
         for (int i = 0; i < allWords.Count; i++)
         {
             string temp = allWords[i];
@@ -162,7 +159,7 @@ public class FormSentenceManager : SingleplayerManager
     // Display the feedback after the player answers the question
     public void CheckAnswer()
     {
-        //Do string manipulation to verify that the sentences are the same or not
+        // Do string manipulation to verify that the sentences are the same or not
         string playerProverb = answerProverb.Replace(" ", "");
 
         DisplayFeedback(playerProverb.ToLower().Equals(correctProverb.ToLower().Replace(" ", "")));
