@@ -113,7 +113,7 @@ public class RecognizeImageManager : SingleplayerManager
 
         answers[numbers[0]].isCorrect = true;
 
-        answers[numbers[0]].text = nextProverb.meaning;
+        answers[numbers[0]].text = nextProverb.phrase;
         answers[numbers[1]].text = nextProverb.otherPhrases[0];
         answers[numbers[2]].text = nextProverb.otherPhrases[1];
         answers[numbers[3]].text = nextProverb.otherPhrases[1];
