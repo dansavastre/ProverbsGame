@@ -27,8 +27,8 @@ public class SingleplayerManager : MonoBehaviour
 
     // Variables
     protected Question currentQuestion;
-    private static LinkedList<Bucket> allProficiencies;
-    private static Dictionary<Bucket, int> dictionary;
+    protected static LinkedList<Bucket> allProficiencies;
+    protected static Dictionary<Bucket, int> dictionary;
 
     private const int apprenticeStage = 3;
     private const int journeymanStage = 5;
@@ -236,5 +236,13 @@ public class SingleplayerManager : MonoBehaviour
                 SceneManager.LoadScene("Menu");
                 break;
         }
+    }
+
+    public void LoadFunFact() 
+    {
+        Debug.Log("Load Fun Fact");
+        Debug.Log("Proverb phrase: " + nextProverb.phrase);
+        ProverbStateController.proverb = nextProverb;
+        SceneManager.LoadScene("FunFact");
     }
 }

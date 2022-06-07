@@ -255,7 +255,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 560862404}
         m_TargetAssemblyTypeName: SingleplayerManager, Assembly-CSharp
-        m_MethodName: LoadQuestion
+        m_MethodName: LoadFunFact
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
