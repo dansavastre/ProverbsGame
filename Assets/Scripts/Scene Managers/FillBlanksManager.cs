@@ -8,26 +8,30 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class FillBlanksManager : SingleplayerManager
 {
-    // UI elements
-    [SerializeField] private List<GameObject> buttons;
-    [SerializeField] private List<TextMeshProUGUI> buttonTexts;
+    [SerializeField] private Transform keywordBoard;
+    [SerializeField] private TextMeshProUGUI ResultText;
+    [SerializeField] private List<Button> Buttons;
+    [SerializeField] private List<TextMeshProUGUI> ButtonsTexts;
+
+    [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab;
 
     // Variables
     private static string correctProverb;
     private string answerProverb;
     List<string> allWords;
-    public string LastClickedWord;
+    private string LastClickedWord;
 
     // Start is called before the first frame update
-    async void Start()
+    protected async override void Start()
     {
         base.Start();
 
         // Goes to the 'proverbs' database table and searches for the key
-        await dbReference.Child("proverbs").Child(currentKey)
+        await dbReference.Child("proverbs").Child(currentBucket.key)
         .GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -63,9 +67,25 @@ public class FillBlanksManager : SingleplayerManager
             answerProverb = answerProverb.Replace(v, "...");
         }
 
-        for(int i = 0; i < buttonTexts.Count; i++)
+        //Shuffling list of words
+        for (int i = 0; i < allWords.Count; i++)
         {
-            buttonTexts[i].text = allWords[i];
+            string temp = allWords[i];
+            int randomIndex = Random.Range(i, allWords.Count);
+            allWords[i] = allWords[randomIndex];
+            allWords[randomIndex] = temp;
+        }
+
+        for (int i = 0; i < allWords.Count; i++)
+        {
+            Button newButton = Instantiate(fillInTheBlanksAnswerButtonPrefab, keywordBoard, false);
+            newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
+            int xPos = (i % 3 - 1) * 230;
+            int yPos = -(i / 3) * 100;
+            newButton.transform.localPosition = new Vector3(xPos, yPos);
+            newButton.name = "AnswerButton" + i;
+            int x = i;
+            newButton.onClick.AddListener(() => buttonPressed(x));
         }
 
         questionText.text = answerProverb;
@@ -80,6 +100,7 @@ public class FillBlanksManager : SingleplayerManager
             if (wordIndex != -1)
             {
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
+                Debug.Log(LastClickedWord);
 
                 if (allWords.Contains(LastClickedWord))
                 {
@@ -108,9 +129,10 @@ public class FillBlanksManager : SingleplayerManager
 
     private void removeWord(string word)
     {
-        for(int i = 0 ; i < buttonTexts.Count; i++) {
-            if(buttonTexts[i].text.Equals(word)) {
-                buttons[i].SetActive(true);
+        Button[] buttons = keywordBoard.GetComponentsInChildren<Button>();
+        for(int i = 0 ; i < buttons.Length; i++) {
+            if(buttons[i].GetComponentInChildren<TextMeshProUGUI>().text.Equals(word)) {
+                buttons[i].interactable = true;
             }
         }
         word = "<u><b>" + word + "</u></b>";
@@ -131,8 +153,8 @@ public class FillBlanksManager : SingleplayerManager
     {
         if(canInput(answerProverb, "...")) 
         {
-            inputWord(buttonTexts[index].text);
-            buttons[index].SetActive(false);
+            inputWord(keywordBoard.GetComponentsInChildren<Button>()[index].GetComponentInChildren<TextMeshProUGUI>().text);
+            keywordBoard.GetComponentsInChildren<Button>()[index].interactable = false;
         }
     }
 

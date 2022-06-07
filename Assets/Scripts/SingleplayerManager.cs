@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class SingleplayerManager : MonoBehaviour
 {
@@ -22,37 +23,176 @@ public class SingleplayerManager : MonoBehaviour
     protected DatabaseReference dbReference;
     protected Proverb nextProverb;
     protected string currentType;
-    protected string currentKey;
+    protected Bucket currentBucket;
 
     // Variables
     protected Question currentQuestion;
+    private static LinkedList<Bucket> allProficiencies;
+    private static Dictionary<Bucket, int> dictionary;
+
+    private const int apprenticeStage = 3;
+    private const int journeymanStage = 5;
+    private const int expertStage = 6;
+    private const int masterStage = 7;
     
     // Start is called before the first frame update
-    protected void Start()
+    protected virtual void Start()
     {
+        // Get information from external sources
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         playerProficiency = SessionManager.playerProficiency;
         newProficiency = SessionManager.newProficiency;
+
+        // Initialize new variables
+        allProficiencies = SessionManager.allProficiencies;
+        dictionary = SessionManager.dictionary;
         
         GetNextKey();
         nextQuestionButton.SetActive(false);
     }
 
+    // Get the key for the next proverb in the session in chronological order
+    protected void GetNextKey()
+    {
+        // Select first bucket from shuffled allProficiencies list
+        currentBucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;
+        // The session is complete if there are no proverbs left
+        if (currentBucket == null) 
+        {
+            Debug.Log("Session complete.");
+            currentType = "none";
+        }
+        // Otherwise we fetch the next type
+        else currentType = GetTypeOfStage(currentBucket.stage);
+    }
+
     // Display the feedback after the player answers the question
     protected void DisplayFeedback(bool correct)
     {
-        if (correct) 
+        if (correct)
         {
             resultText.text = "Correct!";
             UpdateProficiency();
-            SessionManager.RightAnswer();
         }
         else 
         {
             resultText.text = "Incorrect!";
-            SessionManager.WrongAnswer();
+            dictionary[currentBucket]++;
+            Debug.Log("Mistakes: " + dictionary[currentBucket].ToString());
+            allProficiencies.Remove(currentBucket);
+            // Wrongly answered questions are repeated after other questions are shown
+            if (allProficiencies.Count >= 3) allProficiencies.AddAfter(allProficiencies.First.Next.Next, currentBucket);
+            else allProficiencies.AddLast(currentBucket);
         }
         nextQuestionButton.SetActive(true);
+    }
+
+    // Update the player proficiency into a new object
+    protected void UpdateProficiency()
+    {
+        // Bucket currentBucket;
+        switch (currentType)
+        {
+            case "apprentice":
+                playerProficiency.apprentice.Remove(currentBucket);
+                newProficiency.apprentice.Remove(currentBucket);
+                SharedUpdate();
+                break;
+            case "journeyman":
+                playerProficiency.journeyman.Remove(currentBucket);
+                newProficiency.journeyman.Remove(currentBucket);
+                SharedUpdate();
+                break;
+            case "expert":
+                playerProficiency.expert.Remove(currentBucket);
+                newProficiency.expert.Remove(currentBucket);
+                SharedUpdate();
+                break;
+            case "master":
+                playerProficiency.master.Remove(currentBucket);
+                newProficiency.master.Remove(currentBucket);
+                SharedUpdate();
+                break;
+            default:
+                Debug.Log("Invalid type.");
+                break;
+        }
+    }
+
+    // Helper function for updating the player proficiency
+    private void SharedUpdate()
+    {
+        allProficiencies.Remove(currentBucket);
+        // Update the timestamp of the bucket to now
+        long time = (long) DateTime.Now.ToUniversalTime()
+        .Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+        currentBucket.timestamp = time;
+        // Check if we should go up or down a stage
+        if (dictionary[currentBucket] == 0 && currentBucket.stage < 7)
+        {
+            currentBucket.stage++;
+            Debug.Log(currentBucket.key + " stage upgraded to " + currentBucket.stage.ToString());
+        } else if (dictionary[currentBucket] > 0 && currentBucket.stage > 1)
+        {
+            currentBucket.stage = ChangeStage(currentBucket.stage, dictionary[currentBucket]);
+            Debug.Log(currentBucket.key + " stage downgraded to " + currentBucket.stage.ToString());
+        }
+        // Add bucket to the proficiency that corresponds to its stage
+        string newType = GetTypeOfStage(currentBucket.stage);
+        switch (newType)
+        {
+            case "apprentice":
+                newProficiency.apprentice.Add(currentBucket);
+                break;
+            case "journeyman":
+                newProficiency.journeyman.Add(currentBucket);
+                break;
+            case "expert":
+                newProficiency.expert.Add(currentBucket);
+                break;
+            case "master":
+                newProficiency.master.Add(currentBucket);
+                break;
+        }
+    }
+
+    // Helper function for checking how many stages the proverb should go down
+    private int ChangeStage(int stage, int mistakes)
+    {
+        switch (stage)
+        {
+            case <= journeymanStage:
+                return Math.Max(1, stage - mistakes);
+            case expertStage:
+                return Math.Max(apprenticeStage + 1, stage - mistakes);
+            case >= masterStage:
+                return Math.Max(journeymanStage + 1, stage - mistakes);
+        }
+    }
+    
+    // Get the proficiency type corresponding to the stage
+    private string GetTypeOfStage(int stage)
+    {
+        switch (stage)
+        {
+            case <= apprenticeStage:
+                return "apprentice";
+            case > apprenticeStage and <= journeymanStage:
+                return "journeyman";
+            case expertStage:
+                return "expert";
+            case >= masterStage:
+                return "master";
+        }
+    }
+
+    // Quit the session and return to the start menu
+    public void QuitSession()
+    {
+        Debug.Log("Quitting session.");
+        string json = JsonUtility.ToJson(newProficiency);
+        dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
+        SceneManager.LoadScene("Menu");
     }
 
     // Load the next question
@@ -60,114 +200,40 @@ public class SingleplayerManager : MonoBehaviour
     {
         Debug.Log("Load next question.");
         GetNextKey();
-        switch (currentType)
+        if (currentBucket == null) 
         {
-            case "apprentice":
+            string json = JsonUtility.ToJson(newProficiency);
+            dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
+            SceneManager.LoadScene("Menu");
+            return;
+        }
+        switch (currentBucket.stage)
+        {
+            case 1:
                 SceneManager.LoadScene("RecognizeImage");
                 break;
-            case "journeyman":
+            case 2:
                 SceneManager.LoadScene("MultipleChoice");
                 break;
-            case "expert":
+            case 3:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            case 4:
                 SceneManager.LoadScene("FillBlanks");
                 break;
-            case "master":
+            case 5:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            case 6:
+                SceneManager.LoadScene("FormSentence");
+                break;
+            case 7:
                 SceneManager.LoadScene("MultipleChoice");
                 break;
             default:
                 string json = JsonUtility.ToJson(newProficiency);
-                dbReference.Child("proficiencies").Child(SessionManager.PlayerKey()).SetRawJsonValueAsync(json);
+                dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
                 SceneManager.LoadScene("Menu");
-                break;
-        }
-    }
-
-    // Get the key for the next proverb in the session in chronological order
-    protected void GetNextKey()
-    {
-        if (playerProficiency.apprentice.Count > 0)
-        {
-            currentKey = playerProficiency.apprentice.First();
-            currentType = "apprentice";
-        }
-        else if (playerProficiency.journeyman.Count > 0)
-        {
-            currentKey = playerProficiency.journeyman.First();
-            currentType = "journeyman";
-        }
-        else if (playerProficiency.expert.Count > 0)
-        {
-            currentKey = playerProficiency.expert.First();
-            currentType = "expert";
-        }
-        else if (playerProficiency.master.Count > 0)
-        {
-            currentKey = playerProficiency.master.First();
-            currentType = "master";
-        }
-        else
-        {
-            Debug.Log("Session complete.");
-            currentKey = null;
-            currentType = "none";
-        }
-    }
-
-    // Update the player proficiency into a new object
-    protected void UpdateProficiency()
-    {
-        switch (currentType)
-        {
-            case "apprentice":
-                playerProficiency.apprentice.Remove(currentKey);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    newProficiency.journeyman.Add(currentKey);
-                    Debug.Log(currentKey + " moved to journeyman!");
-                } else 
-                {
-                    newProficiency.apprentice.Add(currentKey);
-                    Debug.Log(currentKey + " stayed in apprentice...");
-                }
-                break;
-            case "journeyman":
-                playerProficiency.journeyman.Remove(currentKey);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    newProficiency.expert.Add(currentKey);
-                    Debug.Log(currentKey + " moved to expert!");
-                } else 
-                {
-                    newProficiency.apprentice.Add(currentKey);
-                    Debug.Log(currentKey + " moved to apprentice...");
-                }
-                break;
-            case "expert":
-                playerProficiency.expert.Remove(currentKey);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    newProficiency.master.Add(currentKey);
-                    Debug.Log(currentKey + " moved to master!");
-                } else 
-                {
-                    newProficiency.journeyman.Add(currentKey);
-                    Debug.Log(currentKey + " moved to journeyman...");
-                }
-                break;
-            case "master":
-                playerProficiency.master.Remove(currentKey);
-                if (SessionManager.wrongAnswers == 0)
-                {
-                    newProficiency.master.Add(currentKey);
-                    Debug.Log(currentKey + " stayed in master!");
-                } else 
-                {
-                    newProficiency.expert.Add(currentKey);
-                    Debug.Log(currentKey + " moved to expert...");
-                }
-                break;
-            default:
-                Debug.Log("Invalid type.");
                 break;
         }
     }
