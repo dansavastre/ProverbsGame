@@ -83,8 +83,9 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         int wordIndex = TMP_TextUtilities.FindIntersectingWord(proverbText, Input.mousePosition, null);
         string[] splits = proverbText.text.Split(" ");
 
-        if (wordIndex > -1)
+        if ((wordIndex > -1) && (splits[wordIndex].Equals("<u>BLANK</u>")))
         {
+            Debug.Log(splits[wordIndex]);
             splits[wordIndex] = "<u>" + draggedButtonText + "</u>";
             proverbText.text = string.Join(" ", splits);
             Destroy(eventData.pointerDrag, 0);
