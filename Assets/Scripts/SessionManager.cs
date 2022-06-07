@@ -123,26 +123,25 @@ public class SessionManager : MonoBehaviour
     // Loads the first scene
     public void NextScene()
     {
-        SceneManager.LoadScene("FillBlankMulti");
-        //if (playerProficiency.apprentice.Count > 0)
-        //{
-        //    SceneManager.LoadScene("RecognizeImage");
-        //}
-        //else if (playerProficiency.journeyman.Count > 0)
-        //{
-        //    SceneManager.LoadScene("MultipleChoice");
-        //}
-        //else if (playerProficiency.expert.Count > 0)
-        //{
-        //    SceneManager.LoadScene("FillBlanks");
-        //}
-        //else if (playerProficiency.master.Count > 0)
-        //{
-        //    SceneManager.LoadScene("MultipleChoice");
-        //}
-        //else
-        //{
-        //    Debug.Log("No proverbs available.");
-        //}
+        if (playerProficiency.apprentice.Count > 0)
+        {
+           SceneManager.LoadScene("RecognizeImage");
+        }
+        else if (playerProficiency.journeyman.Count > 0)
+        {
+           SceneManager.LoadScene("MultipleChoice");
+        }
+        else if (playerProficiency.expert.Count > 0)
+        {
+           SceneManager.LoadScene("FillBlanks");
+        }
+        else if (playerProficiency.master.Count > 0)
+        {
+           SceneManager.LoadScene("MultipleChoice");
+        }
+        else
+        {
+           Debug.Log("No proverbs available.");
+        }
     }
 }
