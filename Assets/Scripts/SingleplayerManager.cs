@@ -29,6 +29,7 @@ public class SingleplayerManager : MonoBehaviour
     protected Question currentQuestion;
     private static LinkedList<Bucket> allProficiencies;
     private static Dictionary<Bucket, int> dictionary;
+    private bool answeredCorrect;
 
     private const int apprenticeStage = 3;
     private const int journeymanStage = 5;
@@ -46,6 +47,7 @@ public class SingleplayerManager : MonoBehaviour
         // Initialize new variables
         allProficiencies = SessionManager.allProficiencies;
         dictionary = SessionManager.dictionary;
+        answeredCorrect = false;
         
         GetNextKey();
         nextQuestionButton.SetActive(false);
@@ -71,6 +73,7 @@ public class SingleplayerManager : MonoBehaviour
     {
         if (correct)
         {
+            answeredCorrect = true;
             resultText.text = "Correct!";
             UpdateProficiency();
         }
@@ -195,6 +198,20 @@ public class SingleplayerManager : MonoBehaviour
         SceneManager.LoadScene("Menu");
     }
 
+    public void LoadNextScene()
+    {
+        if(answeredCorrect)
+        {
+            Debug.Log("Answered Correct!");
+            LoadFunFact();
+        }
+        else
+        {
+            Debug.Log("Answered Incorrect!");
+            LoadQuestion();
+        }
+    }
+
     // Load the next question
     public void LoadQuestion() 
     {
@@ -239,6 +256,7 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
 
+    // Load the FunFact scene
     public void LoadFunFact() 
     {
         Debug.Log("Load Fun Fact");
