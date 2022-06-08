@@ -54,12 +54,12 @@ public class SingleplayerManager : MonoBehaviour
         // Initialize new variables
         allProficiencies = SessionManager.allProficiencies;
         dictionary = SessionManager.dictionary;
-
-        // Update Progress bar
-        Debug.Log("ProgressBar: " + SessionManager.correctAnswers + " / " + SessionManager.maxValue);
         
         GetNextKey();
         nextQuestionButton.SetActive(false);
+
+        // Update Progress bar
+        Debug.Log("ProgressBar: " + SessionManager.correctAnswers + " / " + SessionManager.maxValue);
         progressBar.SetProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
     }
 
