@@ -23,13 +23,15 @@ public class FunFactManager : SingleplayerManager
 
     public async void Start()
     {
+        nextProverb = SessionManager.proverb;
+        newProficiency = SessionManager.proficiency;
+        dbReference = SessionManager.dbReferenceStatic;
         DisplayFunFact();
     }
 
     private void DisplayFunFact() 
     {
         nextQuestionButton.SetActive(true);
-        nextProverb = ProverbStateController.proverb;
         Debug.Log(nextProverb.funFact);
         funFactText.text = nextProverb.funFact;
     }

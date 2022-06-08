@@ -27,8 +27,8 @@ public class SingleplayerManager : MonoBehaviour
 
     // Variables
     protected Question currentQuestion;
-    protected static LinkedList<Bucket> allProficiencies;
-    protected static Dictionary<Bucket, int> dictionary;
+    private static LinkedList<Bucket> allProficiencies;
+    private static Dictionary<Bucket, int> dictionary;
 
     private const int apprenticeStage = 3;
     private const int journeymanStage = 5;
@@ -202,6 +202,7 @@ public class SingleplayerManager : MonoBehaviour
         GetNextKey();
         if (currentBucket == null) 
         {
+            Debug.Log("Saving progress.");
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
             SceneManager.LoadScene("Menu");
@@ -241,8 +242,8 @@ public class SingleplayerManager : MonoBehaviour
     public void LoadFunFact() 
     {
         Debug.Log("Load Fun Fact");
-        Debug.Log("Proverb phrase: " + nextProverb.phrase);
-        ProverbStateController.proverb = nextProverb;
+        SessionManager.proverb = nextProverb;
+        SessionManager.proficiency = newProficiency;
         SceneManager.LoadScene("FunFact");
     }
 }

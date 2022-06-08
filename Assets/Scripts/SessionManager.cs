@@ -23,6 +23,7 @@ public class SessionManager : MonoBehaviour
 
     // Stores the reference location of the database
     private DatabaseReference dbReference;
+    public static DatabaseReference dbReferenceStatic;
 
     // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
@@ -32,6 +33,9 @@ public class SessionManager : MonoBehaviour
     private Random random;
     public static LinkedList<Bucket> allProficiencies;
     public static Dictionary<Bucket, int> dictionary;
+
+    public static Proverb proverb;
+    public static Proficiency proficiency;
 
     private TimeSpan[] waitingPeriod = 
     {
@@ -54,7 +58,7 @@ public class SessionManager : MonoBehaviour
 
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-
+        dbReferenceStatic = dbReference;
         // Make the button inactive
         SessionButton.gameObject.SetActive(false);
     }
@@ -73,6 +77,8 @@ public class SessionManager : MonoBehaviour
             JourneymanCount.ForceMeshUpdate(true);
             ExpertCount.ForceMeshUpdate(true);
             MasterCount.ForceMeshUpdate(true);
+
+            dbReferenceStatic = dbReference;
         }
     }
 
