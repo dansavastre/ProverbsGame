@@ -30,6 +30,10 @@ public class SessionManager : MonoBehaviour
     public static Proficiency newProficiency;
     public static string playerKey;
 
+    // Progress bar
+    public static int maxValue;
+    public static int correctAnswers;
+
     private Random random;
     public static LinkedList<Bucket> allProficiencies;
     public static Dictionary<Bucket, int> dictionary;
@@ -53,7 +57,6 @@ public class SessionManager : MonoBehaviour
         // Reset the player proficiency
         playerProficiency = null;
         newProficiency = null;
-        allProficiencies = new LinkedList<Bucket>();
         random = new Random();
 
         // Get the root reference location of the database
@@ -149,11 +152,16 @@ public class SessionManager : MonoBehaviour
 
     private void InitList()
     {
-        // Add all proficiencies to one list 
+        // Add all proficiencies to one list
+        allProficiencies = new LinkedList<Bucket>();
         allProficiencies.AddRange(playerProficiency.apprentice);
         allProficiencies.AddRange(playerProficiency.journeyman);
         allProficiencies.AddRange(playerProficiency.expert);
         allProficiencies.AddRange(playerProficiency.master);
+
+        // Initiate ProgressBar
+        maxValue = allProficiencies.Count;
+        correctAnswers = 0;
 
         Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
 
