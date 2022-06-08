@@ -29,6 +29,10 @@ public class SessionManager : MonoBehaviour
     public static Proficiency newProficiency;
     public static string playerKey;
 
+    // Progress bar
+    public static int maxValue;
+    public static int correctAnswers = 0;
+
     private Random random;
     public static LinkedList<Bucket> allProficiencies;
     public static Dictionary<Bucket, int> dictionary;
@@ -148,6 +152,10 @@ public class SessionManager : MonoBehaviour
         allProficiencies.AddRange(playerProficiency.journeyman);
         allProficiencies.AddRange(playerProficiency.expert);
         allProficiencies.AddRange(playerProficiency.master);
+
+        // Initiate ProgressBar
+        maxValue = allProficiencies.Count;
+        correctAnswers = 0;
 
         Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
 

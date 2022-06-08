@@ -34,6 +34,10 @@ public class SingleplayerManager : MonoBehaviour
     private static LinkedList<Bucket> allProficiencies;
     private static Dictionary<Bucket, int> dictionary;
 
+    // Progress bar
+    [SerializeField]
+    public ProgressBar progressBar;
+
     private const int apprenticeStage = 3;
     private const int journeymanStage = 5;
     private const int expertStage = 6;
@@ -50,9 +54,13 @@ public class SingleplayerManager : MonoBehaviour
         // Initialize new variables
         allProficiencies = SessionManager.allProficiencies;
         dictionary = SessionManager.dictionary;
+
+        // Update Progress bar
+        Debug.Log("ProgressBar: " + SessionManager.correctAnswers + " / " + SessionManager.maxValue);
         
         GetNextKey();
         nextQuestionButton.SetActive(false);
+        progressBar.SetProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
     }
 
     // Get the key for the next proverb in the session in chronological order
@@ -76,6 +84,7 @@ public class SingleplayerManager : MonoBehaviour
         if (correct)
         {
             resultText.text = "Correct!";
+            SessionManager.correctAnswers++;
             UpdateProficiency();
         }
         else 
@@ -88,6 +97,7 @@ public class SingleplayerManager : MonoBehaviour
             if (allProficiencies.Count >= 3) allProficiencies.AddAfter(allProficiencies.First.Next.Next, currentBucket);
             else allProficiencies.AddLast(currentBucket);
         }
+        progressBar.UpdateProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
         nextQuestionButton.SetActive(true);
     }
 
