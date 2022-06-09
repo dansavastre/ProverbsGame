@@ -99,7 +99,7 @@ public class MultipleChoiceManager : SingleplayerManager
         if (gamemode == Mode.ProverbMeaning)
         {
             SetCurrentQuestion(nextProverb.meaning, nextProverb.otherMeanings);
-            taskText.text = "Choose the meaning belonging to the proverb below.";
+            taskText.text = "Select the meaning";
             currentQuestion.text = nextProverb.phrase;
 
             // currentQuestion.answers[numbers[0]].text = nextProverb.meaning;
@@ -113,12 +113,12 @@ public class MultipleChoiceManager : SingleplayerManager
             if (gamemode == Mode.MeaningProverb)
             {
                 
-                taskText.text = "Choose the proverb belonging to the meaning below.";
+                taskText.text = "Select the proverb";
                 currentQuestion.text = nextProverb.meaning;
             }
             else
             {
-                taskText.text = "Choose the proverb belonging to the example below.";
+                taskText.text = "Select the proverb";
                 currentQuestion.text = nextProverb.example;
             }
             // currentQuestion.answers[numbers[0]].text = nextProverb.phrase;
