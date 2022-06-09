@@ -89,9 +89,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             splits[wordIndex] = "<u>" + draggedButtonText + "</u>";
             proverbText.text = string.Join(" ", splits);
             Destroy(eventData.pointerDrag, 0);
+            CoopGame.buttonIndices[CoopGame.buttonIndices.IndexOf(draggedButtonText)] = "";
         }
-
-        //proverbText.textInfo.wordInfo[wordIndex].textComponent.text = "AAAA";
-        //Debug.Log(proverbText.textInfo);
     }
 }

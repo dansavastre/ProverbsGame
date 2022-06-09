@@ -15,7 +15,9 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition =
                 GetComponent<RectTransform>().anchoredPosition;
 
-            string draggedButtonText = eventData.pointerDrag.GetComponentInChildren<TextMeshProUGUI>().text; 
+            string draggedButtonText = eventData.pointerDrag.GetComponentInChildren<TextMeshProUGUI>().text;
+            // CoopGame.allWords.Remove(draggedButtonText);
+            // CoopGame.buttonIndices[CoopGame.buttonIndices.IndexOf(draggedButtonText)] = "";
             Debug.Log(draggedButtonText);
         }
     }

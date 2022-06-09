@@ -14,18 +14,19 @@ using UnityEngine.EventSystems;
 public class CoopGame : SingleplayerManager
 {
     // UI elements
-    [SerializeField] private List<GameObject> buttons;
-    [SerializeField] private List<TextMeshProUGUI> buttonTexts;
+    // [SerializeField] private List<GameObject> buttons;
+    // [SerializeField] private List<TextMeshProUGUI> buttonTexts;
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private Button dragDropButtonPrefab;
     [SerializeField] private Canvas canvas;
-    private List<bool> buttonIndices;
 
     // Variables
     private static string correctProverb;
     private string answerProverb;
-    List<string> allWords;
+    private List<string> buttonsToCreateWords;
     public string LastClickedWord;
+    public static List<string> allWords;
+    public static List<string> buttonIndices;
 
     // Start is called before the first frame update
     async void Start()
@@ -53,7 +54,7 @@ public class CoopGame : SingleplayerManager
         //     }
         // });
         questionText.text = "Don't look a gift horse in the mouth";
-        allWords = new List<string>(new[] { "gift", "horse", "mouth" });
+        buttonsToCreateWords = new List<string>(new[] { "gift", "horse", "mouth" });
 
         // Set the variables
         correctProverb = "Don't look a gift horse in the mouth";
@@ -61,12 +62,12 @@ public class CoopGame : SingleplayerManager
 
         // Add the keywords to allwords, and add some flukes
         // allWords = nextProverb.keywords;
-        allWords.Add("frog");
-        allWords.Add("box");
-        allWords.Add("loses");
-        allWords.Add("mediocre");
+        buttonsToCreateWords.Add("frog");
+        buttonsToCreateWords.Add("box");
+        buttonsToCreateWords.Add("loses");
+        buttonsToCreateWords.Add("mediocre");
 
-        foreach (string v in allWords)
+        foreach (string v in buttonsToCreateWords)
         {
             answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
         }
@@ -76,8 +77,9 @@ public class CoopGame : SingleplayerManager
         //     buttonTexts[i].text = allWords[i];
         // }
 
-        buttonIndices = new List<bool>();
-        for (int i = 0; i < allWords.Count; i++)
+        buttonIndices = new List<string>();
+        allWords = new List<string>();
+        for (int i = 0; i < buttonsToCreateWords.Count; i++)
         {
             //Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
             //newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
@@ -88,11 +90,11 @@ public class CoopGame : SingleplayerManager
             //newButton.GetComponent<DragDrop>().canvas = canvas;
             //newButton.GetComponent<DragDrop>().proverbText = questionText;
             //newButton.onClick.AddListener(delegate { Debug.Log("hi"); });
-            CreateButton(i, allWords[i]);
+            CreateButton(i, buttonsToCreateWords[i]);
         }
 
         questionText.text = answerProverb;
-        CreateButton(allWords.Count, "TEST");
+        CreateButton(buttonsToCreateWords.Count, "test");
     }
 
     private void Update()
@@ -124,20 +126,15 @@ public class CoopGame : SingleplayerManager
         return true;
     }
 
-    private void inputWord(string word)
-    {
-        word = "<u><b>" + word + "</u></b>";
-        answerProverb = ReplaceFirst(answerProverb, "...", word);
-        questionText.text = answerProverb;
-    }
+    // private void inputWord(string word)
+    // {
+    //     word = "<u><b>" + word + "</u></b>";
+    //     answerProverb = ReplaceFirst(answerProverb, "<u>BLANK</u>", word);
+    //     questionText.text = answerProverb;
+    // }
 
     private void removeWord(string word)
     {
-        for(int i = 0 ; i < buttonTexts.Count; i++) {
-            if(buttonTexts[i].text.Equals(word)) {
-                buttons[i].SetActive(true);
-            }
-        }
         word = "<u>" + word + "</u>";
         answerProverb = questionText.text;
         answerProverb = ReplaceFirst(answerProverb, word, "<u>BLANK</u>");
@@ -153,14 +150,18 @@ public class CoopGame : SingleplayerManager
         return text.Substring(0, text.IndexOf(search)) + replace + text.Substring(text.IndexOf(search) + search.Length);
     }
 
-    public void buttonPressed(int index)
-    {
-        if(canInput(answerProverb, "...")) 
-        {
-            inputWord(buttonTexts[index].text);
-            buttons[index].SetActive(false);
-        }
-    }
+    // public void buttonPressed(Button button)
+    // {
+    //     Debug.Log("here");
+    //     if(canInput(answerProverb, "<u>BLANK</u>"))
+    //     {
+    //         string buttonText = button.GetComponentInChildren<TextMeshProUGUI>().text;
+    //         inputWord(buttonText);
+    //         allWords.Remove(buttonText);
+    //         buttonIndices[buttonIndices.IndexOf(buttonText)] = "";
+    //         Destroy(button);
+    //     }
+    // }
 
     // Display the feedback after the player answers the question
     public void CheckAnswer()
@@ -173,7 +174,7 @@ public class CoopGame : SingleplayerManager
     public void CreateButtonForReceivedKeyword(string text)
     {
         int index = 0;
-        while (index < buttonIndices.Count && buttonIndices[index])
+        while (index < buttonIndices.Count && buttonIndices[index] != "")
         {
             index++;
         }
@@ -192,6 +193,15 @@ public class CoopGame : SingleplayerManager
         newButton.GetComponent<DragDrop>().canvas = canvas;
         newButton.GetComponent<DragDrop>().proverbText = questionText;
         newButton.GetComponent<DragDrop>().startingPosition = newButton.transform.localPosition;
-        buttonIndices.Add(true);
+        // newButton.onClick.AddListener(() => buttonPressed(newButton));
+        if (i >= buttonIndices.Count)
+        {
+            buttonIndices.Add(text);
+        }
+        else
+        {
+            buttonIndices[i] = text;
+        }
+        allWords.Add(text);
     }
 }
