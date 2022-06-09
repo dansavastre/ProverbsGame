@@ -677,11 +677,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionText: {fileID: 1877712596}
   resultText: {fileID: 507801830}
+  checkButton: {fileID: 1910191045}
   nextQuestionButton: {fileID: 2139857922}
   answerButtonPrefab: {fileID: 0}
   answerBoard: {fileID: 0}
   answerButtons: []
   progressBar: {fileID: 1246240342}
+  image: {fileID: 1943479383}
   keywordBoard: {fileID: 305126662}
   Buttons: []
   fillInTheBlanksAnswerButtonPrefab: {fileID: 1929956151825164805, guid: af2be71e72734ce4cb057bb4fb9f0526, type: 3}
@@ -1718,8 +1720,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MultipleChoiceManager, Assembly-CSharp
+      - m_Target: {fileID: 560862404}
+        m_TargetAssemblyTypeName: FormSentenceManager, Assembly-CSharp
         m_MethodName: GetHint
         m_Mode: 1
         m_Arguments:

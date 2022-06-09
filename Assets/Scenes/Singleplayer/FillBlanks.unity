@@ -796,11 +796,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionText: {fileID: 1168106567}
   resultText: {fileID: 103702252}
+  checkButton: {fileID: 787498343}
   nextQuestionButton: {fileID: 258915739}
   answerButtonPrefab: {fileID: 0}
   answerBoard: {fileID: 0}
   answerButtons: []
   progressBar: {fileID: 1737922376}
+  image: {fileID: 1219460374}
   keywordBoard: {fileID: 1328290778}
   Buttons: []
   fillInTheBlanksAnswerButtonPrefab: {fileID: 1929956151825164805, guid: af2be71e72734ce4cb057bb4fb9f0526, type: 3}
@@ -1786,8 +1788,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MultipleChoiceManager, Assembly-CSharp
+      - m_Target: {fileID: 560862404}
+        m_TargetAssemblyTypeName: FillBlanksManager, Assembly-CSharp
         m_MethodName: GetHint
         m_Mode: 1
         m_Arguments:

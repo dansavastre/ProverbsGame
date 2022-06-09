@@ -13,7 +13,6 @@ public class RecognizeImageManager : SingleplayerManager
     // Stores information fetched from the database
     private StorageReference storageRef;
     private string currentImage;
-
     private byte[] fileContents;
 
     // Start is called before the first frame update.
@@ -69,5 +68,11 @@ public class RecognizeImageManager : SingleplayerManager
         });
         
         SetCurrentQuestion(nextProverb.phrase, nextProverb.otherPhrases);
+    }
+
+    // Load the image when a hint is asked for
+    public void GetHint()
+    {
+        image.enabled = true;
     }
 }

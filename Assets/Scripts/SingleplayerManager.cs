@@ -16,6 +16,7 @@ public class SingleplayerManager : MonoBehaviour
     // UI elements
     [SerializeField] protected TextMeshProUGUI questionText;
     [SerializeField] protected TextMeshProUGUI resultText;
+    [SerializeField] protected GameObject checkButton;
     [SerializeField] protected GameObject nextQuestionButton;
     [SerializeField] protected Button answerButtonPrefab;
     [SerializeField] protected RectTransform answerBoard;

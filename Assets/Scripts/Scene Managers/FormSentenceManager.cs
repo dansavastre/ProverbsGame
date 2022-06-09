@@ -1,5 +1,7 @@
 using Firebase;
 using Firebase.Database;
+using Firebase.Storage;
+using Firebase.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,9 +14,15 @@ using Random = UnityEngine.Random;
 
 public class FormSentenceManager : SingleplayerManager
 {
+    [SerializeField] private RawImage image;
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private List<Button> Buttons;
     [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab;
+
+    // Stores information fetched from the database
+    private StorageReference storageRef;
+    private string currentImage;
+    private byte[] fileContents;
 
     // Variables
     private static string correctProverb;
@@ -26,6 +34,8 @@ public class FormSentenceManager : SingleplayerManager
     protected async override void Start()
     {
         base.Start();
+
+        image.enabled = false;
 
         // Goes to the 'proverbs' database table and searches for the key
         await dbReference.Child("proverbs").Child(currentBucket.key)
@@ -45,6 +55,32 @@ public class FormSentenceManager : SingleplayerManager
                 string json = snapshot.GetRawJsonValue();
                 nextProverb = JsonUtility.FromJson<Proverb>(json);
                 Debug.Log(json);
+            }
+        });
+
+        // Get a reference to the storage service, using the default Firebase App
+        storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
+
+        // Reference for retrieving an image
+        StorageReference imageRef = storageRef.Child("proverbs/" + nextProverb.image);
+        Debug.Log("proverbs/" + nextProverb.image);
+
+        const long maxAllowedSize = 1 * 1024 * 1024;
+        imageRef.GetBytesAsync(maxAllowedSize).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                Debug.LogError("Task (get image byte array) could not be completed.");
+                return;
+            }
+            
+            if (task.IsCompleted)
+            {
+                fileContents = task.Result;
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(fileContents);
+                image.GetComponent<RawImage>().texture = tex;
+                Debug.Log("Finished downloading!");
             }
         });
 
@@ -161,6 +197,13 @@ public class FormSentenceManager : SingleplayerManager
         string playerProverb = answerProverb.Replace(" ", "");
 
         DisplayFeedback(playerProverb.ToLower().Equals(correctProverb.ToLower().Replace(" ", "")));
-        // TODO: Disable the ability to click and check new answers
+        // TODO: Disable the ability to click new answers
+        checkButton.SetActive(false);
+    }
+
+    // Load the image when a hint is asked for
+    public void GetHint()
+    {
+        image.enabled = true;
     }
 }
