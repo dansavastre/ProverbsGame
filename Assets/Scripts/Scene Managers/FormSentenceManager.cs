@@ -13,9 +13,7 @@ using Random = UnityEngine.Random;
 public class FormSentenceManager : SingleplayerManager
 {
     [SerializeField] private Transform keywordBoard;
-    [SerializeField] private TextMeshProUGUI ResultText;
     [SerializeField] private List<Button> Buttons;
-    [SerializeField] private List<TextMeshProUGUI> ButtonsTexts;
     [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab;
 
     // Variables
