@@ -33,6 +33,11 @@ public class SingleplayerManager : MonoBehaviour
     protected Question currentQuestion;
     private static LinkedList<Bucket> allProficiencies;
     private static Dictionary<Bucket, int> dictionary;
+    private bool answeredCorrect;
+
+    // Progress bar
+    [SerializeField]
+    public ProgressBar progressBar;
 
     private const int apprenticeStage = 3;
     private const int journeymanStage = 5;
@@ -50,9 +55,14 @@ public class SingleplayerManager : MonoBehaviour
         // Initialize new variables
         allProficiencies = SessionManager.allProficiencies;
         dictionary = SessionManager.dictionary;
+        answeredCorrect = false;
         
         GetNextKey();
         nextQuestionButton.SetActive(false);
+
+        // Update Progress bar
+        Debug.Log("ProgressBar: " + SessionManager.correctAnswers + " / " + SessionManager.maxValue);
+        progressBar.SetProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
     }
 
     // Get the key for the next proverb in the session in chronological order
@@ -75,7 +85,9 @@ public class SingleplayerManager : MonoBehaviour
     {
         if (correct)
         {
+            answeredCorrect = true;
             resultText.text = "Correct!";
+            SessionManager.correctAnswers++;
             UpdateProficiency();
         }
         else 
@@ -88,6 +100,7 @@ public class SingleplayerManager : MonoBehaviour
             if (allProficiencies.Count >= 3) allProficiencies.AddAfter(allProficiencies.First.Next.Next, currentBucket);
             else allProficiencies.AddLast(currentBucket);
         }
+        progressBar.UpdateProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
         nextQuestionButton.SetActive(true);
     }
 
@@ -292,6 +305,20 @@ public class SingleplayerManager : MonoBehaviour
         SceneManager.LoadScene("Menu");
     }
 
+    public void LoadNextScene()
+    {
+        if(answeredCorrect)
+        {
+            Debug.Log("Answered Correct!");
+            LoadFunFact();
+        }
+        else
+        {
+            Debug.Log("Answered Incorrect!");
+            LoadQuestion();
+        }
+    }
+
     // Load the next question
     public void LoadQuestion() 
     {
@@ -299,6 +326,7 @@ public class SingleplayerManager : MonoBehaviour
         GetNextKey();
         if (currentBucket == null) 
         {
+            Debug.Log("Saving progress.");
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
             SceneManager.LoadScene("Menu");
@@ -333,5 +361,14 @@ public class SingleplayerManager : MonoBehaviour
                 SceneManager.LoadScene("Menu");
                 break;
         }
+    }
+
+    // Load the FunFact scene
+    public void LoadFunFact() 
+    {
+        Debug.Log("Load Fun Fact");
+        SessionManager.proverb = nextProverb;
+        SessionManager.proficiency = newProficiency;
+        SceneManager.LoadScene("FunFact");
     }
 }
