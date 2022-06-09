@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 public class Launcher_FIB : MonoBehaviourPunCallbacks {
     public static Launcher_FIB Instance;
 
+    public PhotonView _photon;
+
     [SerializeField] TMP_InputField roomNameInputField_FIB;
     [SerializeField] TMP_Text errorText_FIB;
     [SerializeField] TMP_Text roomNameText_FIB;
@@ -31,6 +33,20 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     void Start() {
         Debug.Log("Connecting to Master.");
         PhotonNetwork.ConnectUsingSettings();
+    }
+
+    [PunRPC]
+    void ReceiveChat(string msg)
+    {
+        Debug.Log("b");
+        Debug.Log(msg);
+    }
+
+    public void SendChat(string msg)
+    {
+        Debug.Log("a");
+        string newMessage = PhotonNetwork.NickName + ":" + msg;
+        _photon.RPC("ReceiveChat", RpcTarget.All, "a");
     }
 
     public override void OnConnectedToMaster() {
@@ -67,6 +83,8 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
             Instantiate(playerListItemPrefab_FIB, playerListContent_FIB).GetComponent<PlayerListItem>().SetUp(players[i]);
 
         startGameButton_FIB.SetActive(PhotonNetwork.IsMasterClient); // only the host of the game can start the game
+
+        SendChat("Hi");
     }
 
     /**

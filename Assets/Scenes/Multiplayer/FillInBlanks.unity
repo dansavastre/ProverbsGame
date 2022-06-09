@@ -2869,6 +2869,7 @@ GameObject:
   - component: {fileID: 1577094751}
   - component: {fileID: 1577094755}
   - component: {fileID: 1577094749}
+  - component: {fileID: 1577094756}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3002,6 +3003,28 @@ MonoBehaviour:
   roomListItemPrefab_FIB: {fileID: 4839989428055499263, guid: b73ef3d58ee7ce24fb11b11c82a65473, type: 3}
   playerListItemPrefab_FIB: {fileID: 8297469300105054214, guid: 7d65520c49cefce4ba35e131b6cbb2c2, type: 3}
   startGameButton_FIB: {fileID: 1027491719}
+--- !u!114 &1577094756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577094748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1603586414
 GameObject:
   m_ObjectHideFlags: 0
