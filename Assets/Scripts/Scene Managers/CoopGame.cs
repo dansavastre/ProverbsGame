@@ -165,6 +165,23 @@ public class CoopGame : SingleplayerManager
         }
     }
 
+    /**
+     * <summary>Sends missing keywords from this player's proverb to other players and does that in an as uniform way as possible.</summary>
+     * <param name="myKeywords">List of the keywords from this player's proverb to send to other players.</param>
+     */
+    private void sentMyKeywordsToOtherPlayers(List<string> myKeywords)
+    {
+        int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount;
+        int i = 0;
+        foreach (string keyword in myKeywords)
+        {
+            var playerToSendTo = PhotonNetwork.CurrentRoom.Players[i % playerCountThisRoom];
+            if (playerToSendTo.NickName.Equals(PhotonNetwork.NickName)) i++;
+            _photon.RPC("receiveChat", PhotonNetwork.CurrentRoom.Players[i % playerCountThisRoom], playerToSendTo.NickName+":"+keyword);
+            i++;
+        }
+    }
+
     public bool canInput(string text, string search)
     {
         int pos = text.IndexOf(search);
