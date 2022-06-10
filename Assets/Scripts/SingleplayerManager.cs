@@ -256,10 +256,10 @@ public class SingleplayerManager : MonoBehaviour
     {
         Button newButton = Instantiate(answerButtonPrefab, answerBoard, false);
         // Set position
-        int yPos = -answerIndex * 75 + 20;
+        int yPos = -answerIndex * (int) newButton.GetComponent<RectTransform>().rect.height; // Change the starting location of buttons
         var transform1 = newButton.transform;
         transform1.localPosition = new Vector3(transform1.localPosition.x, yPos);
-        // set name, text, and callback
+        // Set name, text, sprite, and callback
         newButton.name = "Answer" + answerIndex;
         newButton.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[answerIndex].text;
         newButton.onClick.AddListener(() => CheckAnswer(answerIndex));

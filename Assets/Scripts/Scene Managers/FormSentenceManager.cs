@@ -115,8 +115,8 @@ public class FormSentenceManager : SingleplayerManager
             Button newButton = Instantiate(fillInTheBlanksAnswerButtonPrefab, keywordBoard, false);
             newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
             Debug.Log(allWords[i]);
-            int xPos = (i % 3 - 1) * 230;
-            int yPos = -(i / 3) * 100;
+            int xPos = (i % 3 - 1) * (int) newButton.GetComponent<RectTransform>().rect.width;
+            int yPos = -(i / 3) * (int) newButton.GetComponent<RectTransform>().rect.height;
             newButton.transform.localPosition = new Vector3(xPos, yPos);
             newButton.name = "AnswerButton" + i;
             int x = i;

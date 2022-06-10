@@ -100,7 +100,7 @@ public class FillBlanksManager : SingleplayerManager
             answerProverb = answerProverb.Replace(v, "...");
         }
 
-        //Shuffling list of words
+        // Shuffling list of words
         for (int i = 0; i < allWords.Count; i++)
         {
             string temp = allWords[i];
@@ -113,8 +113,8 @@ public class FillBlanksManager : SingleplayerManager
         {
             Button newButton = Instantiate(fillInTheBlanksAnswerButtonPrefab, keywordBoard, false);
             newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
-            int xPos = (i % 3 - 1) * 230;
-            int yPos = -(i / 3) * 100;
+            int xPos = (i % 3 - 1) * (int) newButton.GetComponent<RectTransform>().rect.width;
+            int yPos = -(i / 3) * (int) newButton.GetComponent<RectTransform>().rect.height;
             newButton.transform.localPosition = new Vector3(xPos, yPos);
             newButton.name = "AnswerButton" + i;
             int x = i;

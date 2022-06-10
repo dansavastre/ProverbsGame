@@ -29,8 +29,7 @@ public class RecognizeImageManager : SingleplayerManager
                 Debug.LogError("Task (get next proverb) could not be completed.");
                 return;
             }
-            
-            if (task.IsCompleted)
+            else if (task.IsCompleted)
             {
                 // Take a snapshot of the database entry
                 DataSnapshot snapshot = task.Result;
