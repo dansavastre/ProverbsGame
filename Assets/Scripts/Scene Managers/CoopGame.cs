@@ -25,6 +25,7 @@ public class CoopGame : SingleplayerManager
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private Button dragDropButtonPrefab;
     [SerializeField] private Canvas canvas;
+    [SerializeField] private TextMeshProUGUI[] otherPlayerNames;
 
     // Variables
     private static string correctProverb;
@@ -45,13 +46,36 @@ public class CoopGame : SingleplayerManager
     {
         Debug.Log("a");
         string newMessage = PhotonNetwork.NickName + ":" + msg;
-        _photon.RPC("ReceiveChat", RpcTarget.All, "a");
+        _photon.RPC("ReceiveChat", RpcTarget.Others, "a");
+    }
+
+    public void sendMyNickName()
+    {
+        _photon.RPC("ReceiveName", RpcTarget.Others, PhotonNetwork.NickName);
+    }
+    
+    public void ReceiveName(string playerName)
+    {
+        sendMyNickName();
+        foreach (TextMeshProUGUI name in otherPlayerNames)
+        {
+            if (name.text == playerName) return;
+        }
+        
+        int i = 0;
+        while (otherPlayerNames[i].text != "")
+        {
+            i++;
+        }
+
+        otherPlayerNames[i].text = playerName;
+        otherPlayerNames[i].transform.parent.GameObject().SetActive(true);
     }
 
     // Start is called before the first frame update
     async void Start()
     {
-        SendChat("a");
+        sendMyNickName();
         // base.Start();
 
         // Goes to the 'proverbs' database table and searches for the key
