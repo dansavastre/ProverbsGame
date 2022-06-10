@@ -76,6 +76,7 @@ public class FillBlanksManager : SingleplayerManager
             allWords[randomIndex] = temp;
         }
 
+        //Create a button for each word option
         for (int i = 0; i < allWords.Count; i++)
         {
             Button newButton = Instantiate(fillInTheBlanksAnswerButtonPrefab, keywordBoard, false);
@@ -101,7 +102,7 @@ public class FillBlanksManager : SingleplayerManager
             {
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
                 Debug.Log(LastClickedWord);
-
+                //If a keyword inside of the proverb is clicked, remove that keyword from the proverb and create a button
                 if (allWords.Contains(LastClickedWord))
                 {
                     removeWord(LastClickedWord);
@@ -110,6 +111,7 @@ public class FillBlanksManager : SingleplayerManager
         }
     }
 
+    //Check if text is able to be put in the sentence
     public bool canInput(string text, string search)
     {
         int pos = text.IndexOf(search);
@@ -120,6 +122,7 @@ public class FillBlanksManager : SingleplayerManager
         return true;
     }
 
+    //Input a word inside of the proverb
     private void inputWord(string word)
     {
         word = "<u><b>" + word + "</u></b>";
@@ -127,6 +130,7 @@ public class FillBlanksManager : SingleplayerManager
         questionText.text = answerProverb;
     }
 
+    //Remove a word from the proverb
     private void removeWord(string word)
     {
         Button[] buttons = keywordBoard.GetComponentsInChildren<Button>();
@@ -140,6 +144,7 @@ public class FillBlanksManager : SingleplayerManager
         questionText.text = answerProverb;
     }
 
+    //Function that replaces the first occurance of a string "search" inside of a string "text" with a string "replace"
     public string ReplaceFirst(string text, string search, string replace)
     {
         if (!canInput(answerProverb, search))
@@ -149,6 +154,7 @@ public class FillBlanksManager : SingleplayerManager
         return text.Substring(0, text.IndexOf(search)) + replace + text.Substring(text.IndexOf(search) + search.Length);
     }
 
+    //Detect the press of a button
     public void buttonPressed(int index)
     {
         if(canInput(answerProverb, "...")) 

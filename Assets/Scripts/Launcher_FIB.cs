@@ -35,20 +35,6 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    [PunRPC]
-    void ReceiveChat(string msg)
-    {
-        Debug.Log("b");
-        Debug.Log(msg);
-    }
-
-    public void SendChat(string msg)
-    {
-        Debug.Log("a");
-        string newMessage = PhotonNetwork.NickName + ":" + msg;
-        _photon.RPC("ReceiveChat", RpcTarget.All, "a");
-    }
-
     public override void OnConnectedToMaster() {
         Debug.Log("Connected to Master.");
         PhotonNetwork.JoinLobby(); // you need to be in a Lobby to join a Room
@@ -100,7 +86,7 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     }
 
     public void StartGame() {
-        PhotonNetwork.LoadLevel("FillBlankMultiplayer"); // TODO: change the level to the actual fill in the blanks multiplayer game mode
+        PhotonNetwork.LoadLevel("FillBlankMultiplayer");
     }
 
     public void LeaveRoom() {

@@ -35,6 +35,8 @@ public class CoopGame : SingleplayerManager
     public static List<string> allWords;
     public static List<string> buttonIndices;
 
+
+    //Receive a word from another player
     [PunRPC]
     void ReceiveChat(string msg)
     {
@@ -45,18 +47,20 @@ public class CoopGame : SingleplayerManager
         }
     }
 
+    //Send a word to another player
     public void SendChat(string msg)
     {
-        Debug.Log("a");
         string newMessage = PhotonNetwork.NickName + ":" + msg;
         _photon.RPC("ReceiveChat", RpcTarget.Others, "a");
     }
 
+    //Send a message to other players signalling that you joined the game
     public void sendMyNickName()
     {
         _photon.RPC("ReceiveName", RpcTarget.Others, PhotonNetwork.NickName);
     }
     
+    //Receive a signal that a player has loaded in to the game
     [PunRPC]
     public void ReceiveName(string playerName)
     {
@@ -76,32 +80,12 @@ public class CoopGame : SingleplayerManager
         otherPlayerNames[i].transform.parent.GameObject().SetActive(true);
     }
 
-    // Start is called before the first frame update
-    async void Start()
+    //Starts the scene but waits first
+    IEnumerator startButWaitFirst()
     {
+        yield return new WaitForSeconds(1);
         sendMyNickName();
-        // base.Start();
 
-        // Goes to the 'proverbs' database table and searches for the key
-        // await dbReference.Child("proverbs").Child(currentKey)
-        // .GetValueAsync().ContinueWith(task =>
-        // {
-        //     if (task.IsFaulted)
-        //     {
-        //         Debug.LogError("Task could not be completed.");
-        //         return;
-        //     }
-        //     
-        //     else if (task.IsCompleted)
-        //     {
-        //         // Take a snapshot of the database entry
-        //         DataSnapshot snapshot = task.Result;
-        //         // Convert the JSON back to a Proverb object
-        //         string json = snapshot.GetRawJsonValue();
-        //         nextProverb = JsonUtility.FromJson<Proverb>(json);
-        //         Debug.Log(json);
-        //     }
-        // });
         questionText.text = "Don't look a gift horse in the mouth";
         buttonsToCreateWords = new List<string>(new[] { "gift", "horse", "mouth" });
 
@@ -111,10 +95,10 @@ public class CoopGame : SingleplayerManager
 
         // Add the keywords to allwords, and add some flukes
         // allWords = nextProverb.keywords;
-        buttonsToCreateWords.Add("frog");
-        buttonsToCreateWords.Add("box");
-        buttonsToCreateWords.Add("loses");
-        buttonsToCreateWords.Add("mediocre");
+        //buttonsToCreateWords.Add("frog");
+        //buttonsToCreateWords.Add("box");
+        //buttonsToCreateWords.Add("loses");
+        //buttonsToCreateWords.Add("mediocre");
 
         foreach (string v in buttonsToCreateWords)
         {
@@ -146,6 +130,36 @@ public class CoopGame : SingleplayerManager
         CreateButton(buttonsToCreateWords.Count, "test");
     }
 
+    // Start is called before the first frame update
+    async void Start()
+    {
+        StartCoroutine(startButWaitFirst());
+        // base.Start();
+
+        // Goes to the 'proverbs' database table and searches for the key
+        // await dbReference.Child("proverbs").Child(currentKey)
+        // .GetValueAsync().ContinueWith(task =>
+        // {
+        //     if (task.IsFaulted)
+        //     {
+        //         Debug.LogError("Task could not be completed.");
+        //         return;
+        //     }
+        //     
+        //     else if (task.IsCompleted)
+        //     {
+        //         // Take a snapshot of the database entry
+        //         DataSnapshot snapshot = task.Result;
+        //         // Convert the JSON back to a Proverb object
+        //         string json = snapshot.GetRawJsonValue();
+        //         nextProverb = JsonUtility.FromJson<Proverb>(json);
+        //         Debug.Log(json);
+        //     }
+        // });
+    }
+
+
+    
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -156,6 +170,8 @@ public class CoopGame : SingleplayerManager
             {
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
 
+
+                //If a keyword inside of the proverb is clicked, remove that keyword from the proverb and create a button
                 if (allWords.Contains(LastClickedWord))
                 {
                     removeWord(LastClickedWord);
@@ -181,7 +197,8 @@ public class CoopGame : SingleplayerManager
             i++;
         }
     }
-
+    
+    //Check if text is able to be put in the sentence
     public bool canInput(string text, string search)
     {
         int pos = text.IndexOf(search);
@@ -199,6 +216,7 @@ public class CoopGame : SingleplayerManager
     //     questionText.text = answerProverb;
     // }
 
+    //Remove a word from the proverb
     private void removeWord(string word)
     {
         word = "<u>" + word + "</u>";
@@ -207,6 +225,7 @@ public class CoopGame : SingleplayerManager
         questionText.text = answerProverb;
     }
 
+    //Function that replaces the first occurance of a string "search" inside of a string "text" with a string "replace"
     public string ReplaceFirst(string text, string search, string replace)
     {
         if (!canInput(answerProverb, search))
@@ -237,6 +256,7 @@ public class CoopGame : SingleplayerManager
         // TODO: Disable the ability to click and check new answers
     }
 
+    //Creates a button for a received keyword
     public void CreateButtonForReceivedKeyword(string text)
     {
         int index = 0;
@@ -248,6 +268,7 @@ public class CoopGame : SingleplayerManager
         CreateButton(index, text);
     }
 
+    //Create a button with the right position and components
     private void CreateButton(int i, string text)
     {
         Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
