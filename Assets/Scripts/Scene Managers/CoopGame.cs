@@ -57,6 +57,7 @@ public class CoopGame : SingleplayerManager
         _photon.RPC("ReceiveName", RpcTarget.Others, PhotonNetwork.NickName);
     }
     
+    [PunRPC]
     public void ReceiveName(string playerName)
     {
         sendMyNickName();
