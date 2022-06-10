@@ -27,7 +27,7 @@ public class RegisterManager : MonoBehaviour
     public void OnClickSkip() 
     {
         Debug.Log("Skip!");
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("SingleplayerMenu");
     }
 
     public void OnClickRegister() 
@@ -48,7 +48,7 @@ public class RegisterManager : MonoBehaviour
         GetProverbs();
         
         // Load menu after succesful registration
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("SingleplayerMenu");
     }
 
     private void CheckEmail(string email) 
@@ -67,7 +67,7 @@ public class RegisterManager : MonoBehaviour
             if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
                 Debug.Log("Email already in use");
-                SceneManager.LoadScene("Menu");
+                SceneManager.LoadScene("SingleplayerMenu");
             }
         };
     }
