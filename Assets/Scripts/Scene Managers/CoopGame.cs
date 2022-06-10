@@ -38,8 +38,11 @@ public class CoopGame : SingleplayerManager
     [PunRPC]
     void ReceiveChat(string msg)
     {
-        Debug.Log("b");
-        Debug.Log(msg);
+        string[] splits = msg.Split(":");
+        if (PhotonNetwork.NickName.Equals(splits[0]))
+        {
+            CreateButtonForReceivedKeyword(splits[1]);
+        }
     }
 
     public void SendChat(string msg)
