@@ -38,6 +38,21 @@ public class RegisterManager : MonoBehaviour
         Debug.Log("Email: " + email + ", Username: " + username);
 
         // Check if the email is already associated with an account
+        CheckEmail(email);
+
+        // Add the new user to the database
+        playerKey = dbReference.Child("players").Push().Key;
+        dbReference.Child("players").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(new Player(username, email)));
+        Debug.Log("PlayerKey: " + playerKey);
+        
+        GetProverbs();
+        
+        // Load menu after succesful registration
+        SceneManager.LoadScene("SingleplayerMenu");
+    }
+
+    private void CheckEmail(string email) 
+    {
         // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(email)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
@@ -52,20 +67,6 @@ public class RegisterManager : MonoBehaviour
             if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
                 Debug.Log("Email already in use");
-                SceneManager.LoadScene("SingleplayerMenu");
-                //Debug.Log("Loaded Menu");
-                //this.enabled = false;
-            }
-            else
-            {
-                // Add the new user to the database
-                playerKey = dbReference.Child("players").Push().Key;
-                dbReference.Child("players").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(new Player(username, email)));
-                //Debug.Log("PlayerKey: " + playerKey);
-                
-                GetProverbs();
-                
-                // Load menu after succesful registration
                 SceneManager.LoadScene("SingleplayerMenu");
             }
         };
