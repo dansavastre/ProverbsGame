@@ -92,7 +92,7 @@ public class CoopGame : SingleplayerManager
         // Set the variables
         correctProverb = "Don't look a gift horse in the mouth";
         answerProverb = correctProverb;
-        sentMyKeywordsToOtherPlayers(new List<string>(new string[]{"shayan1", "shayan2", "shayan3", "shayan4"}));
+
         // Add the keywords to allwords, and add some flukes
         // allWords = nextProverb.keywords;
         //buttonsToCreateWords.Add("frog");
