@@ -1319,13 +1319,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionText: {fileID: 461726958}
   resultText: {fileID: 0}
+  checkButton: {fileID: 0}
   nextQuestionButton: {fileID: 1040666604}
   answerButtonPrefab: {fileID: 0}
   answerBoard: {fileID: 0}
   answerButtons: []
   progressBar: {fileID: 780920359}
   funFactText: {fileID: 1244935437}
-  image: {fileID: 0}
+  image: {fileID: 1125516270}
 --- !u!1 &1125516268
 GameObject:
   m_ObjectHideFlags: 0

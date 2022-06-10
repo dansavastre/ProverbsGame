@@ -56,7 +56,6 @@ public class RecognizeImageManager : SingleplayerManager
                 Debug.LogError("Task (get image byte array) could not be completed.");
                 return;
             }
-            
             else if (task.IsCompleted)
             {
                 fileContents = task.Result;
