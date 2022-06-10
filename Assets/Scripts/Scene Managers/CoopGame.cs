@@ -92,7 +92,7 @@ public class CoopGame : SingleplayerManager
         // Set the variables
         correctProverb = "Don't look a gift horse in the mouth";
         answerProverb = correctProverb;
-
+        sentMyKeywordsToOtherPlayers(new List<string>(new string[]{"shayan1", "shayan2", "shayan3", "shayan4"}));
         // Add the keywords to allwords, and add some flukes
         // allWords = nextProverb.keywords;
         //buttonsToCreateWords.Add("frog");
@@ -191,9 +191,8 @@ public class CoopGame : SingleplayerManager
         int i = 0;
         foreach (string keyword in myKeywords)
         {
-            var playerToSendTo = PhotonNetwork.CurrentRoom.Players[i % playerCountThisRoom];
-            if (playerToSendTo.NickName.Equals(PhotonNetwork.NickName)) i++;
-            _photon.RPC("receiveChat", PhotonNetwork.CurrentRoom.Players[i % playerCountThisRoom], playerToSendTo.NickName+":"+keyword);
+            var playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
+            _photon.RPC("receiveChat", PhotonNetwork.PlayerList[i % playerCountThisRoom], playerToSendTo.NickName+":"+keyword);
             i++;
         }
     }

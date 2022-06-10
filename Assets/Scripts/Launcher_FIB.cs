@@ -69,8 +69,6 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
             Instantiate(playerListItemPrefab_FIB, playerListContent_FIB).GetComponent<PlayerListItem>().SetUp(players[i]);
 
         startGameButton_FIB.SetActive(PhotonNetwork.IsMasterClient); // only the host of the game can start the game
-
-        SendChat("Hi");
     }
 
     /**
