@@ -16,6 +16,7 @@ public class SingleplayerManager : MonoBehaviour
     // UI elements
     [SerializeField] protected TextMeshProUGUI questionText;
     [SerializeField] protected TextMeshProUGUI resultText;
+    [SerializeField] protected GameObject checkButton;
     [SerializeField] protected GameObject nextQuestionButton;
     [SerializeField] protected Button answerButtonPrefab;
     [SerializeField] protected RectTransform answerBoard;
@@ -255,10 +256,10 @@ public class SingleplayerManager : MonoBehaviour
     {
         Button newButton = Instantiate(answerButtonPrefab, answerBoard, false);
         // Set position
-        int yPos = -answerIndex * 75 + 20;
+        int yPos = -answerIndex * (int) newButton.GetComponent<RectTransform>().rect.height; // Change the starting location of buttons
         var transform1 = newButton.transform;
         transform1.localPosition = new Vector3(transform1.localPosition.x, yPos);
-        // set name, text, and callback
+        // Set name, text, sprite, and callback
         newButton.name = "Answer" + answerIndex;
         newButton.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[answerIndex].text;
         newButton.onClick.AddListener(() => CheckAnswer(answerIndex));
@@ -302,7 +303,7 @@ public class SingleplayerManager : MonoBehaviour
         Debug.Log("Quitting session.");
         string json = JsonUtility.ToJson(newProficiency);
         dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("SingleplayerMenu");
     }
 
     public void LoadNextScene()
@@ -329,7 +330,7 @@ public class SingleplayerManager : MonoBehaviour
             Debug.Log("Saving progress.");
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-            SceneManager.LoadScene("Menu");
+            SceneManager.LoadScene("singleplayerMenu");
             return;
         }
         switch (currentBucket.stage)
@@ -358,7 +359,7 @@ public class SingleplayerManager : MonoBehaviour
             default:
                 string json = JsonUtility.ToJson(newProficiency);
                 dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-                SceneManager.LoadScene("Menu");
+                SceneManager.LoadScene("SingleplayerMenu");
                 break;
         }
     }

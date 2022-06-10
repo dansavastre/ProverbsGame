@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 8278442498680255171}
   - component: {fileID: 8278442498680255168}
   m_Layer: 5
-  m_Name: Progres Bar
+  m_Name: ProgressBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -292,5 +292,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc14a8f359b281e409552b96c137e10e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FillSpeed: 0.5
-  target: 0
