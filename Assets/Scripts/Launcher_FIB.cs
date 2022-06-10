@@ -100,7 +100,7 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     }
 
     public void StartGame() {
-        PhotonNetwork.LoadLevel(1); // TODO: change the level to the actual fill in the blanks multiplayer game mode
+        PhotonNetwork.LoadLevel("FillBlankMultiplayer"); // TODO: change the level to the actual fill in the blanks multiplayer game mode
     }
 
     public void LeaveRoom() {

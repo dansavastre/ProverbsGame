@@ -935,6 +935,7 @@ GameObject:
   - component: {fileID: 1151029730}
   - component: {fileID: 1151029729}
   - component: {fileID: 1151029733}
+  - component: {fileID: 1151029734}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1043,12 +1044,37 @@ MonoBehaviour:
   questionText: {fileID: 1745299263}
   resultText: {fileID: 283468578}
   nextQuestionButton: {fileID: 542374365}
-  buttons: []
-  buttonTexts: []
+  answerButtonPrefab: {fileID: 0}
+  answerBoard: {fileID: 0}
+  answerButtons: []
+  progressBar: {fileID: 0}
+  _photon: {fileID: 1151029734}
   keywordBoard: {fileID: 1151029732}
   dragDropButtonPrefab: {fileID: 3265820505575547767, guid: f9a2da42e09b114439c8d12d86fedcd8, type: 3}
   canvas: {fileID: 1151029731}
   LastClickedWord: 
+--- !u!114 &1151029734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151029728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &1607899684
 PrefabInstance:
   m_ObjectHideFlags: 0

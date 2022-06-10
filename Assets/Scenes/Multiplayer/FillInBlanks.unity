@@ -2995,6 +2995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 091b5bdb943c8ed46812722f267609c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _photon: {fileID: 1577094756}
   roomNameInputField_FIB: {fileID: 2053679680}
   errorText_FIB: {fileID: 472915725}
   roomNameText_FIB: {fileID: 2070325315}

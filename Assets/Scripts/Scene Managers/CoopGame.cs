@@ -10,9 +10,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class CoopGame : SingleplayerManager
 {
+
+    public static Launcher_FIB Instance;
+
+    public PhotonView _photon;
     // UI elements
     // [SerializeField] private List<GameObject> buttons;
     // [SerializeField] private List<TextMeshProUGUI> buttonTexts;
@@ -28,9 +34,24 @@ public class CoopGame : SingleplayerManager
     public static List<string> allWords;
     public static List<string> buttonIndices;
 
+    [PunRPC]
+    void ReceiveChat(string msg)
+    {
+        Debug.Log("b");
+        Debug.Log(msg);
+    }
+
+    public void SendChat(string msg)
+    {
+        Debug.Log("a");
+        string newMessage = PhotonNetwork.NickName + ":" + msg;
+        _photon.RPC("ReceiveChat", RpcTarget.All, "a");
+    }
+
     // Start is called before the first frame update
     async void Start()
     {
+        SendChat("a");
         // base.Start();
 
         // Goes to the 'proverbs' database table and searches for the key
