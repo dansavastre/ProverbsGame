@@ -29,6 +29,7 @@ public class SessionManager : MonoBehaviour
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
     public static string playerKey;
+    public static string email;
 
     // Progress bar
     public static int maxValue;
@@ -54,16 +55,23 @@ public class SessionManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Reset the player proficiency
-        playerProficiency = null;
-        newProficiency = null;
         random = new Random();
 
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         dbReferenceStatic = dbReference;
         // Make the button inactive
-        SessionButton.gameObject.SetActive(false);
+
+        if(playerKey != null)
+        {
+            PlayerEmail.text = email;
+            GetPlayerKey();
+        }
+        else
+        {
+            SessionButton.gameObject.SetActive(false);
+        }
+        
     }
 
     // Update is called once per frame
@@ -97,6 +105,10 @@ public class SessionManager : MonoBehaviour
     // Fetches the key of the current player
     public void GetPlayerKey()
     {
+        // Reset the player proficiency
+        playerProficiency = null;
+        newProficiency = null;
+        email = PlayerEmail.text;
         // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(PlayerEmail.text)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
