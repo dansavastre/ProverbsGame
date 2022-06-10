@@ -37,8 +37,8 @@ public class CoopGame : SingleplayerManager
     [PunRPC]
     void ReceiveChat(string msg)
     {
-        string[] splits = proverbText.text.Split(":");
-        if (PhotonNetWork.NickName.equals(splits[0]))
+        string[] splits = msg.Split(":");
+        if (PhotonNetwork.NickName.Equals(splits[0]))
         {
             CreateButtonForReceivedKeyword(splits[1]);
         }
