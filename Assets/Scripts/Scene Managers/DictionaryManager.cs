@@ -24,6 +24,8 @@ public class DictionaryManager : MonoBehaviour
     {
         allProverbs = new List<ProverbsDictionary>(new []
         {
+            new ProverbsDictionary("<b>horse is in house!</b>", "meaning"),
+            new ProverbsDictionary("<b>horse was here!</b>", "meaning"),
             new ProverbsDictionary("<b>Don't look a gift horse in his mouth</b>", "meaning"),
             new ProverbsDictionary("slow and steady wins the race", "meaning2"),
             new ProverbsDictionary("To be the black sheep of the family", "if you are different, you are oft not accepted in a group."),
@@ -63,8 +65,7 @@ public class DictionaryManager : MonoBehaviour
             // add button for word filtered on 
             Button wordButton = Instantiate(wordButtonPrefab, filterTextHolderPanel);
             wordButton.GetComponentInChildren<TextMeshProUGUI>().text = wordToFilterOn;
-            int x = wordsToFilterOn.Count - 1;
-            wordButton.onClick.AddListener(() => WordButtonPressed(x));
+            wordButton.onClick.AddListener(() => WordButtonPressed(wordToFilterOn));
         }
         UpdateDictionaryContentHolderContents();
         filterText.text = "";
@@ -81,11 +82,18 @@ public class DictionaryManager : MonoBehaviour
         }
     }
 
-    private void WordButtonPressed(int wordIndex)
+    private void WordButtonPressed(string wordOfButton)
     {
-        wordsToFilterOn.RemoveAt(wordIndex);
-        Destroy(filterTextHolderPanel.GetChild(wordIndex).GameObject());
-        
+        wordsToFilterOn.Remove(wordOfButton);
+
+        foreach (var tmp in filterTextHolderPanel.GetComponentsInChildren<TextMeshProUGUI>())
+        {
+            if (tmp.text == wordOfButton)
+            {
+                Destroy(tmp.transform.parent.GameObject());
+            }
+        }
+
         filteredProverbsList = new List<ProverbsDictionary>(allProverbs);
         foreach (var wordToFilterOn in wordsToFilterOn)
         {
