@@ -5,13 +5,11 @@ public class Player
 {
     public string playerName;
     public string email;
-    public string proficiency;
 
-    public Player(string playerName, string email, string proficiency)
+    public Player(string playerName, string email)
     {
         this.playerName = playerName;
         this.email = email;
-        this.proficiency = proficiency;
     }
 
     /**
@@ -27,7 +25,6 @@ public class Player
         
         Player other = (Player)obj;
         return this.playerName == other.playerName 
-            && this.email == other.email 
-            && this.proficiency == other.proficiency;
+            && this.email == other.email;
     }
 }
