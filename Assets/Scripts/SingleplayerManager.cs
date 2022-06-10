@@ -303,7 +303,7 @@ public class SingleplayerManager : MonoBehaviour
         Debug.Log("Quitting session.");
         string json = JsonUtility.ToJson(newProficiency);
         dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("SingleplayerMenu");
     }
 
     public void LoadNextScene()
@@ -330,7 +330,7 @@ public class SingleplayerManager : MonoBehaviour
             Debug.Log("Saving progress.");
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-            SceneManager.LoadScene("Menu");
+            SceneManager.LoadScene("singleplayerMenu");
             return;
         }
         switch (currentBucket.stage)
@@ -359,7 +359,7 @@ public class SingleplayerManager : MonoBehaviour
             default:
                 string json = JsonUtility.ToJson(newProficiency);
                 dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-                SceneManager.LoadScene("Menu");
+                SceneManager.LoadScene("SingleplayerMenu");
                 break;
         }
     }
