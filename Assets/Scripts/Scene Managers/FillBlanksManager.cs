@@ -8,13 +8,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class FillBlanksManager : SingleplayerManager
 {
-    [SerializeField]
-    private Transform keywordBoard;
-    [SerializeField]
-    private TextMeshProUGUI ResultText;
+    [SerializeField] private Transform keywordBoard;
+    [SerializeField] private TextMeshProUGUI ResultText;
     [SerializeField] private List<Button> Buttons;
     [SerializeField] private List<TextMeshProUGUI> ButtonsTexts;
 
@@ -27,12 +26,12 @@ public class FillBlanksManager : SingleplayerManager
     private string LastClickedWord;
 
     // Start is called before the first frame update
-    async void Start()
+    protected async override void Start()
     {
         base.Start();
 
         // Goes to the 'proverbs' database table and searches for the key
-        await dbReference.Child("proverbs").Child(currentKey)
+        await dbReference.Child("proverbs").Child(currentBucket.key)
         .GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -66,6 +65,15 @@ public class FillBlanksManager : SingleplayerManager
         foreach (string v in nextProverb.keywords)
         {
             answerProverb = answerProverb.Replace(v, "...");
+        }
+
+        //Shuffling list of words
+        for (int i = 0; i < allWords.Count; i++)
+        {
+            string temp = allWords[i];
+            int randomIndex = Random.Range(i, allWords.Count);
+            allWords[i] = allWords[randomIndex];
+            allWords[randomIndex] = temp;
         }
 
         for (int i = 0; i < allWords.Count; i++)
