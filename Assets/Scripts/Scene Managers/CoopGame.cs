@@ -83,7 +83,7 @@ public class CoopGame : SingleplayerManager
     //Starts the scene but waits first
     IEnumerator startButWaitFirst()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
         sendMyNickName();
 
         questionText.text = "Don't look a gift horse in the mouth";
@@ -99,7 +99,7 @@ public class CoopGame : SingleplayerManager
         //buttonsToCreateWords.Add("box");
         //buttonsToCreateWords.Add("loses");
         //buttonsToCreateWords.Add("mediocre");
-
+        
         foreach (string v in buttonsToCreateWords)
         {
             answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
@@ -128,6 +128,7 @@ public class CoopGame : SingleplayerManager
 
         questionText.text = answerProverb;
         CreateButton(buttonsToCreateWords.Count, "test");
+        sentMyKeywordsToOtherPlayers(new List<string>(new string[] { "ferhan1", "ferhan2", "ferhan3", "ferhan4" }));
     }
 
     // Start is called before the first frame update
@@ -187,12 +188,12 @@ public class CoopGame : SingleplayerManager
      */
     private void sentMyKeywordsToOtherPlayers(List<string> myKeywords)
     {
-        int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount;
+        int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount-1;
         int i = 0;
         foreach (string keyword in myKeywords)
         {
-            var playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
-            _photon.RPC("receiveChat", PhotonNetwork.PlayerList[i % playerCountThisRoom], playerToSendTo.NickName+":"+keyword);
+            var playerToSendTo = PhotonNetwork.PlayerListOthers[i % playerCountThisRoom];
+            _photon.RPC("ReceiveChat", PhotonNetwork.PlayerListOthers[i % playerCountThisRoom], playerToSendTo.NickName+":"+keyword);
             i++;
         }
     }
