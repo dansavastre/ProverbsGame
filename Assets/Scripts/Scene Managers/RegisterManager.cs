@@ -24,12 +24,21 @@ public class RegisterManager : MonoBehaviour
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
+    public void OnClickSkip() 
+    {
+        Debug.Log("Skip!");
+        SceneManager.LoadScene("Menu");
+    }
+
     public void OnClickRegister() 
     {
         Debug.Log("Register!");
         string email = emailField.text;
         string username = usernameField.text;
-        Debug.Log("Email: " + email + ", Username: " + username);        
+        Debug.Log("Email: " + email + ", Username: " + username);
+
+        // Check if the email is already associated with an account
+        CheckEmail(email);
 
         // Add the new user to the database
         playerKey = dbReference.Child("players").Push().Key;
@@ -40,6 +49,27 @@ public class RegisterManager : MonoBehaviour
         
         // Load menu after succesful registration
         SceneManager.LoadScene("Menu");
+    }
+
+    private void CheckEmail(string email) 
+    {
+        // Goes to the 'players' database table and searches for the user
+        dbReference.Child("players").OrderByChild("email").EqualTo(email)
+        .ValueChanged += (object sender, ValueChangedEventArgs args) =>
+        {
+            if (args.DatabaseError != null)
+            {
+                Debug.LogError(args.DatabaseError.Message);
+                return;
+            }
+
+            // Check to see if there is at least one result
+            if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
+            {
+                Debug.Log("Email already in use");
+                SceneManager.LoadScene("Menu");
+            }
+        };
     }
 
     private void GetProverbs()
@@ -68,9 +98,4 @@ public class RegisterManager : MonoBehaviour
         }});
     }
 
-    public void OnClickSkip() 
-    {
-        Debug.Log("Skip!");
-        SceneManager.LoadScene("Menu");
-    }
 }
