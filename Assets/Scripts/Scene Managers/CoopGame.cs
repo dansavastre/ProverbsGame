@@ -54,38 +54,71 @@ public class CoopGame : SingleplayerManager
         _photon.RPC("ReceiveChat", RpcTarget.Others, "a");
     }
 
-    //Send a message to other players signalling that you joined the game
-    public void sendMyNickName()
-    {
-        _photon.RPC("ReceiveName", RpcTarget.Others, PhotonNetwork.NickName);
-    }
+    // //Send a message to other players signalling that you joined the game
+    // public void sendMyNickName()
+    // {
+    //     _photon.RPC("ReceiveName", RpcTarget.Others, PhotonNetwork.NickName);
+    // }
     
-    //Receive a signal that a player has loaded in to the game
-    [PunRPC]
-    public void ReceiveName(string playerName)
-    {
-        sendMyNickName();
-        foreach (TextMeshProUGUI name in otherPlayerNames)
-        {
-            if (name.text == playerName) return;
-        }
-        
-        int i = 0;
-        while (otherPlayerNames[i].text != "")
-        {
-            i++;
-        }
-
-        otherPlayerNames[i].text = playerName;
-        otherPlayerNames[i].transform.parent.GameObject().SetActive(true);
-    }
+    // //Receive a signal that a player has loaded in to the game
+    // [PunRPC]
+    // public void ReceiveName(string playerName)
+    // {
+    //     sendMyNickName();
+    //     foreach (TextMeshProUGUI name in otherPlayerNames)
+    //     {
+    //         if (name.text == playerName) return;
+    //     }
+    //     
+    //     int i = 0;
+    //     while (otherPlayerNames[i].text != "")
+    //     {
+    //         i++;
+    //     }
+    //
+    //     otherPlayerNames[i].text = playerName;
+    //     otherPlayerNames[i].transform.parent.GameObject().SetActive(true);
+    // }
 
     //Starts the scene but waits first
-    IEnumerator startButWaitFirst()
-    {
-        yield return new WaitForSeconds(2);
-        sendMyNickName();
+    // IEnumerator startButWaitFirst()
+    // {
+    //     yield return new WaitForSeconds(2);
+    //     sendMyNickName();
+    // }
 
+    // Start is called before the first frame update
+    async void Start()
+    {
+        // StartCoroutine(startButWaitFirst());
+        // base.Start();
+
+        // Goes to the 'proverbs' database table and searches for the key
+        // await dbReference.Child("proverbs").Child(currentKey)
+        // .GetValueAsync().ContinueWith(task =>
+        // {
+        //     if (task.IsFaulted)
+        //     {
+        //         Debug.LogError("Task could not be completed.");
+        //         return;
+        //     }
+        //     
+        //     else if (task.IsCompleted)
+        //     {
+        //         // Take a snapshot of the database entry
+        //         DataSnapshot snapshot = task.Result;
+        //         // Convert the JSON back to a Proverb object
+        //         string json = snapshot.GetRawJsonValue();
+        //         nextProverb = JsonUtility.FromJson<Proverb>(json);
+        //         Debug.Log(json);
+        //     }
+        // });
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount - 1; i++)
+        {
+            otherPlayerNames[i].text = PhotonNetwork.PlayerListOthers[i].NickName;
+            otherPlayerNames[i].transform.parent.GameObject().SetActive(true);
+        }
+        
         questionText.text = "Don't look a gift horse in the mouth";
         buttonsToCreateWords = new List<string>(new[] { "gift", "horse", "mouth" });
 
@@ -93,13 +126,6 @@ public class CoopGame : SingleplayerManager
         correctProverb = "Don't look a gift horse in the mouth";
         answerProverb = correctProverb;
 
-        // Add the keywords to allwords, and add some flukes
-        // allWords = nextProverb.keywords;
-        //buttonsToCreateWords.Add("frog");
-        //buttonsToCreateWords.Add("box");
-        //buttonsToCreateWords.Add("loses");
-        //buttonsToCreateWords.Add("mediocre");
-        
         foreach (string v in buttonsToCreateWords)
         {
             answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
@@ -129,34 +155,6 @@ public class CoopGame : SingleplayerManager
         questionText.text = answerProverb;
         CreateButton(buttonsToCreateWords.Count, "test");
         sentMyKeywordsToOtherPlayers(new List<string>(new string[] { "ferhan1", "ferhan2", "ferhan3", "ferhan4" }));
-    }
-
-    // Start is called before the first frame update
-    async void Start()
-    {
-        StartCoroutine(startButWaitFirst());
-        // base.Start();
-
-        // Goes to the 'proverbs' database table and searches for the key
-        // await dbReference.Child("proverbs").Child(currentKey)
-        // .GetValueAsync().ContinueWith(task =>
-        // {
-        //     if (task.IsFaulted)
-        //     {
-        //         Debug.LogError("Task could not be completed.");
-        //         return;
-        //     }
-        //     
-        //     else if (task.IsCompleted)
-        //     {
-        //         // Take a snapshot of the database entry
-        //         DataSnapshot snapshot = task.Result;
-        //         // Convert the JSON back to a Proverb object
-        //         string json = snapshot.GetRawJsonValue();
-        //         nextProverb = JsonUtility.FromJson<Proverb>(json);
-        //         Debug.Log(json);
-        //     }
-        // });
     }
 
 
