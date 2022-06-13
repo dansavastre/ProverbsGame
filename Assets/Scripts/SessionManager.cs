@@ -66,14 +66,11 @@ public class SessionManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-<<<<<<< HEAD
-=======
         // Reset the player proficiency
         playerProficiency = null;
         newProficiency = null;
-        playerEmail = AccountManager.playerEmail;
+        //playerEmail = AccountManager.playerEmail;
         playerKey = null;
->>>>>>> develop
         random = new Random();
 
         // Get the root reference location of the database
@@ -81,19 +78,6 @@ public class SessionManager : MonoBehaviour
         dbReferenceStatic = dbReference;
 
         // Make the button inactive
-<<<<<<< HEAD
-
-        if(playerKey != null)
-        {
-            PlayerEmail.text = email;
-            GetPlayerKey();
-        }
-        else
-        {
-            SessionButton.gameObject.SetActive(false);
-        }
-        
-=======
         if (playerEmail == null)
         {
             Debug.Log("No email was given, returning to first screen.");
@@ -103,7 +87,6 @@ public class SessionManager : MonoBehaviour
         {
             GetPlayerKey();
         }
->>>>>>> develop
     }
 
     // Update is called once per frame
@@ -140,7 +123,7 @@ public class SessionManager : MonoBehaviour
         // Reset the player proficiency
         playerProficiency = null;
         newProficiency = null;
-        email = PlayerEmail.text;
+        //email = playerEmail.text;
         // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(playerEmail)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
@@ -305,17 +288,9 @@ public class SessionManager : MonoBehaviour
         }
     }
 
-<<<<<<< HEAD
-    public void GoToRegister()
-    {
-        SceneManager.LoadScene("Register");
-    }
-}
-=======
     // Switch to the scene corresponding to the sceneIndex
     public void SwitchScene(int sceneIndex)
     {
         SceneManager.LoadScene(scenes[sceneIndex]);
     }
 }
->>>>>>> develop

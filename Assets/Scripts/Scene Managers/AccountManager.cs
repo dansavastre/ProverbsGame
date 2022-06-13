@@ -30,18 +30,7 @@ public class AccountManager : MonoBehaviour
         playerEmail = emailField.text;
         Debug.Log("Email: " + playerEmail);
 
-<<<<<<< HEAD:Assets/Scripts/Scene Managers/RegisterManager.cs
-    public void OnClickRegister() 
-    {
-        Debug.Log("Register!");
-        string email = emailField.text;
-        string username = usernameField.text;
-        Debug.Log("Email: " + email + ", Username: " + username);
-
-        // Check if the email is already associated with an account
-=======
         // Check if the email is actually associated with an account
->>>>>>> develop:Assets/Scripts/Scene Managers/AccountManager.cs
         // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(playerEmail)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
@@ -55,12 +44,6 @@ public class AccountManager : MonoBehaviour
             // Check to see if there is at least one result
             if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
-<<<<<<< HEAD:Assets/Scripts/Scene Managers/RegisterManager.cs
-                Debug.Log("Email already in use");
-                SceneManager.LoadScene("SingleplayerMenu");
-                //Debug.Log("Loaded Menu");
-                //this.enabled = false;
-=======
                 Debug.Log("Login: Email in use.");
                 // Load next scene after succesful login
                 SwitchScene(3);
@@ -97,26 +80,15 @@ public class AccountManager : MonoBehaviour
             {
                 Debug.Log("Register: Email already in use.");
                 // playerEmail = null;
->>>>>>> develop:Assets/Scripts/Scene Managers/AccountManager.cs
             }
             else
             {
                 // Add the new user to the database
                 playerKey = dbReference.Child("players").Push().Key;
-<<<<<<< HEAD:Assets/Scripts/Scene Managers/RegisterManager.cs
-                dbReference.Child("players").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(new Player(username, email)));
-                //Debug.Log("PlayerKey: " + playerKey);
-                
-                GetProverbs();
-                
-                // Load menu after succesful registration
-                SceneManager.LoadScene("SingleplayerMenu");
-=======
                 dbReference.Child("players").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(new Player(username, playerEmail)));
                 GetProverbs();
                 // Load next scene after succesful registration
                 SwitchScene(3);
->>>>>>> develop:Assets/Scripts/Scene Managers/AccountManager.cs
             }
         };
     }
