@@ -11,44 +11,28 @@ public class AccountManager : MonoBehaviour
     [SerializeField] private TMP_InputField emailField;
     [SerializeField] private TMP_InputField usernameField;
 
-    private string[] scenes = SessionManager.scenes;
-
     private DatabaseReference dbReference;
-    private string playerKey;
+
     private Proficiency playerProficiency;
+    public static string playerEmail;
+    private string playerKey;
+
+    private string[] scenes = SessionManager.scenes;
 
     void Start()
     {
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
-    public void SwitchScene(int sceneIndex)
-    {
-        SceneManager.LoadScene(scenes[sceneIndex]);
-    }
-
     public void OnClickLogin()
     {
         Debug.Log("Login!");
-        string email = emailField.text;
-        Debug.Log("Email: " + email);
-        SwitchScene(3);
+        playerEmail = emailField.text;
+        Debug.Log("Email: " + playerEmail);
 
         // Check if the email is actually associated with an account
         // Goes to the 'players' database table and searches for the user
-        // TODO
-    }
-
-    public void OnClickRegister() 
-    {
-        Debug.Log("Register!");
-        string email = emailField.text;
-        string username = usernameField.text;
-        Debug.Log("Email: " + email + ", Username: " + username);
-
-        // Check if the email is already associated with an account
-        // Goes to the 'players' database table and searches for the user
-        dbReference.Child("players").OrderByChild("email").EqualTo(email)
+        dbReference.Child("players").OrderByChild("email").EqualTo(playerEmail)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
         {
             if (args.DatabaseError != null)
@@ -60,13 +44,45 @@ public class AccountManager : MonoBehaviour
             // Check to see if there is at least one result
             if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
-                Debug.Log("Email already in use");
+                Debug.Log("Email in use.");
+                SwitchScene(3);
+            }
+            else
+            {
+                Debug.Log("Email not in use.");
+                playerEmail = null;
+            }
+        };
+    }
+
+    public void OnClickRegister() 
+    {
+        Debug.Log("Register!");
+        playerEmail = emailField.text;
+        string username = usernameField.text;
+        Debug.Log("Email: " + playerEmail + ", Username: " + username);
+
+        // Check if the email is already associated with an account
+        // Goes to the 'players' database table and searches for the user
+        dbReference.Child("players").OrderByChild("email").EqualTo(playerEmail)
+        .ValueChanged += (object sender, ValueChangedEventArgs args) =>
+        {
+            if (args.DatabaseError != null)
+            {
+                Debug.LogError(args.DatabaseError.Message);
+                return;
+            }
+
+            // Check to see if there is at least one result
+            if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
+            {
+                Debug.Log("Email already in use.");
             }
             else
             {
                 // Add the new user to the database
                 playerKey = dbReference.Child("players").Push().Key;
-                dbReference.Child("players").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(new Player(username, email)));
+                dbReference.Child("players").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(new Player(username, playerEmail)));
                 GetProverbs();
                 // Load menu after succesful registration
                 SwitchScene(3);
@@ -98,5 +114,10 @@ public class AccountManager : MonoBehaviour
                 }
                 dbReference.Child("proficiencies").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(playerProficiency));
         }});
+    }
+
+    public void SwitchScene(int sceneIndex)
+    {
+        SceneManager.LoadScene(scenes[sceneIndex]);
     }
 }
