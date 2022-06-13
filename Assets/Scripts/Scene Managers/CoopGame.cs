@@ -34,7 +34,7 @@ public class CoopGame : SingleplayerManager
     public string LastClickedWord;
     public static List<string> allWords;
     public static List<string> buttonIndices;
-
+    public List<Proverb> proverbs;
 
     //Receive a word from another player
     [PunRPC]
@@ -288,5 +288,25 @@ public class CoopGame : SingleplayerManager
             buttonIndices[i] = text;
         }
         allWords.Add(text);
+    }
+
+    //Load next proverb, if there are none, send a signal that you're finished
+    private void LoadNextProverb()
+    {
+        proverbs.RemoveAt(0);
+
+
+        Proverb proverb = proverbs.First();
+
+        // Set the variables
+        correctProverb = proverb.phrase;
+        answerProverb = correctProverb;
+
+        foreach (string v in proverb.keywords)
+        {
+            answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
+        }
+
+        questionText.text = answerProverb;
     }
 }
