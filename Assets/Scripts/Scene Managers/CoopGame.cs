@@ -32,16 +32,30 @@ public class CoopGame : SingleplayerManager
     public static List<string> allWords;
     public static List<string> buttonIndices;
     private List<Proverb> proverbs;
-    Random random = new Random();
+    readonly Random random = new Random();
 
-    // Start is called before the first frame update
+    /**
+     * Called before the first frame update
+     * <summary>
+     * - Creates player buttons;
+     * - If masterClient: gets proverbs from the DB, selects {numberOfProverbsPerPlayer} proverbs per player and randomly
+     * distributes them between players.
+     * </summary>
+     */
     async void Start()
     {
-        // base.Start();
+        // initializations
+        buttonIndices = new List<string>();
+        allWords = new List<string>();
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+        
+        // variables needed here
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         int numberOfProverbsPerPlayer = 2;
+        int[] randomProverbIndices = {};
+        List<DataSnapshot> allProverbs = new List<DataSnapshot>();
 
+        // set player buttons active and add their names
         for (int i = 0; i < playerCount - 1; i++)
         {
             otherPlayerNames[i].text = PhotonNetwork.PlayerListOthers[i].NickName;
@@ -58,16 +72,15 @@ public class CoopGame : SingleplayerManager
                     if (task.IsFaulted)
                     {
                         Debug.LogError("Task could not be completed.");
+                        return;
                     }
                 
                     else if (task.IsCompleted)
                     {
                         // Take a snapshot of the database entry
                         DataSnapshot snapshot = task.Result;
-                        // convert it to JSON
-                        string json = snapshot.GetRawJsonValue();
                         // select {playerCount} random proverb indices
-                        int[] randomProverbIndices = new int[playerCount * numberOfProverbsPerPlayer];
+                        randomProverbIndices = new int[playerCount * numberOfProverbsPerPlayer];
                         for (int i = 0; i < randomProverbIndices.Length; i++)
                         {
                             int nextInt = random.Next(0, Convert.ToInt32(snapshot.ChildrenCount));
@@ -76,37 +89,39 @@ public class CoopGame : SingleplayerManager
                                 randomProverbIndices[i] = nextInt;
                             }
                         }
-
-                        // select proverbs from the database with the random indices selected above
-                        List<DataSnapshot> allProverbs = snapshot.Children.ToList();
-                        List<Proverb> proverbsSelected = new List<Proverb>();
-                        foreach (int i in randomProverbIndices)
-                        {
-                            proverbsSelected.Add(JsonUtility.FromJson<Proverb>(allProverbs[i].GetRawJsonValue()));
-                        }
                         
-                        // send proverbs to each player
-                        foreach (var player in PhotonNetwork.PlayerList)
-                        {
-                            _photon.RPC("SetProverbs", player, 
-                                proverbsSelected.GetRange(0, numberOfProverbsPerPlayer));
-                            proverbsSelected.RemoveRange(0, numberOfProverbsPerPlayer);
-                        }
-                        Debug.Log(proverbsSelected[0].phrase);
+                        allProverbs = snapshot.Children.ToList();
                     }
                 });
+            // select proverbs from the database with the random indices selected above
+            List<Proverb> proverbsSelected = new List<Proverb>();
+            foreach (int i in randomProverbIndices)
+            {
+                proverbsSelected.Add(JsonUtility.FromJson<Proverb>(allProverbs[i].GetRawJsonValue()));
+            }
+                        
+            // send proverbs to each player
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                // send the first {numberOfProverbsPerPlayer} proverbs to "player"
+                _photon.RPC("SetProverbs", player, 
+                    proverbsSelected.GetRange(0, numberOfProverbsPerPlayer));
+                // remove the proverbs sent
+                proverbsSelected.RemoveRange(0, numberOfProverbsPerPlayer);
+            }
         }
     }
 
 
     /**
      * <summary>Gets list of proverbs, saves this in corresponding attribute, merges all keywords, and distributes them</summary>
+     * <param name="proverbs">List of Proverb</param>
      */
     [PunRPC]
     private void SetProverbs(List<Proverb> proverbs)
     {
         this.proverbs = proverbs;
-        // merge all keywords
+        // merge all keywords of the proverbs given
         List<string> allKeywords = new List<string>();
         foreach (Proverb proverb in this.proverbs)
         {
@@ -125,17 +140,17 @@ public class CoopGame : SingleplayerManager
 
         // Distribute keywords between players
         SentMyKeywordsToAllPlayers(allKeywords);
-
+        
         // show next proverb
-        for (int i = 0; i < allKeywords.Count; i++)
-        {
-            CreateButton(i, allKeywords[i]);
-        }
         LoadNextProverb();
     }
 
+    /**
+     * <summary>Loads the next available proverb into the scene with blanks or lets the master know this player is finished.</summary>
+     */
     private void LoadNextProverb()
     {
+        // if no proverbs left, then this player is finished and master should be let known
         if (proverbs.Count == 0)
         {
             _photon.RPC("PlayerDone", RpcTarget.MasterClient);
@@ -146,17 +161,19 @@ public class CoopGame : SingleplayerManager
         correctProverb = proverb.phrase;
         answerProverb = correctProverb;
         
+        // Set blank spaces in the proverb based on the keywords
         foreach (string v in buttonsToCreateWords)
         {
             answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
         }
-        
-        buttonIndices = new List<string>();
-        allWords = new List<string>();
 
         questionText.text = answerProverb;
     }
     
+    /**
+     * Called after every frame load.
+     * <summary>Checks whether words from proverb need to be set back as buttons.</summary>
+     */
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -172,28 +189,19 @@ public class CoopGame : SingleplayerManager
                 if (allWords.Contains(LastClickedWord))
                 {
                     RemoveWord(LastClickedWord);
-                    CreateButtonForReceivedKeyword(LastClickedWord);
+                    CreateButtonForKeyword(LastClickedWord);
                 }
             }
         }
     }
     
-    //Receive a word from another player
+    /**
+     * <summary>PunRPC taking care of receiving keywords from other players.</summary>
+     */
     [PunRPC]
     void ReceiveChat(string msg)
     {
-        string[] splits = msg.Split(":");
-        if (PhotonNetwork.NickName.Equals(splits[0]))
-        {
-            CreateButtonForReceivedKeyword(splits[1]);
-        }
-    }
-
-    //Send a word to another player
-    public void SendChat(string msg)
-    {
-        string newMessage = PhotonNetwork.NickName + ":" + msg;
-        _photon.RPC("ReceiveChat", RpcTarget.Others, newMessage);
+        CreateButtonForKeyword(msg);
     }
 
     /**
@@ -207,7 +215,7 @@ public class CoopGame : SingleplayerManager
         foreach (string keyword in myKeywords)
         {
             var playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
-            _photon.RPC("ReceiveChat", playerToSendTo, playerToSendTo.NickName+":"+keyword);
+            _photon.RPC("ReceiveChat", playerToSendTo, keyword);
             i++;
         }
     }
@@ -280,8 +288,10 @@ public class CoopGame : SingleplayerManager
         // TODO: Disable the ability to click and check new answers
     }
 
-    //Creates a button for a received keyword
-    public void CreateButtonForReceivedKeyword(string text)
+    /**
+     * <summary>Creates button for a keyword at a nice place in the UI</summary> 
+     */
+    public void CreateButtonForKeyword(string text)
     {
         int index = 0;
         while (index < buttonIndices.Count && buttonIndices[index] != "")
@@ -292,7 +302,9 @@ public class CoopGame : SingleplayerManager
         CreateButton(index, text);
     }
 
-    //Create a button with the right position and components
+    /**
+     * <summary>Create a button at the right position and configures its components.</summary>
+     */
     private void CreateButton(int i, string text)
     {
         Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
@@ -301,10 +313,12 @@ public class CoopGame : SingleplayerManager
         int yPos = -(i / 3) * 70;
         newButton.transform.localPosition = new Vector3(xPos, yPos);
         newButton.name = "AnswerButton" + i;
+        // Configure the DragDrop script component of the button
         newButton.GetComponent<DragDrop>().canvas = canvas;
         newButton.GetComponent<DragDrop>().proverbText = questionText;
         newButton.GetComponent<DragDrop>().startingPosition = newButton.transform.localPosition;
         // newButton.onClick.AddListener(() => buttonPressed(newButton));
+        
         if (i >= buttonIndices.Count)
         {
             buttonIndices.Add(text);
@@ -316,15 +330,18 @@ public class CoopGame : SingleplayerManager
         allWords.Add(text);
     }
 
+    /**
+     * <summary>Function to be called when any player is finished. This function is only called in the Master's CoopGame class.</summary>
+     */
     [PunRPC]
-    void PlayerDone()
+    private void PlayerDone()
     {
         int amountOfPlayers = PhotonNetwork.PlayerListOthers.Count() + 1;
 
-        if (amountOfPlayers == playersDone)
+        if (amountOfPlayers == playersDone) //Everyone's done
         {
-            //Everyone's done
             Debug.Log("Everyone's done");
+            _photon.RPC("LoadRoomAgain", RpcTarget.All);
         }
     }
 
@@ -333,5 +350,14 @@ public class CoopGame : SingleplayerManager
         resultText.text = "Incorrect!";
         yield return new WaitForSeconds(3);
         resultText.text = "";
+    }
+
+    /**
+     * <summary>Joins room where player is already in a level of it.</summary>
+     */
+    [PunRPC]
+    private void LoadRoomAgain()
+    {
+        PhotonNetwork.JoinRoom(PhotonNetwork.CurrentRoom.Name);
     }
 }

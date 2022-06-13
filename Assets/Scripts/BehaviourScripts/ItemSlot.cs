@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Photon.Pun;
 using TMPro;
 using Unity.VisualScripting;
@@ -23,11 +24,11 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         CoopGame.allWords.Remove(draggedButtonText);
         CoopGame.buttonIndices[CoopGame.buttonIndices.IndexOf(draggedButtonText)] = "";
         Destroy(eventData.pointerDrag.GetComponent<Button>().GameObject());
-        SendChat(buttonText+":"+draggedButtonText);
+        SendChat(buttonText, draggedButtonText);
     }
     
-    public void SendChat(string msg)
+    public void SendChat(string msg, string player)
     {
-        _photon.RPC("ReceiveChat", RpcTarget.Others, msg);
+        _photon.RPC("ReceiveChat", PhotonNetwork.PlayerList.First(p => p.NickName.Equals(player)), msg);
     }
 }
