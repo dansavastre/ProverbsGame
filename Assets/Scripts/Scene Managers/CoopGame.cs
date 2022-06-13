@@ -1,5 +1,6 @@
 using Firebase.Database;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -8,7 +9,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
-using Unity.Mathematics;
 using Random = System.Random;
 
 public class CoopGame : SingleplayerManager
@@ -124,9 +124,13 @@ public class CoopGame : SingleplayerManager
         }
 
         // Distribute keywords between players
-        sentMyKeywordsToAllPlayers(allKeywords);
+        SentMyKeywordsToAllPlayers(allKeywords);
 
         // show next proverb
+        for (int i = 0; i < allKeywords.Count; i++)
+        {
+            CreateButton(i, allKeywords[i]);
+        }
         LoadNextProverb();
     }
 
@@ -149,10 +153,6 @@ public class CoopGame : SingleplayerManager
         
         buttonIndices = new List<string>();
         allWords = new List<string>();
-        for (int i = 0; i < buttonsToCreateWords.Count; i++)
-        {
-            CreateButton(i, buttonsToCreateWords[i]);
-        }
 
         questionText.text = answerProverb;
     }
@@ -171,7 +171,7 @@ public class CoopGame : SingleplayerManager
                 //If a keyword inside of the proverb is clicked, remove that keyword from the proverb and create a button
                 if (allWords.Contains(LastClickedWord))
                 {
-                    removeWord(LastClickedWord);
+                    RemoveWord(LastClickedWord);
                     CreateButtonForReceivedKeyword(LastClickedWord);
                 }
             }
@@ -200,7 +200,7 @@ public class CoopGame : SingleplayerManager
      * <summary>Sends missing keywords from this player's proverb to other players and does that in an as uniform way as possible.</summary>
      * <param name="myKeywords">List of the keywords from this player's proverb to send to other players.</param>
      */
-    private void sentMyKeywordsToAllPlayers(List<string> myKeywords)
+    private void SentMyKeywordsToAllPlayers(List<string> myKeywords)
     {
         int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount;
         int i = 0;
@@ -213,7 +213,7 @@ public class CoopGame : SingleplayerManager
     }
     
     //Check if text is able to be put in the sentence
-    public bool canInput(string text, string search)
+    public bool CanInput(string text, string search)
     {
         int pos = text.IndexOf(search);
         if(pos < 0) 
@@ -231,7 +231,7 @@ public class CoopGame : SingleplayerManager
     // }
 
     //Remove a word from the proverb
-    private void removeWord(string word)
+    private void RemoveWord(string word)
     {
         word = "<u>" + word + "</u>";
         answerProverb = questionText.text;
@@ -242,7 +242,7 @@ public class CoopGame : SingleplayerManager
     //Function that replaces the first occurance of a string "search" inside of a string "text" with a string "replace"
     public string ReplaceFirst(string text, string search, string replace)
     {
-        if (!canInput(answerProverb, search))
+        if (!CanInput(answerProverb, search))
         {
             return text;
         }
@@ -320,35 +320,12 @@ public class CoopGame : SingleplayerManager
     void PlayerDone()
     {
         int amountOfPlayers = PhotonNetwork.PlayerListOthers.Count() + 1;
-        
-        if (amountOfPlayers == playersDone){
+
+        if (amountOfPlayers == playersDone)
+        {
             //Everyone's done
             Debug.Log("Everyone's done");
         }
-    }
-
-    //Load next proverb, if there are none, send a signal that you're finished
-    private void LoadNextProverb()
-    {
-        proverbs.RemoveAt(0);
-
-        if (proverbs.Count == 0)
-        {
-            //send signal
-        }
-
-        Proverb proverb = proverbs.First();
-
-        // Set the variables
-        correctProverb = proverb.phrase;
-        answerProverb = correctProverb;
-
-        foreach (string v in proverb.keywords)
-        {
-            answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
-        }
-
-        questionText.text = answerProverb;
     }
 
     IEnumerator DisplayFeedbackMulti()
