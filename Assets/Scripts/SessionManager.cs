@@ -30,7 +30,6 @@ public class SessionManager : MonoBehaviour
     public static Proficiency newProficiency;
     public static string playerEmail;
     public static string playerKey;
-    public static string email;
 
     // Progress bar
     public static int maxValue;
@@ -69,7 +68,7 @@ public class SessionManager : MonoBehaviour
         // Reset the player proficiency
         playerProficiency = null;
         newProficiency = null;
-        //playerEmail = AccountManager.playerEmail;
+        playerEmail = AccountManager.playerEmail;
         playerKey = null;
         random = new Random();
 
