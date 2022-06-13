@@ -7,13 +7,10 @@ using Firebase.Database;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 
-public class RegisterManager : MonoBehaviour
+public class AccountManager : MonoBehaviour
 {
-
-    [SerializeField]
-    private TMP_InputField emailField;
-    [SerializeField]
-    private TMP_InputField usernameField;
+    [SerializeField] private TMP_InputField emailField;
+    [SerializeField] private TMP_InputField usernameField;
 
     private DatabaseReference dbReference;
     private string playerKey;
@@ -24,10 +21,25 @@ public class RegisterManager : MonoBehaviour
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
-    public void OnClickSkip() 
+    public void CreateAccount()
     {
-        Debug.Log("Skip!");
         SceneManager.LoadScene("SingleplayerMenu");
+    }
+
+    public void SignIn()
+    {
+        SceneManager.LoadScene("SingleplayerMenu");
+    }
+
+    public void OnClickLogin()
+    {
+        Debug.Log("Login!");
+        string email = emailField.text;
+        Debug.Log("Email: " + email);
+
+        // Check if the email is actually associated with an account
+        // Goes to the 'players' database table and searches for the user
+        // TODO
     }
 
     public void OnClickRegister() 
@@ -53,16 +65,14 @@ public class RegisterManager : MonoBehaviour
             {
                 Debug.Log("Email already in use");
                 SceneManager.LoadScene("SingleplayerMenu");
-                //Debug.Log("Loaded Menu");
-                //this.enabled = false;
+                // Debug.Log("Loaded Menu");
             }
             else
             {
                 // Add the new user to the database
                 playerKey = dbReference.Child("players").Push().Key;
                 dbReference.Child("players").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(new Player(username, email)));
-                //Debug.Log("PlayerKey: " + playerKey);
-                
+                // Debug.Log("PlayerKey: " + playerKey);
                 GetProverbs();
                 
                 // Load menu after succesful registration
@@ -96,5 +106,4 @@ public class RegisterManager : MonoBehaviour
                 dbReference.Child("proficiencies").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(playerProficiency));
         }});
     }
-
 }
