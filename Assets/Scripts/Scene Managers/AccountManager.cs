@@ -44,12 +44,13 @@ public class AccountManager : MonoBehaviour
             // Check to see if there is at least one result
             if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
-                Debug.Log("Email in use.");
+                Debug.Log("Login: Email in use.");
+                // Load next scene after succesful login
                 SwitchScene(3);
             }
             else
             {
-                Debug.Log("Email not in use.");
+                Debug.Log("Login: Email not in use.");
                 playerEmail = null;
             }
         };
@@ -74,9 +75,11 @@ public class AccountManager : MonoBehaviour
             }
 
             // Check to see if there is at least one result
+            // TODO: Stop this if statement from running when the email is not actually in use
             if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
-                Debug.Log("Email already in use.");
+                Debug.Log("Register: Email already in use.");
+                // playerEmail = null;
             }
             else
             {
@@ -84,7 +87,7 @@ public class AccountManager : MonoBehaviour
                 playerKey = dbReference.Child("players").Push().Key;
                 dbReference.Child("players").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(new Player(username, playerEmail)));
                 GetProverbs();
-                // Load menu after succesful registration
+                // Load next scene after succesful registration
                 SwitchScene(3);
             }
         };
