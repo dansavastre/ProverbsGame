@@ -18,7 +18,7 @@ public class SessionManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI JourneymanCount;
     [SerializeField] public TextMeshProUGUI ExpertCount;
     [SerializeField] public TextMeshProUGUI MasterCount;
-    [SerializeField] public TMP_InputField PlayerEmail;
+    // [SerializeField] public TMP_InputField PlayerEmail;
     [SerializeField] public Button SessionButton;
 
     // Stores the reference location of the database
@@ -28,6 +28,7 @@ public class SessionManager : MonoBehaviour
     // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
+    public static string playerEmail;
     public static string playerKey;
 
     // Progress bar
@@ -40,6 +41,16 @@ public class SessionManager : MonoBehaviour
 
     public static Proverb proverb;
     public static Proficiency proficiency;
+
+    public static string[] scenes = 
+    {
+        "FirstScreen",          // First screen on app launch
+        "Register",             // Screen to register
+        "Login",                // Screen to login
+        "SelectionMenu",        // Select singleplayer or multiplayer
+        "SingleplayerMenu",     // Singleplayer menu
+        "TitleMenu"             // Multiplayer menu
+    };
 
     private TimeSpan[] waitingPeriod = 
     {
@@ -57,13 +68,24 @@ public class SessionManager : MonoBehaviour
         // Reset the player proficiency
         playerProficiency = null;
         newProficiency = null;
+        playerEmail = AccountManager.playerEmail;
+        playerKey = null;
         random = new Random();
 
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         dbReferenceStatic = dbReference;
+
         // Make the button inactive
-        SessionButton.gameObject.SetActive(false);
+        if (playerEmail == null)
+        {
+            Debug.Log("No email was given, returning to first screen.");
+            SwitchScene(0);
+        }
+        else
+        {
+            GetPlayerKey();
+        }
     }
 
     // Update is called once per frame
@@ -98,7 +120,7 @@ public class SessionManager : MonoBehaviour
     public void GetPlayerKey()
     {
         // Goes to the 'players' database table and searches for the user
-        dbReference.Child("players").OrderByChild("email").EqualTo(PlayerEmail.text)
+        dbReference.Child("players").OrderByChild("email").EqualTo(playerEmail)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
         {
             if (args.DatabaseError != null)
@@ -261,8 +283,9 @@ public class SessionManager : MonoBehaviour
         }
     }
 
-    public void GoToRegister()
+    // Switch to the scene corresponding to the sceneIndex
+    public void SwitchScene(int sceneIndex)
     {
-        SceneManager.LoadScene("Register");
+        SceneManager.LoadScene(scenes[sceneIndex]);
     }
 }
