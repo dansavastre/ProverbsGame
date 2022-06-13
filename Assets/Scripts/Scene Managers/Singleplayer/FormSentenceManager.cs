@@ -12,7 +12,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-public class FillBlanksManager : SingleplayerManager
+public class FormSentenceManager : SingleplayerManager
 {
     [SerializeField] private RawImage image;
     [SerializeField] private Transform keywordBoard;
@@ -46,7 +46,7 @@ public class FillBlanksManager : SingleplayerManager
                 Debug.LogError("Task could not be completed.");
                 return;
             }
-            
+
             else if (task.IsCompleted)
             {
                 // Take a snapshot of the database entry
@@ -86,19 +86,20 @@ public class FillBlanksManager : SingleplayerManager
 
         // Set the variables
         correctProverb = nextProverb.phrase;
-        answerProverb = correctProverb;
+        answerProverb = "";
+
+        string[] splittedStringArray = correctProverb.Split(' ');
+        allWords = new List<string>();
+        foreach (string stringInArray in splittedStringArray)
+        {
+            allWords.Add(stringInArray.ToLower());
+        }
 
         // Add the keywords to allwords, and add some flukes
-        allWords = nextProverb.keywords;
         allWords.Add("frog");
         allWords.Add("box");
         allWords.Add("loses");
         allWords.Add("mediocre");
-
-        foreach (string v in nextProverb.keywords)
-        {
-            answerProverb = answerProverb.Replace(v, "...");
-        }
 
         // Shuffling list of words
         for (int i = 0; i < allWords.Count; i++)
@@ -113,6 +114,7 @@ public class FillBlanksManager : SingleplayerManager
         {
             Button newButton = Instantiate(fillInTheBlanksAnswerButtonPrefab, keywordBoard, false);
             newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
+            Debug.Log(allWords[i]);
             int xPos = (i % 3 - 1) * (int) newButton.GetComponent<RectTransform>().rect.width;
             int yPos = -(i / 3) * (int) newButton.GetComponent<RectTransform>().rect.height;
             newButton.transform.localPosition = new Vector3(xPos, yPos);
@@ -146,7 +148,7 @@ public class FillBlanksManager : SingleplayerManager
     public bool canInput(string text, string search)
     {
         int pos = text.IndexOf(search);
-        if(pos < 0) 
+        if (pos < 0)
         {
             return false;
         }
@@ -155,21 +157,21 @@ public class FillBlanksManager : SingleplayerManager
 
     private void inputWord(string word)
     {
-        word = "<u><b>" + word + "</u></b>";
-        answerProverb = ReplaceFirst(answerProverb, "...", word);
+        answerProverb = answerProverb + " " + word;
         questionText.text = answerProverb;
     }
 
     private void removeWord(string word)
     {
         Button[] buttons = keywordBoard.GetComponentsInChildren<Button>();
-        for(int i = 0 ; i < buttons.Length; i++) {
-            if(buttons[i].GetComponentInChildren<TextMeshProUGUI>().text.Equals(word)) {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i].GetComponentInChildren<TextMeshProUGUI>().text.Equals(word))
+            {
                 buttons[i].interactable = true;
             }
         }
-        word = "<u><b>" + word + "</u></b>";
-        answerProverb = ReplaceFirst(answerProverb, word, "...");
+        answerProverb = ReplaceFirst(answerProverb, word, "");
         questionText.text = answerProverb;
     }
 
@@ -184,25 +186,28 @@ public class FillBlanksManager : SingleplayerManager
 
     public void buttonPressed(int index)
     {
-        if(canInput(answerProverb, "...")) 
-        {
-            inputWord(keywordBoard.GetComponentsInChildren<Button>()[index].GetComponentInChildren<TextMeshProUGUI>().text);
-            keywordBoard.GetComponentsInChildren<Button>()[index].interactable = false;
-        }
+          inputWord(keywordBoard.GetComponentsInChildren<Button>()[index].GetComponentInChildren<TextMeshProUGUI>().text);
+          keywordBoard.GetComponentsInChildren<Button>()[index].interactable = false;
     }
 
     // Display the feedback after the player answers the question
     public void CheckAnswer()
     {
-        string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
-        DisplayFeedback(playerProverb.Equals(correctProverb));
+        // Do string manipulation to verify that the sentences are the same or not
+        string playerProverb = answerProverb.Replace(" ", "");
+
+        DisplayFeedback(playerProverb.ToLower().Equals(correctProverb.ToLower().Replace(" ", "")));
         // TODO: Disable the ability to click new answers
         checkButton.SetActive(false);
     }
 
-    // Load the image when a hint is asked for
-    public void GetHint()
+    /** 
+     * Functionality for clicking the hint image:
+     * - if the hint image is currently hidden, show it;
+     * - it the hint image is currently shown, hide it.
+     */
+    public void HintClicked()
     {
-        image.enabled = true;
+        image.enabled = !image.enabled;
     }
 }
