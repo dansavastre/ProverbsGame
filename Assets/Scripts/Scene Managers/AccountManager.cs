@@ -5,12 +5,21 @@ using TMPro;
 using Firebase;
 using Firebase.Database;
 using UnityEngine.SceneManagement;
-using Newtonsoft.Json;
 
 public class AccountManager : MonoBehaviour
 {
     [SerializeField] private TMP_InputField emailField;
     [SerializeField] private TMP_InputField usernameField;
+
+    private string[] scenes = 
+    {
+        "FirstScreen",          // First screen on app launch
+        "Register",             // Screen to register
+        "Login",                // Screen to login
+        "SelectionMenu",        // Select singleplayer or multiplayer
+        "SingleplayerMenu",     // Singleplayer menu
+        "TitleMenu"             // Multiplayer menu
+    };
 
     private DatabaseReference dbReference;
     private string playerKey;
@@ -21,14 +30,9 @@ public class AccountManager : MonoBehaviour
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
-    public void CreateAccount()
+    public void SwitchScene(int sceneIndex)
     {
-        SceneManager.LoadScene("SingleplayerMenu");
-    }
-
-    public void SignIn()
-    {
-        SceneManager.LoadScene("SingleplayerMenu");
+        SceneManager.LoadScene(scenes[sceneIndex]);
     }
 
     public void OnClickLogin()
@@ -36,6 +40,7 @@ public class AccountManager : MonoBehaviour
         Debug.Log("Login!");
         string email = emailField.text;
         Debug.Log("Email: " + email);
+        SwitchScene(3);
 
         // Check if the email is actually associated with an account
         // Goes to the 'players' database table and searches for the user
@@ -64,19 +69,15 @@ public class AccountManager : MonoBehaviour
             if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
                 Debug.Log("Email already in use");
-                SceneManager.LoadScene("SingleplayerMenu");
-                // Debug.Log("Loaded Menu");
             }
             else
             {
                 // Add the new user to the database
                 playerKey = dbReference.Child("players").Push().Key;
                 dbReference.Child("players").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(new Player(username, email)));
-                // Debug.Log("PlayerKey: " + playerKey);
                 GetProverbs();
-                
                 // Load menu after succesful registration
-                SceneManager.LoadScene("SingleplayerMenu");
+                SwitchScene(3);
             }
         };
     }
