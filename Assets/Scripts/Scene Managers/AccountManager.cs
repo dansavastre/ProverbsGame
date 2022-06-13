@@ -11,15 +11,7 @@ public class AccountManager : MonoBehaviour
     [SerializeField] private TMP_InputField emailField;
     [SerializeField] private TMP_InputField usernameField;
 
-    private string[] scenes = 
-    {
-        "FirstScreen",          // First screen on app launch
-        "Register",             // Screen to register
-        "Login",                // Screen to login
-        "SelectionMenu",        // Select singleplayer or multiplayer
-        "SingleplayerMenu",     // Singleplayer menu
-        "TitleMenu"             // Multiplayer menu
-    };
+    private string[] scenes = SessionManager.scenes;
 
     private DatabaseReference dbReference;
     private string playerKey;

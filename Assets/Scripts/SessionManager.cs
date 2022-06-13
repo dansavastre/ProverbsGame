@@ -41,6 +41,16 @@ public class SessionManager : MonoBehaviour
     public static Proverb proverb;
     public static Proficiency proficiency;
 
+    public static string[] scenes = 
+    {
+        "FirstScreen",          // First screen on app launch
+        "Register",             // Screen to register
+        "Login",                // Screen to login
+        "SelectionMenu",        // Select singleplayer or multiplayer
+        "SingleplayerMenu",     // Singleplayer menu
+        "TitleMenu"             // Multiplayer menu
+    };
+
     private TimeSpan[] waitingPeriod = 
     {
         new TimeSpan(),             // Always
@@ -261,8 +271,8 @@ public class SessionManager : MonoBehaviour
         }
     }
 
-    public void GoToRegister()
+    public void SwitchScene(int sceneIndex)
     {
-        SceneManager.LoadScene("Register");
+        SceneManager.LoadScene(scenes[sceneIndex]);
     }
 }
