@@ -198,7 +198,6 @@ build-StandaloneWindows64:
 build-android-il2cpp:
  <<: *build
  image: $IMAGE:$UNITY_VERSION-android-$IMAGE_VERSION
- timeout: 30m
  variables:
    BUILD_TARGET: Android
    BUILD_APP_BUNDLE: "false"
