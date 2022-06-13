@@ -316,7 +316,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Next Question
+  m_text: Continue
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 65ee0ba0c28ce1c4f8d30b2341be7e40, type: 2}
   m_sharedMaterial: {fileID: -1254144477192601998, guid: 65ee0ba0c28ce1c4f8d30b2341be7e40, type: 2}
