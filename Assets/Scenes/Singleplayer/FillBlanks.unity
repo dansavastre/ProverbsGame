@@ -509,7 +509,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ac65ad3b27006724d81f0ea250ddca28, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 68c674c004b05e242b8c048f8602a030, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -585,7 +585,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 339087685cf6a3245b0463810b29c593, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4718b3b74e48df94cb3b1d3847df6749, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -729,7 +729,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9df1d6976ac869442a212d60e94df7c4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e5a4910d4797bdb449ade390d7f6a9d3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1610,7 +1610,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: de1c695339137e7408e863bfa979de87, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 520e4e01bb8a53040bde0db4ae782514, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2157,6 +2157,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 3bfdcc75106438944aa6e280c19ee96a, type: 3}
+    - target: {fileID: 8278442497029488092, guid: 57389e47ddf8eb547be473b19638e4cc, type: 3}
+      propertyPath: m_Color.b
+      value: 0.8301887
+      objectReference: {fileID: 0}
+    - target: {fileID: 8278442497029488092, guid: 57389e47ddf8eb547be473b19638e4cc, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8301887
+      objectReference: {fileID: 0}
+    - target: {fileID: 8278442497029488092, guid: 57389e47ddf8eb547be473b19638e4cc, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8301887
+      objectReference: {fileID: 0}
     - target: {fileID: 8278442497029488093, guid: 57389e47ddf8eb547be473b19638e4cc, type: 3}
       propertyPath: m_SizeDelta.y
       value: 38
