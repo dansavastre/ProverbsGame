@@ -272,4 +272,9 @@ public class SessionManager : MonoBehaviour
                 break;
         }
     }
+
+    public void GoToRegister()
+    {
+        SceneManager.LoadScene("Register");
+    }
 }
