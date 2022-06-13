@@ -28,6 +28,7 @@ public class CoopGame : SingleplayerManager
     [SerializeField] private TextMeshProUGUI[] otherPlayerNames;
 
     // Variables
+    private int playersDone = 0;
     private static string correctProverb;
     private string answerProverb;
     private List<string> buttonsToCreateWords;
@@ -249,8 +250,18 @@ public class CoopGame : SingleplayerManager
     // Display the feedback after the player answers the question
     public void CheckAnswer()
     {
-        string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
-        DisplayFeedback(playerProverb.Equals(correctProverb));
+        answerProverb = questionText.text;
+        string playerProverb = answerProverb.Replace("<u>", "").Replace("</u>", "");
+        bool correct = playerProverb.Equals(correctProverb);
+
+        if (correct)
+        {
+            LoadNextProverb();
+        }
+        else
+        {
+            StartCoroutine(DisplayFeedbackMulti());
+        }
         // TODO: Disable the ability to click and check new answers
     }
 
@@ -290,11 +301,26 @@ public class CoopGame : SingleplayerManager
         allWords.Add(text);
     }
 
+    [PunRPC]
+    void PlayerDone()
+    {
+        int amountOfPlayers = PhotonNetwork.PlayerListOthers.Count() + 1;
+        
+        if (amountOfPlayers == playersDone){
+            //Everyone's done
+            Debug.Log("Everyone's done");
+        }
+    }
+
     //Load next proverb, if there are none, send a signal that you're finished
     private void LoadNextProverb()
     {
         proverbs.RemoveAt(0);
 
+        if (proverbs.Count == 0)
+        {
+            //send signal
+        }
 
         Proverb proverb = proverbs.First();
 
@@ -308,5 +334,12 @@ public class CoopGame : SingleplayerManager
         }
 
         questionText.text = answerProverb;
+    }
+
+    IEnumerator DisplayFeedbackMulti()
+    {
+        resultText.text = "Incorrect!";
+        yield return new WaitForSeconds(3);
+        resultText.text = "";
     }
 }
