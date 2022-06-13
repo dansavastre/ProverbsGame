@@ -22,7 +22,7 @@ public class FunFactManager : SingleplayerManager
     private string currentImage;
     private byte[] fileContents;
 
-    public async void Start()
+    public void Start()
     {
         nextProverb = SessionManager.proverb;
         newProficiency = SessionManager.proficiency;

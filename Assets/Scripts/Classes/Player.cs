@@ -12,19 +12,22 @@ public class Player
         this.email = email;
     }
 
-    /**
-     * Method that checks the equality of the Player object with another object.
-     */
-    public override bool Equals(object obj) {
-        if (obj == null)
+    // Checks the equality of the Player object with another object
+    public override bool Equals(object obj) 
+    {
+        var player = obj as Player;
+
+        if (player == null)
             return false;
-        if (obj.GetType().Equals(this.GetType()))
-            return false;
-        if (obj == this)
+        if (player == this)
             return true;
-        
-        Player other = (Player)obj;
-        return this.playerName == other.playerName 
-            && this.email == other.email;
+
+        return this.playerName == player.playerName && this.email == player.email;
+    }
+
+    // Generates hashcode for a Player object
+    public override int GetHashCode()
+    {
+        return this.playerName.GetHashCode() * 17 + this.email.GetHashCode();
     }
 }
