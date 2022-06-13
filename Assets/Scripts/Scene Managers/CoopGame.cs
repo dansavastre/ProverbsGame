@@ -1,17 +1,15 @@
-using Firebase;
 using Firebase.Database;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
 using Photon.Pun;
 using Photon.Realtime;
+using Unity.Mathematics;
+using Random = System.Random;
 
 public class CoopGame : SingleplayerManager
 {
@@ -20,8 +18,6 @@ public class CoopGame : SingleplayerManager
 
     public PhotonView _photon;
     // UI elements
-    // [SerializeField] private List<GameObject> buttons;
-    // [SerializeField] private List<TextMeshProUGUI> buttonTexts;
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private Button dragDropButtonPrefab;
     [SerializeField] private Canvas canvas;
@@ -34,130 +30,131 @@ public class CoopGame : SingleplayerManager
     public string LastClickedWord;
     public static List<string> allWords;
     public static List<string> buttonIndices;
-
-
-    //Receive a word from another player
-    [PunRPC]
-    void ReceiveChat(string msg)
-    {
-        string[] splits = msg.Split(":");
-        if (PhotonNetwork.NickName.Equals(splits[0]))
-        {
-            CreateButtonForReceivedKeyword(splits[1]);
-        }
-    }
-
-    //Send a word to another player
-    public void SendChat(string msg)
-    {
-        string newMessage = PhotonNetwork.NickName + ":" + msg;
-        _photon.RPC("ReceiveChat", RpcTarget.Others, "a");
-    }
-
-    // //Send a message to other players signalling that you joined the game
-    // public void sendMyNickName()
-    // {
-    //     _photon.RPC("ReceiveName", RpcTarget.Others, PhotonNetwork.NickName);
-    // }
-    
-    // //Receive a signal that a player has loaded in to the game
-    // [PunRPC]
-    // public void ReceiveName(string playerName)
-    // {
-    //     sendMyNickName();
-    //     foreach (TextMeshProUGUI name in otherPlayerNames)
-    //     {
-    //         if (name.text == playerName) return;
-    //     }
-    //     
-    //     int i = 0;
-    //     while (otherPlayerNames[i].text != "")
-    //     {
-    //         i++;
-    //     }
-    //
-    //     otherPlayerNames[i].text = playerName;
-    //     otherPlayerNames[i].transform.parent.GameObject().SetActive(true);
-    // }
-
-    //Starts the scene but waits first
-    // IEnumerator startButWaitFirst()
-    // {
-    //     yield return new WaitForSeconds(2);
-    //     sendMyNickName();
-    // }
+    private List<Proverb> proverbs;
+    Random random = new Random();
 
     // Start is called before the first frame update
     async void Start()
     {
-        // StartCoroutine(startButWaitFirst());
         // base.Start();
+        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        int numberOfProverbsPerPlayer = 2;
 
-        // Goes to the 'proverbs' database table and searches for the key
-        // await dbReference.Child("proverbs").Child(currentKey)
-        // .GetValueAsync().ContinueWith(task =>
-        // {
-        //     if (task.IsFaulted)
-        //     {
-        //         Debug.LogError("Task could not be completed.");
-        //         return;
-        //     }
-        //     
-        //     else if (task.IsCompleted)
-        //     {
-        //         // Take a snapshot of the database entry
-        //         DataSnapshot snapshot = task.Result;
-        //         // Convert the JSON back to a Proverb object
-        //         string json = snapshot.GetRawJsonValue();
-        //         nextProverb = JsonUtility.FromJson<Proverb>(json);
-        //         Debug.Log(json);
-        //     }
-        // });
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount - 1; i++)
+        for (int i = 0; i < playerCount - 1; i++)
         {
             otherPlayerNames[i].text = PhotonNetwork.PlayerListOthers[i].NickName;
             otherPlayerNames[i].transform.parent.GameObject().SetActive(true);
         }
+
+        // get proverbs from DB if this is master client and distribute them
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // Goes to the 'proverbs' database table and select {playerCount} random proverbs
+            await dbReference.Child("proverbs")
+                .GetValueAsync().ContinueWith(task =>
+                {
+                    if (task.IsFaulted)
+                    {
+                        Debug.LogError("Task could not be completed.");
+                    }
+                
+                    else if (task.IsCompleted)
+                    {
+                        // Take a snapshot of the database entry
+                        DataSnapshot snapshot = task.Result;
+                        // convert it to JSON
+                        string json = snapshot.GetRawJsonValue();
+                        // select {playerCount} random proverb indices
+                        int[] randomProverbIndices = new int[playerCount * numberOfProverbsPerPlayer];
+                        for (int i = 0; i < randomProverbIndices.Length; i++)
+                        {
+                            int nextInt = random.Next(0, Convert.ToInt32(snapshot.ChildrenCount));
+                            if (!randomProverbIndices.Contains(nextInt))
+                            {
+                                randomProverbIndices[i] = nextInt;
+                            }
+                        }
+
+                        // select proverbs from the database with the random indices selected above
+                        List<DataSnapshot> allProverbs = snapshot.Children.ToList();
+                        List<Proverb> proverbsSelected = new List<Proverb>();
+                        foreach (int i in randomProverbIndices)
+                        {
+                            proverbsSelected.Add(JsonUtility.FromJson<Proverb>(allProverbs[i].GetRawJsonValue()));
+                        }
+                        
+                        // send proverbs to each player
+                        foreach (var player in PhotonNetwork.PlayerList)
+                        {
+                            _photon.RPC("SetProverbs", player, 
+                                proverbsSelected.GetRange(0, numberOfProverbsPerPlayer));
+                            proverbsSelected.RemoveRange(0, numberOfProverbsPerPlayer);
+                        }
+                        Debug.Log(proverbsSelected[0].phrase);
+                    }
+                });
+        }
+    }
+
+
+    /**
+     * <summary>Gets list of proverbs, saves this in corresponding attribute, merges all keywords, and distributes them</summary>
+     */
+    [PunRPC]
+    private void SetProverbs(List<Proverb> proverbs)
+    {
+        this.proverbs = proverbs;
+        // merge all keywords
+        List<string> allKeywords = new List<string>();
+        foreach (Proverb proverb in this.proverbs)
+        {
+            allKeywords.AddRange(proverb.keywords);
+            // allKeywords.AddRange(proverbs.otherKeyWords);    //TODO this is also needed
+        }
         
-        questionText.text = "Don't look a gift horse in the mouth";
-        buttonsToCreateWords = new List<string>(new[] { "gift", "horse", "mouth" });
+        //Shuffling list of words
+        for (int i = 0; i < allKeywords.Count; i++)
+        {
+            string temp = allKeywords[i];
+            int randomIndex = random.Next(i, allKeywords.Count);
+            allKeywords[i] = allKeywords[randomIndex];
+            allKeywords[randomIndex] = temp;
+        }
 
-        // Set the variables
-        correctProverb = "Don't look a gift horse in the mouth";
+        // Distribute keywords between players
+        sentMyKeywordsToAllPlayers(allKeywords);
+
+        // show next proverb
+        loadNextProverb();
+    }
+
+    private void loadNextProverb()
+    {
+        if (proverbs.Count == 0)
+        {
+            _photon.RPC("PlayerDone", RpcTarget.MasterClient);
+        }
+        Proverb proverb = proverbs.First();
+        proverbs.RemoveAt(0);
+        buttonsToCreateWords = proverb.keywords;
+        correctProverb = proverb.phrase;
         answerProverb = correctProverb;
-
+        
         foreach (string v in buttonsToCreateWords)
         {
             answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
         }
-
-        // for(int i = 0; i < buttonTexts.Count; i++)
-        // {
-        //     buttonTexts[i].text = allWords[i];
-        // }
-
+        
         buttonIndices = new List<string>();
         allWords = new List<string>();
         for (int i = 0; i < buttonsToCreateWords.Count; i++)
         {
-            //Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
-            //newButton.GetComponentInChildren<TextMeshProUGUI>().text = allWords[i];
-            //int xPos = (i % 3 - 1) * 230;
-            //int yPos = -(i / 3) * 70;
-            //newButton.transform.localPosition = new Vector3(xPos, yPos);
-            //newButton.name = "AnswerButton" + i;
-            //newButton.GetComponent<DragDrop>().canvas = canvas;
-            //newButton.GetComponent<DragDrop>().proverbText = questionText;
-            //newButton.onClick.AddListener(delegate { Debug.Log("hi"); });
             CreateButton(i, buttonsToCreateWords[i]);
         }
 
         questionText.text = answerProverb;
-        CreateButton(buttonsToCreateWords.Count, "test");
-        sentMyKeywordsToOtherPlayers(new List<string>(new string[] { "ferhan1", "ferhan2", "ferhan3", "ferhan4" }));
     }
-
-
     
     private void Update()
     {
@@ -179,19 +176,37 @@ public class CoopGame : SingleplayerManager
             }
         }
     }
+    
+    //Receive a word from another player
+    [PunRPC]
+    void ReceiveChat(string msg)
+    {
+        string[] splits = msg.Split(":");
+        if (PhotonNetwork.NickName.Equals(splits[0]))
+        {
+            CreateButtonForReceivedKeyword(splits[1]);
+        }
+    }
+
+    //Send a word to another player
+    public void SendChat(string msg)
+    {
+        string newMessage = PhotonNetwork.NickName + ":" + msg;
+        _photon.RPC("ReceiveChat", RpcTarget.Others, newMessage);
+    }
 
     /**
      * <summary>Sends missing keywords from this player's proverb to other players and does that in an as uniform way as possible.</summary>
      * <param name="myKeywords">List of the keywords from this player's proverb to send to other players.</param>
      */
-    private void sentMyKeywordsToOtherPlayers(List<string> myKeywords)
+    private void sentMyKeywordsToAllPlayers(List<string> myKeywords)
     {
-        int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount-1;
+        int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount;
         int i = 0;
         foreach (string keyword in myKeywords)
         {
-            var playerToSendTo = PhotonNetwork.PlayerListOthers[i % playerCountThisRoom];
-            _photon.RPC("ReceiveChat", PhotonNetwork.PlayerListOthers[i % playerCountThisRoom], playerToSendTo.NickName+":"+keyword);
+            var playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
+            _photon.RPC("ReceiveChat", playerToSendTo, playerToSendTo.NickName+":"+keyword);
             i++;
         }
     }
