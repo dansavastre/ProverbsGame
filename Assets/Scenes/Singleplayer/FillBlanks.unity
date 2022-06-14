@@ -875,7 +875,7 @@ MonoBehaviour:
   checkButton: {fileID: 787498343}
   nextQuestionButton: {fileID: 258915739}
   answerButtonPrefab: {fileID: 0}
-  answerBoard: {fileID: 0}
+  answerBoard: {fileID: 1328290778}
   answerButtons: []
   progressBar: {fileID: 1737922376}
   image: {fileID: 708929152}
