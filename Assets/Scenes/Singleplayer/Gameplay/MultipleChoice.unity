@@ -369,7 +369,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1185331185}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -585,7 +585,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1185331185}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -777,6 +777,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc14a8f359b281e409552b96c137e10e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1048332965 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8278442497029488090, guid: 57389e47ddf8eb547be473b19638e4cc, type: 3}
+  m_PrefabInstance: {fileID: 1048332962}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1149138166
 GameObject:
   m_ObjectHideFlags: 0
@@ -1042,10 +1047,20 @@ MonoBehaviour:
   answerButtonPrefab: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
   answerBoard: {fileID: 875248372}
   answerButtons: []
-  progressBar: {fileID: 1048332964}
   image: {fileID: 755107124}
+  otherOptionBoard: {fileID: 21300000, guid: 4718b3b74e48df94cb3b1d3847df6749, type: 3}
+  progressBar: {fileID: 1048332964}
   taskText: {fileID: 1149138168}
-  gamemode: 0
+  homeButton: {fileID: 1992433039}
+  barBackground: {fileID: 1048332965}
+  questionBoard: {fileID: 135405743}
+  imageBoard: {fileID: 1332074742}
+  nextButton: {fileID: 1443511710}
+  otherHomeButton: {fileID: 21300000, guid: 520e4e01bb8a53040bde0db4ae782514, type: 3}
+  otherBarBackground: {fileID: 21300000, guid: c96204aac89a5544590c763adcb8e3c1, type: 3}
+  otherImageBoard: {fileID: 21300000, guid: e5a4910d4797bdb449ade390d7f6a9d3, type: 3}
+  otherNextButton: {fileID: 21300000, guid: 68c674c004b05e242b8c048f8602a030, type: 3}
+  gamemode: 2
 --- !u!1 &1223189935
 GameObject:
   m_ObjectHideFlags: 0
@@ -1520,7 +1535,7 @@ RectTransform:
   m_Children:
   - {fileID: 1223189936}
   m_Father: {fileID: 1185331185}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

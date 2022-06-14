@@ -51,6 +51,7 @@ public class SessionManager : MonoBehaviour
         "SelectionMenu",        // Select singleplayer or multiplayer
         "SingleplayerMenu",     // Singleplayer menu
         "TitleMenu",            // Multiplayer menu
+        "InfoScreen",           // Information page
         "ProfilePage"           // Profile page
     };
 

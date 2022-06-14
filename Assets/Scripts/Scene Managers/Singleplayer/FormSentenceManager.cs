@@ -14,7 +14,6 @@ using Random = UnityEngine.Random;
 
 public class FormSentenceManager : SingleplayerManager
 {
-    [SerializeField] private RawImage image;
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private List<Button> Buttons;
     [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab;

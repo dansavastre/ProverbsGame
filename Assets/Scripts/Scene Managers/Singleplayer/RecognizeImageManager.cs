@@ -7,9 +7,6 @@ using UnityEngine.UI;
 
 public class RecognizeImageManager : SingleplayerManager
 {
-    // UI elements
-    [SerializeField] private RawImage image;
-
     // Stores information fetched from the database
     private StorageReference storageRef;
     private string currentImage;
