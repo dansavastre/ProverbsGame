@@ -11,6 +11,7 @@ public class Proverb
     public List<string> otherPhrases;
     public List<string> otherMeanings;
     public List<string> otherExamples;
+    public string funFact;
 
     public Proverb(string phrase, List<string> keywords, string meaning, string example, string image, 
     List<string> otherPhrases, List<string> otherMeanings, List<string> otherExamples) 

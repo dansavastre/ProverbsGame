@@ -9,15 +9,6 @@ using System.Linq;
 public class Launcher : MonoBehaviourPunCallbacks {
     public static Launcher Instance;
 
-    [SerializeField] TMP_InputField roomNameInputField;
-    [SerializeField] TMP_Text errorText;
-    [SerializeField] TMP_Text roomNameText;
-    [SerializeField] Transform roomListContent;
-    [SerializeField] Transform playerListContent;
-    [SerializeField] GameObject roomListItemPrefab;
-    [SerializeField] GameObject playerListItemPrefab;
-    [SerializeField] GameObject startGameButton;
-
     void Awake() {
         Instance = this;    
     }
@@ -40,7 +31,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
-    public void CreateRoom() {
+    /*public void CreateRoom() {
         if (string.IsNullOrEmpty(roomNameInputField.text))
             return;
 
@@ -61,19 +52,19 @@ public class Launcher : MonoBehaviourPunCallbacks {
             Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
 
         startGameButton.SetActive(PhotonNetwork.IsMasterClient); // only the host of the game can start the game
-    }
+    }*/
 
     /**
      * Method that makes sure a new host is chosen for the game if the initial host leaves.
      */
-    public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient) {
+    /*public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient) {
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message) {
         errorText.text = "Room Creation Failed: " + message;
         MenuManager.Instance.OpenMenu("Error");
-    }
+    }*/
 
     public void StartGame() {
         PhotonNetwork.LoadLevel(1); // TODO: change the level to the actual fill in the blanks multiplayer game mode
@@ -93,7 +84,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
         MenuManager.Instance.OpenMenu("Title");
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList) {
+    /*public override void OnRoomListUpdate(List<RoomInfo> roomList) {
         foreach (Transform transform in roomListContent)
             Destroy(transform.gameObject);
 
@@ -106,5 +97,5 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
         Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
-    }
+    }*/
 }
