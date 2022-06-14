@@ -90,10 +90,7 @@ public class FillBlanksManager : SingleplayerManager
 
         // Add the keywords to allwords, and add some flukes
         allWords = nextProverb.keywords;
-        allWords.Add("frog");
-        allWords.Add("box");
-        allWords.Add("loses");
-        allWords.Add("mediocre");
+        allWords.AddRange(nextProverb.otherKeywords);
 
         foreach (string v in nextProverb.keywords)
         {
