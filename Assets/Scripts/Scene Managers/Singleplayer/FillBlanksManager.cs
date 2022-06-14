@@ -119,15 +119,17 @@ public class FillBlanksManager : SingleplayerManager
 
             int buttonHeight = (int)newButton.GetComponent<RectTransform>().rect.height;
             int buttonWidth = (int)newButton.GetComponent<RectTransform>().rect.width;
-            int xStart = boardRightEdge / 2 - buttonWidth / 2,  yStart = boardTopEdge / 2 - buttonHeight / 2; // Get the starting location of the buttons
+            int xStart = boardRightEdge / 2 - buttonWidth / 2, yStart = boardTopEdge / 2 - buttonHeight / 2; // Get the starting location of the buttons
             int row = i % 3 - 1, col = i / 3; // Get the row and the column of the button in the table
             
             int spaceLength = 35;
             int widthSpacing = row * spaceLength, heightSpacing = col * spaceLength; // Keep track of the spacing between buttons in the table
 
+            // Compute the final position of the button
             int xPos = row * buttonWidth + widthSpacing;
             int yPos = yStart - col * buttonHeight - heightSpacing;
             newButton.transform.localPosition = new Vector3(xPos, yPos);
+
             newButton.name = "AnswerButton" + i;
             int x = i;
             newButton.onClick.AddListener(() => buttonPressed(x));
