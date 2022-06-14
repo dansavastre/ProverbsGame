@@ -24,6 +24,7 @@ public class FunFactManager : SingleplayerManager
 
     public async void Start()
     {
+        Debug.Log("is on demand: " + SessionManager.isOnDemandBeforeAnswer);
         nextProverb = SessionManager.proverb;
         newProficiency = SessionManager.proficiency;
         dbReference = SessionManager.dbReferenceStatic;
@@ -54,9 +55,10 @@ public class FunFactManager : SingleplayerManager
         });
 
         questionText.text = nextProverb.phrase;
-        
+
         progressBar.SetProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
         
+
         DisplayFunFact();
     }
 

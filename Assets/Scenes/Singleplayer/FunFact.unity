@@ -1321,12 +1321,14 @@ MonoBehaviour:
   resultText: {fileID: 0}
   checkButton: {fileID: 0}
   nextQuestionButton: {fileID: 1040666604}
+  funFactButtonPrefab: {fileID: 0}
   answerButtonPrefab: {fileID: 0}
   answerBoard: {fileID: 0}
   answerButtons: []
   progressBar: {fileID: 780920359}
   funFactText: {fileID: 1244935437}
   image: {fileID: 1125516270}
+  ContinueButtonText: {fileID: 663158389}
 --- !u!1 &1125516268
 GameObject:
   m_ObjectHideFlags: 0
