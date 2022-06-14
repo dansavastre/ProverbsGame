@@ -18,6 +18,7 @@ public class SingleplayerManager : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI resultText;
     [SerializeField] protected GameObject checkButton;
     [SerializeField] protected GameObject nextQuestionButton;
+    [SerializeField] protected Button funFactButtonPrefab;
     [SerializeField] protected Button answerButtonPrefab;
     [SerializeField] protected RectTransform answerBoard;
     [SerializeField] protected List<Button> answerButtons;
@@ -35,6 +36,8 @@ public class SingleplayerManager : MonoBehaviour
     private static LinkedList<Bucket> allProficiencies;
     private static Dictionary<Bucket, int> dictionary;
     private bool answeredCorrect;
+    private bool answered;
+    private bool firstTimeAnswering;
 
     // Progress bar
     [SerializeField]
@@ -57,6 +60,8 @@ public class SingleplayerManager : MonoBehaviour
         allProficiencies = SessionManager.allProficiencies;
         dictionary = SessionManager.dictionary;
         answeredCorrect = false;
+        SessionManager.isOnDemandBeforeAnswer = false;
+        answered = false;
         
         GetNextKey();
         nextQuestionButton.SetActive(false);
@@ -78,12 +83,26 @@ public class SingleplayerManager : MonoBehaviour
             currentType = "none";
         }
         // Otherwise we fetch the next type
-        else currentType = GetTypeOfStage(currentBucket.stage);
+        else 
+        {
+            currentType = GetTypeOfStage(currentBucket.stage);
+            firstTimeAnswering = currentBucket.timestamp == 0 ? true : false;
+            Debug.Log("Timestamp: " + currentBucket.timestamp);
+            Debug.Log("First time answering: " + firstTimeAnswering);
+            if(!firstTimeAnswering && funFactButtonPrefab != null)
+            {
+                Debug.Log("Instantiate");
+                Button newButton = Instantiate(funFactButtonPrefab, this.transform);
+                newButton.onClick.AddListener(() => LoadFunFactOnDemand());
+            }
+        }
     }
 
     // Display the feedback after the player answers the question
     protected void DisplayFeedback(bool correct)
     {
+        answered = true;
+
         if (correct)
         {
             answeredCorrect = true;
@@ -308,14 +327,14 @@ public class SingleplayerManager : MonoBehaviour
 
     public void LoadNextScene()
     {
-        if(answeredCorrect)
+        if(firstTimeAnswering && answeredCorrect)
         {
-            Debug.Log("Answered Correct!");
+            Debug.Log("First time answered correct!");
+            firstTimeAnswering = false;
             LoadFunFact();
         }
-        else
+        else 
         {
-            Debug.Log("Answered Incorrect!");
             LoadQuestion();
         }
     }
@@ -362,6 +381,16 @@ public class SingleplayerManager : MonoBehaviour
                 SceneManager.LoadScene("SingleplayerMenu");
                 break;
         }
+    }
+
+    // Load the FunFact scene by pressing the "i" button
+    public void LoadFunFactOnDemand()
+    {
+        if(!answered)
+        {
+            SessionManager.isOnDemandBeforeAnswer = true;
+        }
+        LoadFunFact();
     }
 
     // Load the FunFact scene
