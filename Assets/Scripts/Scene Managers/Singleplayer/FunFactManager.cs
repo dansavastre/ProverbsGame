@@ -17,7 +17,6 @@ public class FunFactManager : SingleplayerManager
 
     [SerializeField] private TextMeshProUGUI funFactText;
     [SerializeField] private RawImage image;
-    [SerializeField] private TextMeshProUGUI ContinueButtonText;
 
     private StorageReference storageRef;
     private string currentImage;
@@ -26,7 +25,6 @@ public class FunFactManager : SingleplayerManager
     public async void Start()
     {
         Debug.Log("is on demand: " + SessionManager.isOnDemandBeforeAnswer);
-        ContinueButtonText.text = SessionManager.isOnDemandBeforeAnswer ? "Back" : "Continue";
         nextProverb = SessionManager.proverb;
         newProficiency = SessionManager.proficiency;
         dbReference = SessionManager.dbReferenceStatic;
