@@ -123,7 +123,7 @@ public class FormSentenceManager : SingleplayerManager
             int xStart = boardRightEdge / 2 - buttonWidth / 2, yStart = boardTopEdge / 2 - buttonHeight / 2; // Get the starting location of the buttons
             int row = i % 3 - 1, col = i / 3; // Get the row and the column of the button in the table
 
-            int spaceLength = 35;
+            int spaceLength = 25;
             int widthSpacing = row * spaceLength, heightSpacing = col * spaceLength; // Keep track of the spacing between buttons in the table
 
             // Compute the final position of the button
