@@ -30,9 +30,17 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
         Instance = this;
     }
 
-    void Start() {
+    void Start()
+    {
         Debug.Log("Connecting to Master.");
-        PhotonNetwork.ConnectUsingSettings();
+        if (PhotonNetwork.IsConnected)
+        {
+            OnJoinedRoom();
+        }
+        else
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
 
     public override void OnConnectedToMaster() {

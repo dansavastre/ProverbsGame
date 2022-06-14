@@ -11,6 +11,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using Random = System.Random;
+using UnityEngine.SceneManagement;
 
 public class CoopGame : SingleplayerManager
 {
@@ -53,7 +54,7 @@ public class CoopGame : SingleplayerManager
         
         // variables needed here
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        int numberOfProverbsPerPlayer = 2;
+        int numberOfProverbsPerPlayer = 1;
         int[] randomProverbIndices = {};
         List<DataSnapshot> allProverbs = new List<DataSnapshot>();
 
@@ -108,7 +109,8 @@ public class CoopGame : SingleplayerManager
                 // send the first {numberOfProverbsPerPlayer} proverbs to "player"
                 for (int i = 0; i < numberOfProverbsPerPlayer; i++)
                 {
-                    _photon.RPC("AddProverb", RpcTarget.All, JsonUtility.ToJson(proverbsSelected[i]));
+                    Debug.Log(JsonUtility.ToJson(proverbsSelected[i]));
+                    _photon.RPC("AddProverb", player, JsonUtility.ToJson(proverbsSelected[i]));
                 }
 
                 // remove the proverbs sent
@@ -116,6 +118,7 @@ public class CoopGame : SingleplayerManager
             }
 
             _photon.RPC("StartGame", RpcTarget.All);
+            PhotonNetwork.CurrentRoom.IsVisible = false;
         }
 
     }
@@ -164,6 +167,8 @@ public class CoopGame : SingleplayerManager
         if (proverbs.Count == 0)
         {
             _photon.RPC("PlayerDone", RpcTarget.MasterClient);
+            questionText.text = "You are done with your proverbs! Help your teammates finish theirs!";
+            return;
         }
         Proverb proverb = proverbs.First();
         proverbs.RemoveAt(0);
@@ -347,8 +352,8 @@ public class CoopGame : SingleplayerManager
     private void PlayerDone()
     {
         int amountOfPlayers = PhotonNetwork.PlayerListOthers.Count() + 1;
-
-        if (amountOfPlayers == playersDone) //Everyone's done
+        playersDone = playersDone + 1;
+        if (amountOfPlayers <= playersDone) //Everyone's done
         {
             Debug.Log("Everyone's done");
             _photon.RPC("LoadRoomAgain", RpcTarget.All);
@@ -368,6 +373,6 @@ public class CoopGame : SingleplayerManager
     [PunRPC]
     private void LoadRoomAgain()
     {
-        PhotonNetwork.JoinRoom(PhotonNetwork.CurrentRoom.Name);
+        PhotonNetwork.LoadLevel("FillInBlanks");
     }
 }
