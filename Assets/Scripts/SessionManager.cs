@@ -42,6 +42,7 @@ public class SessionManager : MonoBehaviour
 
     public static Proverb proverb;
     public static Proficiency proficiency;
+    public static bool isOnDemandBeforeAnswer;
 
     public static string[] scenes = 
     {
@@ -75,6 +76,7 @@ public class SessionManager : MonoBehaviour
         playerName = AccountManager.playerName;
         playerKey = null;
         random = new Random();
+        isOnDemandBeforeAnswer = false;
 
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;

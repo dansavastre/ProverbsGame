@@ -1044,6 +1044,7 @@ MonoBehaviour:
   resultText: {fileID: 1003443274}
   checkButton: {fileID: 0}
   nextQuestionButton: {fileID: 1443511710}
+  funFactButtonPrefab: {fileID: 5410978016729983875, guid: 33a8ec32b6adbd4418ea1eb88a4b2613, type: 3}
   answerButtonPrefab: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
   answerBoard: {fileID: 875248372}
   answerButtons: []
