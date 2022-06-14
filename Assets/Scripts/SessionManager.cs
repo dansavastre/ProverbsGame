@@ -119,6 +119,10 @@ public class SessionManager : MonoBehaviour
     // Fetches the key of the current player
     public void GetPlayerKey()
     {
+        // Reset the player proficiency
+        playerProficiency = null;
+        newProficiency = null;
+        //email = playerEmail.text;
         // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(playerEmail)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
