@@ -67,10 +67,4 @@ public class RecognizeImageManager : SingleplayerManager
         
         SetCurrentQuestion(nextProverb.phrase, nextProverb.otherPhrases);
     }
-
-    // Load the image when a hint is asked for
-    public void GetHint()
-    {
-        image.enabled = true;
-    }
 }
