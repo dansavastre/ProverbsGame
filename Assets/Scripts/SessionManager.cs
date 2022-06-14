@@ -29,6 +29,7 @@ public class SessionManager : MonoBehaviour
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
     public static string playerEmail;
+    public static string playerName;
     public static string playerKey;
 
     // Progress bar
@@ -49,7 +50,8 @@ public class SessionManager : MonoBehaviour
         "Login",                // Screen to login
         "SelectionMenu",        // Select singleplayer or multiplayer
         "SingleplayerMenu",     // Singleplayer menu
-        "TitleMenu"             // Multiplayer menu
+        "TitleMenu",            // Multiplayer menu
+        "ProfilePage"           // Profile page
     };
 
     private TimeSpan[] waitingPeriod = 
@@ -69,6 +71,7 @@ public class SessionManager : MonoBehaviour
         playerProficiency = null;
         newProficiency = null;
         playerEmail = AccountManager.playerEmail;
+        playerName = AccountManager.playerName;
         playerKey = null;
         random = new Random();
 
