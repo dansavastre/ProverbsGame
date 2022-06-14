@@ -392,14 +392,8 @@ public class SingleplayerManager : MonoBehaviour
     // Load the FunFact scene by pressing the "i" button
     public void LoadFunFactOnDemand()
     {
-        if(!answered)
-        {
-            SessionManager.isOnDemandBeforeAnswer = true;
-        }
-        else 
-        {
-            LoadFunFact();
-        }
+        if (!answered) SessionManager.isOnDemandBeforeAnswer = true;
+        else LoadFunFact();
     }
 
     // Load the FunFact scene
