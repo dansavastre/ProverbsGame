@@ -96,10 +96,7 @@ public class FormSentenceManager : SingleplayerManager
         }
 
         // Add the keywords to allwords, and add some flukes
-        allWords.Add("frog");
-        allWords.Add("box");
-        allWords.Add("loses");
-        allWords.Add("mediocre");
+        allWords.AddRange(nextProverb.otherKeywords);
 
         // Shuffling list of words
         for (int i = 0; i < allWords.Count; i++)
