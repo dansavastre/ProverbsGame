@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Firebase.Database;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.IMGUI.Controls;
@@ -45,6 +46,33 @@ public class DictionaryManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DatabaseReference dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+        // Goes to the 'players' database table and searches for the user
+        dbReference.Child("players").OrderByChild("email").EqualTo(SessionManager.text)
+            .ValueChanged += (object sender, ValueChangedEventArgs args) =>
+        {
+            if (args.DatabaseError != null)
+            {
+                Debug.LogError(args.DatabaseError.Message);
+                return;
+            }
+
+            // Check to see if there is at least one result
+            if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
+            {
+                // Unity does not know we expect exactly one result, so we must iterate 
+                foreach (var childSnapshot in args.Snapshot.Children)
+                {
+                    // Get the key of the current database entry
+                    playerKey = childSnapshot.Key;
+                    Debug.Log(childSnapshot.Key);
+                    // Use this key to fetch the corresponding player proficiency
+                    GetPlayerProficiencies();
+                }
+            }
+        };
+        
+        
         UpdateDictionaryContentHolderContents();
         UpdateDictionaryContentHolderContents();
     }
