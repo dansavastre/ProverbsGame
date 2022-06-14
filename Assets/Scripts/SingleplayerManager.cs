@@ -255,10 +255,17 @@ public class SingleplayerManager : MonoBehaviour
     private void CreateButton(int answerIndex)
     {
         Button newButton = Instantiate(answerButtonPrefab, answerBoard, false);
+
         // Set position
-        int yPos = -answerIndex * (int) newButton.GetComponent<RectTransform>().rect.height; // Change the starting location of buttons
+        int buttonHeight = (int)newButton.GetComponent<RectTransform>().rect.height; 
+        int boardTopEdge = (int)answerBoard.GetComponent<RectTransform>().rect.height;
+        int startLocation = boardTopEdge / 2 - buttonHeight / 2; // Get the starting location of the buttons
+        int spaceLength = 25; // Space size between 2 buttons
+        int spacing = answerIndex * spaceLength; // The spacing that must be added between the buttons
+        int yPos = startLocation - answerIndex * buttonHeight - spacing; // The final position of the button
         var transform1 = newButton.transform;
         transform1.localPosition = new Vector3(transform1.localPosition.x, yPos);
+        
         // Set name, text, sprite, and callback
         newButton.name = "Answer" + answerIndex;
         newButton.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[answerIndex].text;
