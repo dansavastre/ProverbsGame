@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using MiniJSON;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -48,6 +49,7 @@ public class CoopGame : SingleplayerManager
         buttonIndices = new List<string>();
         allWords = new List<string>();
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+        proverbs = new List<Proverb>();
         
         // variables needed here
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
@@ -104,23 +106,31 @@ public class CoopGame : SingleplayerManager
             foreach (var player in PhotonNetwork.PlayerList)
             {
                 // send the first {numberOfProverbsPerPlayer} proverbs to "player"
-                _photon.RPC("SetProverbs", player, 
-                    proverbsSelected.GetRange(0, numberOfProverbsPerPlayer));
+                for (int i = 0; i < numberOfProverbsPerPlayer; i++)
+                {
+                    _photon.RPC("AddProverb", RpcTarget.All, "a");
+                }
+
                 // remove the proverbs sent
                 proverbsSelected.RemoveRange(0, numberOfProverbsPerPlayer);
             }
+
+            _photon.RPC("StartGame", RpcTarget.All);
         }
+
     }
 
 
-    /**
-     * <summary>Gets list of proverbs, saves this in corresponding attribute, merges all keywords, and distributes them</summary>
-     * <param name="proverbs">List of Proverb</param>
-     */
     [PunRPC]
-    private void SetProverbs(List<Proverb> proverbs)
+    private void AddProverb(string p)
     {
-        this.proverbs = proverbs;
+        proverbs.Add(JsonUtility.FromJson<Proverb>(p));
+    }
+    
+
+    [PunRPC]
+    private void StartGame()
+    {
         // merge all keywords of the proverbs given
         List<string> allKeywords = new List<string>();
         foreach (Proverb proverb in this.proverbs)
@@ -128,7 +138,7 @@ public class CoopGame : SingleplayerManager
             allKeywords.AddRange(proverb.keywords);
             // allKeywords.AddRange(proverbs.otherKeyWords);    //TODO this is also needed
         }
-        
+
         //Shuffling list of words
         for (int i = 0; i < allKeywords.Count; i++)
         {
@@ -140,7 +150,7 @@ public class CoopGame : SingleplayerManager
 
         // Distribute keywords between players
         SentMyKeywordsToAllPlayers(allKeywords);
-        
+
         // show next proverb
         LoadNextProverb();
     }

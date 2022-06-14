@@ -24,7 +24,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         CoopGame.allWords.Remove(draggedButtonText);
         CoopGame.buttonIndices[CoopGame.buttonIndices.IndexOf(draggedButtonText)] = "";
         Destroy(eventData.pointerDrag.GetComponent<Button>().GameObject());
-        SendChat(buttonText, draggedButtonText);
+        SendChat(draggedButtonText, buttonText);
     }
     
     public void SendChat(string msg, string player)
