@@ -390,7 +390,10 @@ public class SingleplayerManager : MonoBehaviour
         {
             SessionManager.isOnDemandBeforeAnswer = true;
         }
-        LoadFunFact();
+        else 
+        {
+            LoadFunFact();
+        }
     }
 
     // Load the FunFact scene
