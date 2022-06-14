@@ -89,12 +89,6 @@ public class SingleplayerManager : MonoBehaviour
             firstTimeAnswering = currentBucket.timestamp == 0 ? true : false;
             Debug.Log("Timestamp: " + currentBucket.timestamp);
             Debug.Log("First time answering: " + firstTimeAnswering);
-            if(!firstTimeAnswering && funFactButtonPrefab != null)
-            {
-                Debug.Log("Instantiate");
-                Button newButton = Instantiate(funFactButtonPrefab, this.transform);
-                newButton.onClick.AddListener(() => LoadFunFactOnDemand());
-            }
         }
     }
 
@@ -102,6 +96,13 @@ public class SingleplayerManager : MonoBehaviour
     protected void DisplayFeedback(bool correct)
     {
         answered = true;
+        
+        if(!firstTimeAnswering && funFactButtonPrefab != null)
+        {
+                Debug.Log("Instantiate");
+                Button newButton = Instantiate(funFactButtonPrefab, this.transform);
+                newButton.onClick.AddListener(() => LoadFunFactOnDemand());
+        }
 
         if (correct)
         {
