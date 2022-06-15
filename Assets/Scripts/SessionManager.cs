@@ -44,6 +44,8 @@ public class SessionManager : MonoBehaviour
     public static Proficiency proficiency;
     public static bool isOnDemandBeforeAnswer;
 
+    private static int SESSION_SIZE = 10; // The number of questions that should be allowed in a single session
+
     public static string[] scenes = 
     {
         "FirstScreen",          // First screen on app launch
@@ -198,6 +200,7 @@ public class SessionManager : MonoBehaviour
         Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
 
         allProficiencies = Shuffle(allProficiencies.ToList());
+        ResizeList<Bucket>(allProficiencies, SESSION_SIZE, null);
 
         Debug.Log("Post-shuffle: " + LinkedString(allProficiencies));
 
@@ -205,6 +208,32 @@ public class SessionManager : MonoBehaviour
         List<int> ints = new List<int>(new int[allProficiencies.Count]);
         dictionary = new Dictionary<Bucket, int>(allProficiencies
         .Zip(ints, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v));
+    }
+
+    /**
+     * Method for resizing a list to the desired size.
+     * 
+     * list - the list to be resized
+     * size - the number of elements that the list should be resized to
+     * c - placeholder element for padding the end of the list
+     */
+    private void ResizeList<T>(this LinkedList<T> list, int size, T c) {
+        T[] arr = new T[size];
+        list.CopyTo(arr, 0);
+
+        int curr = list.Count;
+        if (size < curr) {
+            // Fill the answer array iteratively
+            for (int i = 0; i < size; ++i) {
+                T element = list.First();
+                list.RemoveFirst();
+                arr[i] = element;
+            }
+
+            list = new LinkedList<T>(arr);
+        }
+        else if (size > curr)
+            list.AddRange(Enumerable.Repeat(c, size - curr));
     }
 
     // Print for debugging
