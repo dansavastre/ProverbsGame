@@ -48,8 +48,12 @@ public class ExcelConverter : MonoBehaviour
             List<string> otherPhrases = parseList(row[2].Substring(1, row[2].Length - 2));
             List<string> otherMeanings = parseList(row[6].Substring(1, row[6].Length - 2));
             List<string> otherExamples = parseList(row[8].Substring(1, row[8].Length - 2));
-
-            Proverb proverb = new Proverb(  row[1].Replace("\"", ""), keywords, row[5].Replace("\"", ""), row[7].Replace("\"", ""), 
+            string example = row[7];
+            if(example[0] == '"')
+            {
+                example = example.Substring(1, example.Length - 2).Replace("\"\"", "\"");
+            }
+            Proverb proverb = new Proverb(  row[1].Replace("\"", ""), keywords, row[5].Replace("\"", ""), example, 
                                             row[10].Replace("\r", ""), otherPhrases, otherKeywords, otherMeanings, otherExamples, row[9].Replace("\"", ""));
             Debug.Log(JsonUtility.ToJson(proverb));
 
