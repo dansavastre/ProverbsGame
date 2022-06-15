@@ -64,4 +64,26 @@ public class ClassesTest
         Assert.AreEqual(2, bucket.stage);
         Assert.AreEqual(0, bucket.timestamp);
     }
+
+    [Test]
+    public void ProficiencyTest()
+    {
+        Bucket bucket1 = new Bucket("key1", 1, 0);
+        Bucket bucket2 = new Bucket("key2", 2, 1);
+        Bucket bucket3 = new Bucket("key3", 3, 2);
+        Bucket bucket4 = new Bucket("key4", 4, 3);
+
+        Proficiency proficiency = new Proficiency();
+        proficiency.apprentice.Add(bucket1);
+        proficiency.journeyman.Add(bucket2);
+        proficiency.expert.Add(bucket3);
+        proficiency.master.Add(bucket4);
+
+        Assert.IsTrue(proficiency.apprentice.Contains(bucket1));
+        Assert.IsTrue(proficiency.journeyman.Contains(bucket2));
+        Assert.IsTrue(proficiency.expert.Contains(bucket3));
+        Assert.IsTrue(proficiency.master.Contains(bucket4));
+        
+    }
+
 }
