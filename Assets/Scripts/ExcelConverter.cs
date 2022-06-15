@@ -49,7 +49,7 @@ public class ExcelConverter : MonoBehaviour
             List<string> otherMeanings = parseList(row[6].Substring(1, row[6].Length - 2));
             List<string> otherExamples = parseList(row[8].Substring(1, row[8].Length - 2));
 
-            Proverb proverb = new Proverb(  row[1], keywords, row[5].Substring(1, row[5].Length - 2), row[7].Substring(1, row[7].Length - 2).Replace("\"\"", "\""), 
+            Proverb proverb = new Proverb(  row[1].Replace("\"", ""), keywords, row[5].Substring(1, row[5].Length - 2), row[7].Substring(1, row[7].Length - 2).Replace("\"\"", "\""), 
                                             row[10].Replace("\r", ""), otherPhrases, otherKeywords, otherMeanings, otherExamples, row[9].Substring(1, row[9].Length - 2));
             Debug.Log(JsonUtility.ToJson(proverb));
 
