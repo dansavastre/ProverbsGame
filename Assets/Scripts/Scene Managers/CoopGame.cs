@@ -54,7 +54,7 @@ public class CoopGame : SingleplayerManager
         
         // variables needed here
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        int numberOfProverbsPerPlayer = 1;
+        int numberOfProverbsPerPlayer = 2;
         int[] randomProverbIndices = {};
         List<DataSnapshot> allProverbs = new List<DataSnapshot>();
 
@@ -91,6 +91,10 @@ public class CoopGame : SingleplayerManager
                             {
                                 randomProverbIndices[i] = nextInt;
                             }
+                            else
+                            {
+                                i--;
+                            }
                         }
                         
                         allProverbs = snapshot.Children.ToList();
@@ -102,22 +106,58 @@ public class CoopGame : SingleplayerManager
             {
                 proverbsSelected.Add(JsonUtility.FromJson<Proverb>(allProverbs[i].GetRawJsonValue()));
             }
-                        
+
+            Dictionary<string, List<string>> allKeywordsPerPlayer = new Dictionary<string, List<string>>(); // keywords with user having them
+            List<string> allKeywords = new List<string>();  // list to contain all (other)keywords from the proverbs selected
             // send proverbs to each player
             foreach (var player in PhotonNetwork.PlayerList)
             {
-                // send the first {numberOfProverbsPerPlayer} proverbs to "player"
+                // send the first {numberOfProverbsPerPlayer} proverbs to "player" and add keywords to dict
                 for (int i = 0; i < numberOfProverbsPerPlayer; i++)
                 {
                     Debug.Log(JsonUtility.ToJson(proverbsSelected[i]));
                     _photon.RPC("AddProverb", player, JsonUtility.ToJson(proverbsSelected[i]));
+
+                    if (allKeywordsPerPlayer.ContainsKey(player.NickName))
+                    {
+                        allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].keywords);
+                        // allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
+                    }
+                    else
+                    {
+                        allKeywordsPerPlayer.Add(player.NickName, proverbsSelected[i].keywords);
+                        // allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
+                    }
+                    
+                    allKeywords.AddRange(proverbsSelected[i].keywords); // add keywords to list
+                    // allKeywords.AddRange(proverbsSelected[i].otherKeywords);    // add otherKeywords to list  //TODO this is also needed
                 }
 
                 // remove the proverbs sent
                 proverbsSelected.RemoveRange(0, numberOfProverbsPerPlayer);
             }
 
-            _photon.RPC("StartGame", RpcTarget.All);
+            //Shuffling list of words
+            for (int i = 0; i < allKeywords.Count; i++)
+            {
+                string temp = allKeywords[i];
+                int randomIndex = random.Next(i, allKeywords.Count);
+                allKeywords[i] = allKeywords[randomIndex];
+                allKeywords[randomIndex] = temp;
+            }
+            
+            // Distribute keywords between players
+            if (PhotonNetwork.CountOfPlayers == 2)
+            {
+                SentMyKeywordsToAllPlayers(allKeywords);
+            }
+            else
+            {
+                SentMyKeywordsToOtherPlayers(allKeywords, allKeywordsPerPlayer);
+            }
+            
+            
+            _photon.RPC("LoadNextProverb", RpcTarget.All);
             PhotonNetwork.CurrentRoom.IsVisible = false;
         }
 
@@ -129,38 +169,11 @@ public class CoopGame : SingleplayerManager
     {
         proverbs.Add(JsonUtility.FromJson<Proverb>(p));
     }
-    
-
-    [PunRPC]
-    private void StartGame()
-    {
-        // merge all keywords of the proverbs given
-        List<string> allKeywords = new List<string>();
-        foreach (Proverb proverb in this.proverbs)
-        {
-            allKeywords.AddRange(proverb.keywords);
-            // allKeywords.AddRange(proverbs.otherKeyWords);    //TODO this is also needed
-        }
-
-        //Shuffling list of words
-        for (int i = 0; i < allKeywords.Count; i++)
-        {
-            string temp = allKeywords[i];
-            int randomIndex = random.Next(i, allKeywords.Count);
-            allKeywords[i] = allKeywords[randomIndex];
-            allKeywords[randomIndex] = temp;
-        }
-
-        // Distribute keywords between players
-        SentMyKeywordsToAllPlayers(allKeywords);
-
-        // show next proverb
-        LoadNextProverb();
-    }
 
     /**
      * <summary>Loads the next available proverb into the scene with blanks or lets the master know this player is finished.</summary>
      */
+    [PunRPC]
     private void LoadNextProverb()
     {
         // if no proverbs left, then this player is finished and master should be let known
@@ -220,7 +233,7 @@ public class CoopGame : SingleplayerManager
     }
 
     /**
-     * <summary>Sends missing keywords from this player's proverb to other players and does that in an as uniform way as possible.</summary>
+     * <summary>Sends missing keywords from this player's proverb to all players including yourself.</summary>
      * <param name="myKeywords">List of the keywords from this player's proverb to send to other players.</param>
      */
     private void SentMyKeywordsToAllPlayers(List<string> myKeywords)
@@ -230,6 +243,28 @@ public class CoopGame : SingleplayerManager
         foreach (string keyword in myKeywords)
         {
             var playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
+            _photon.RPC("ReceiveChat", playerToSendTo, keyword);
+            i++;
+        }
+    }
+    
+    /**
+     * <summary>Sends missing keywords from this player's proverb to other players.</summary>
+     * <param name="myKeywords">List of the keywords from this player's proverb to send to other players.</param>
+     * <param name="allKeywordsPerPlayer">Dictionary having users as key and keywords as value, indicating what keywords each user will need in the game.</param>
+     */
+    private void SentMyKeywordsToOtherPlayers(List<string> myKeywords, Dictionary<string, List<string>> allKeywordsPerPlayer)
+    {
+        int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount;
+        int i = 0;
+        foreach (string keyword in myKeywords)
+        {
+            var playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
+            while (allKeywordsPerPlayer[playerToSendTo.NickName].Contains(keyword))
+            {
+                i++;
+                playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
+            }
             _photon.RPC("ReceiveChat", playerToSendTo, keyword);
             i++;
         }
