@@ -7,16 +7,11 @@ using UnityEngine.UI;
 public class TestPopUp : MonoBehaviour
 {
     // UI elements
-    [SerializeField] private TextMeshProUGUI congratulationPrefab;
+    public GameObject prefab;
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    public void OnTestClick()
-    {
-        Instantiate(congratulationPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        Instantiate(prefab, transform.position, Quaternion.identity, GameObject.Find("Canvas").transform);
     }
 }

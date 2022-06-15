@@ -16,7 +16,6 @@ public class FunFactManager : SingleplayerManager
 {
 
     [SerializeField] private TextMeshProUGUI funFactText;
-    [SerializeField] private RawImage image;
 
     private StorageReference storageRef;
     private string currentImage;
