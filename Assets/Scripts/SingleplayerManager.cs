@@ -16,10 +16,16 @@ public class SingleplayerManager : MonoBehaviour
     // UI elements
     [SerializeField] protected TextMeshProUGUI questionText;
     [SerializeField] protected TextMeshProUGUI resultText;
+    [SerializeField] protected GameObject checkButton;
     [SerializeField] protected GameObject nextQuestionButton;
+    [SerializeField] protected Button funFactButtonPrefab;
     [SerializeField] protected Button answerButtonPrefab;
     [SerializeField] protected RectTransform answerBoard;
     [SerializeField] protected List<Button> answerButtons;
+    [SerializeField] protected RawImage image;
+
+    // Sprites for MultipleChoice UI 
+    [SerializeField] protected Sprite otherOptionBoard;
 
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
@@ -34,10 +40,11 @@ public class SingleplayerManager : MonoBehaviour
     private static LinkedList<Bucket> allProficiencies;
     private static Dictionary<Bucket, int> dictionary;
     private bool answeredCorrect;
+    private bool answered;
+    private bool firstTimeAnswering;
 
     // Progress bar
-    [SerializeField]
-    public ProgressBar progressBar;
+    [SerializeField] public ProgressBar progressBar;
 
     private const int apprenticeStage = 3;
     private const int journeymanStage = 5;
@@ -56,6 +63,8 @@ public class SingleplayerManager : MonoBehaviour
         allProficiencies = SessionManager.allProficiencies;
         dictionary = SessionManager.dictionary;
         answeredCorrect = false;
+        SessionManager.isOnDemandBeforeAnswer = false;
+        answered = false;
         
         GetNextKey();
         nextQuestionButton.SetActive(false);
@@ -77,12 +86,27 @@ public class SingleplayerManager : MonoBehaviour
             currentType = "none";
         }
         // Otherwise we fetch the next type
-        else currentType = GetTypeOfStage(currentBucket.stage);
+        else 
+        {
+            currentType = GetTypeOfStage(currentBucket.stage);
+            firstTimeAnswering = currentBucket.timestamp == 0 ? true : false;
+            Debug.Log("Timestamp: " + currentBucket.timestamp);
+            Debug.Log("First time answering: " + firstTimeAnswering);
+        }
     }
 
     // Display the feedback after the player answers the question
     protected void DisplayFeedback(bool correct)
     {
+        answered = true;
+        
+        if(!firstTimeAnswering && funFactButtonPrefab != null)
+        {
+                Debug.Log("Instantiate");
+                Button newButton = Instantiate(funFactButtonPrefab, this.transform);
+                newButton.onClick.AddListener(() => LoadFunFactOnDemand());
+        }
+
         if (correct)
         {
             answeredCorrect = true;
@@ -254,13 +278,21 @@ public class SingleplayerManager : MonoBehaviour
     private void CreateButton(int answerIndex)
     {
         Button newButton = Instantiate(answerButtonPrefab, answerBoard, false);
+
         // Set position
-        int yPos = -answerIndex * 75 + 20;
+        int buttonHeight = (int)newButton.GetComponent<RectTransform>().rect.height; 
+        int boardTopEdge = (int)answerBoard.GetComponent<RectTransform>().rect.height;
+        int startLocation = boardTopEdge / 2 - buttonHeight / 2; // Get the starting location of the buttons
+        int spaceLength = 25; // Space size between 2 buttons
+        int spacing = answerIndex * spaceLength; // The spacing that must be added between the buttons
+        int yPos = startLocation - answerIndex * buttonHeight - spacing; // The final position of the button
         var transform1 = newButton.transform;
         transform1.localPosition = new Vector3(transform1.localPosition.x, yPos);
-        // set name, text, and callback
+        
+        // Set name, text, sprite, and callback
         newButton.name = "Answer" + answerIndex;
         newButton.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[answerIndex].text;
+        newButton.GetComponent<Image>().sprite = otherOptionBoard;
         newButton.onClick.AddListener(() => CheckAnswer(answerIndex));
         answerButtons.Add(newButton);
     }
@@ -269,6 +301,7 @@ public class SingleplayerManager : MonoBehaviour
     public void CheckAnswer(int index)
     {
         DisplayFeedback(currentQuestion.answers[index].isCorrect);
+        image.enabled = true;
         DeactivateAnswerButtons();
     }
     
@@ -302,19 +335,19 @@ public class SingleplayerManager : MonoBehaviour
         Debug.Log("Quitting session.");
         string json = JsonUtility.ToJson(newProficiency);
         dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("SingleplayerMenu");
     }
 
     public void LoadNextScene()
     {
-        if(answeredCorrect)
+        if(firstTimeAnswering && answeredCorrect)
         {
-            Debug.Log("Answered Correct!");
+            Debug.Log("First time answered correct!");
+            firstTimeAnswering = false;
             LoadFunFact();
         }
-        else
+        else 
         {
-            Debug.Log("Answered Incorrect!");
             LoadQuestion();
         }
     }
@@ -329,7 +362,7 @@ public class SingleplayerManager : MonoBehaviour
             Debug.Log("Saving progress.");
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-            SceneManager.LoadScene("Menu");
+            SceneManager.LoadScene("singleplayerMenu");
             return;
         }
         switch (currentBucket.stage)
@@ -358,9 +391,16 @@ public class SingleplayerManager : MonoBehaviour
             default:
                 string json = JsonUtility.ToJson(newProficiency);
                 dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-                SceneManager.LoadScene("Menu");
+                SceneManager.LoadScene("SingleplayerMenu");
                 break;
         }
+    }
+
+    // Load the FunFact scene by pressing the "i" button
+    public void LoadFunFactOnDemand()
+    {
+        if (!answered) SessionManager.isOnDemandBeforeAnswer = true;
+        else LoadFunFact();
     }
 
     // Load the FunFact scene
