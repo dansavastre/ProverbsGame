@@ -80,7 +80,7 @@ public class FunFactManager : SingleplayerManager
         nextQuestionButton.SetActive(true);
         Debug.Log(nextProverb.funFact);
         
-        if(funFact.Length > 150)
+        if(funFact.Length > 210)
         {
             scrollBar.SetActive(true);
             funFactScrollable.text = funFact;
