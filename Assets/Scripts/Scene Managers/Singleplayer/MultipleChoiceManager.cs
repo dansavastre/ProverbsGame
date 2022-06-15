@@ -15,8 +15,19 @@ using Random = UnityEngine.Random;
 public class MultipleChoiceManager : SingleplayerManager
 {
     // UI elements
-    [SerializeField] private RawImage image;
     [SerializeField] private TextMeshProUGUI taskText;
+
+    [SerializeField] private GameObject homeButton;
+    [SerializeField] private GameObject barBackground;
+    [SerializeField] private GameObject questionBoard;
+    [SerializeField] private GameObject imageBoard;
+    [SerializeField] private GameObject nextButton;
+
+    // Sprites for UI
+    [SerializeField] private Sprite otherHomeButton;
+    [SerializeField] private Sprite otherBarBackground;
+    [SerializeField] private Sprite otherImageBoard;
+    [SerializeField] private Sprite otherNextButton;
 
     // Stores information fetched from the database
     private StorageReference storageRef;
@@ -34,7 +45,15 @@ public class MultipleChoiceManager : SingleplayerManager
 
         if (currentBucket.stage == 2) gamemode = Mode.ProverbMeaning;
         else if (currentBucket.stage == 3) gamemode = Mode.MeaningProverb;
-        else gamemode = Mode.ExampleSentence;
+        else 
+        {
+            gamemode = Mode.ExampleSentence;
+            homeButton.GetComponent<Image>().sprite = otherHomeButton;
+            barBackground.GetComponent<Image>().sprite = otherBarBackground;
+            questionBoard.GetComponent<Image>().sprite = otherOptionBoard;
+            imageBoard.GetComponent<Image>().sprite = otherImageBoard;
+            nextButton.GetComponent<Image>().sprite = otherNextButton;
+        }
 
         // Goes to the 'proverbs' database table and searches for the key
         await dbReference.Child("proverbs").Child(currentBucket.key)

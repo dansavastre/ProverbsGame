@@ -14,8 +14,6 @@ using UnityEngine.EventSystems;
 public class CoopGame : SingleplayerManager
 {
     // UI elements
-    // [SerializeField] private List<GameObject> buttons;
-    // [SerializeField] private List<TextMeshProUGUI> buttonTexts;
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private Button dragDropButtonPrefab;
     [SerializeField] private Canvas canvas;
@@ -29,7 +27,7 @@ public class CoopGame : SingleplayerManager
     public static List<string> buttonIndices;
 
     // Start is called before the first frame update
-    async void Start()
+    public void Start()
     {
         // base.Start();
 

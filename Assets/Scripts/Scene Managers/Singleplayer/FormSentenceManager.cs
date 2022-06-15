@@ -14,7 +14,6 @@ using Random = UnityEngine.Random;
 
 public class FormSentenceManager : SingleplayerManager
 {
-    [SerializeField] private RawImage image;
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private List<Button> Buttons;
     [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab;
@@ -34,8 +33,6 @@ public class FormSentenceManager : SingleplayerManager
     protected async override void Start()
     {
         base.Start();
-
-        image.enabled = false;
 
         // Goes to the 'proverbs' database table and searches for the key
         await dbReference.Child("proverbs").Child(currentBucket.key)
@@ -96,10 +93,7 @@ public class FormSentenceManager : SingleplayerManager
         }
 
         // Add the keywords to allwords, and add some flukes
-        allWords.Add("frog");
-        allWords.Add("box");
-        allWords.Add("loses");
-        allWords.Add("mediocre");
+        allWords.AddRange(nextProverb.otherKeywords);
 
         // Shuffling list of words
         for (int i = 0; i < allWords.Count; i++)
@@ -212,15 +206,5 @@ public class FormSentenceManager : SingleplayerManager
         DisplayFeedback(playerProverb.ToLower().Equals(correctProverb.ToLower().Replace(" ", "")));
         // TODO: Disable the ability to click new answers
         checkButton.SetActive(false);
-    }
-
-    /** 
-     * Functionality for clicking the hint image:
-     * - if the hint image is currently hidden, show it;
-     * - it the hint image is currently shown, hide it.
-     */
-    public void HintClicked()
-    {
-        image.enabled = !image.enabled;
     }
 }

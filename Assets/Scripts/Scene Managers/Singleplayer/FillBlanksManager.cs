@@ -14,7 +14,6 @@ using Random = UnityEngine.Random;
 
 public class FillBlanksManager : SingleplayerManager
 {
-    [SerializeField] private RawImage image;
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private List<Button> Buttons;
     [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab;
@@ -90,10 +89,7 @@ public class FillBlanksManager : SingleplayerManager
 
         // Add the keywords to allwords, and add some flukes
         allWords = nextProverb.keywords;
-        allWords.Add("frog");
-        allWords.Add("box");
-        allWords.Add("loses");
-        allWords.Add("mediocre");
+        allWords.AddRange(nextProverb.otherKeywords);
 
         foreach (string v in nextProverb.keywords)
         {
@@ -210,6 +206,7 @@ public class FillBlanksManager : SingleplayerManager
     {
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
         DisplayFeedback(playerProverb.Equals(correctProverb));
+        image.enabled = true;
         // TODO: Disable the ability to click new answers
         checkButton.SetActive(false);
     }

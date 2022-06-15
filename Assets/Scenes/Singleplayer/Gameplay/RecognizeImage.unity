@@ -1078,11 +1078,13 @@ MonoBehaviour:
   resultText: {fileID: 174113382}
   checkButton: {fileID: 0}
   nextQuestionButton: {fileID: 2090833226}
+  funFactButtonPrefab: {fileID: 5410978016729983875, guid: 33a8ec32b6adbd4418ea1eb88a4b2613, type: 3}
   answerButtonPrefab: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
   answerBoard: {fileID: 1589750915}
   answerButtons: []
-  progressBar: {fileID: 2059056546}
   image: {fileID: 689247322}
+  otherOptionBoard: {fileID: 21300000, guid: 339087685cf6a3245b0463810b29c593, type: 3}
+  progressBar: {fileID: 2059056546}
 --- !u!1 &1203008378
 GameObject:
   m_ObjectHideFlags: 0
