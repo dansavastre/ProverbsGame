@@ -200,7 +200,7 @@ public class SessionManager : MonoBehaviour
         Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
 
         allProficiencies = Shuffle(allProficiencies.ToList());
-        ResizeList<Bucket>(allProficiencies, SESSION_SIZE, null);
+        ResizeList<Bucket>(allProficiencies, SESSION_SIZE, null); // Resize the list
 
         Debug.Log("Post-shuffle: " + LinkedString(allProficiencies));
 
@@ -217,7 +217,7 @@ public class SessionManager : MonoBehaviour
      * size - the number of elements that the list should be resized to
      * c - placeholder element for padding the end of the list
      */
-    private void ResizeList<T>(this LinkedList<T> list, int size, T c) {
+    private void ResizeList<T>(LinkedList<T> list, int size, T c) {
         T[] arr = new T[size];
         list.CopyTo(arr, 0);
 
