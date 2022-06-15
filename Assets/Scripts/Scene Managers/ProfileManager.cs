@@ -12,11 +12,20 @@ public class ProfileManager : MonoBehaviour
 
     private string[] scenes = SessionManager.scenes;
 
+    private static AudioSource WoodButton;
+
     // Start is called before the first frame update
     void Start()
     {
         username.text = AccountManager.playerName;
         email.text = AccountManager.playerEmail;
+
+        WoodButton = AccountManager.WoodButton;
+    }
+
+    public void PlonkNoise()
+    {
+        WoodButton.Play();
     }
 
     public void OnClickLogout()

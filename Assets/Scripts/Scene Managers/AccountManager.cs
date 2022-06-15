@@ -11,6 +11,8 @@ public class AccountManager : MonoBehaviour
     [SerializeField] private TMP_InputField emailField;
     [SerializeField] private TMP_InputField usernameField;
 
+    public static AudioSource WoodButton;
+
     private DatabaseReference dbReference;
 
     private Proficiency playerProficiency;
@@ -22,7 +24,13 @@ public class AccountManager : MonoBehaviour
 
     void Start()
     {
+        WoodButton = GameObject.Find("WoodButtonAudio").GetComponent<AudioSource>();
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+    }
+
+    public void PlonkNoise()
+    {
+        WoodButton.Play();
     }
 
     public void OnClickLogin()

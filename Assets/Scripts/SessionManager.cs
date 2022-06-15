@@ -18,8 +18,9 @@ public class SessionManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI JourneymanCount;
     [SerializeField] public TextMeshProUGUI ExpertCount;
     [SerializeField] public TextMeshProUGUI MasterCount;
-    // [SerializeField] public TMP_InputField PlayerEmail;
     [SerializeField] public Button SessionButton;
+
+    private static AudioSource WoodButton;
 
     // Stores the reference location of the database
     private DatabaseReference dbReference;
@@ -78,6 +79,8 @@ public class SessionManager : MonoBehaviour
         random = new Random();
         isOnDemandBeforeAnswer = false;
 
+        WoodButton = AccountManager.WoodButton;
+
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         dbReferenceStatic = dbReference;
@@ -92,6 +95,11 @@ public class SessionManager : MonoBehaviour
         {
             GetPlayerKey();
         }
+    }
+
+    public void PlonkNoise()
+    {
+        WoodButton.Play();
     }
 
     // Update is called once per frame

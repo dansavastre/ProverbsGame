@@ -45,6 +45,7 @@ public class SingleplayerManager : MonoBehaviour
 
     // Progress bar
     [SerializeField] public ProgressBar progressBar;
+    public static AudioSource WoodButton;
 
     private const int apprenticeStage = 3;
     private const int journeymanStage = 5;
@@ -59,6 +60,8 @@ public class SingleplayerManager : MonoBehaviour
         playerProficiency = SessionManager.playerProficiency;
         newProficiency = SessionManager.newProficiency;
 
+        WoodButton = GameObject.Find("WoodButtonAudio").GetComponent<AudioSource>();
+
         // Initialize new variables
         allProficiencies = SessionManager.allProficiencies;
         dictionary = SessionManager.dictionary;
@@ -72,6 +75,11 @@ public class SingleplayerManager : MonoBehaviour
         // Update Progress bar
         Debug.Log("ProgressBar: " + SessionManager.correctAnswers + " / " + SessionManager.maxValue);
         progressBar.SetProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
+    }
+
+    public void PlonkNoise()
+    {
+        WoodButton.Play();
     }
 
     // Get the key for the next proverb in the session in chronological order
