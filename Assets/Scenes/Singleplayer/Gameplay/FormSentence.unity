@@ -490,7 +490,7 @@ MonoBehaviour:
   nextQuestionButton: {fileID: 2139857922}
   funFactButtonPrefab: {fileID: 5410978016729983875, guid: 33a8ec32b6adbd4418ea1eb88a4b2613, type: 3}
   answerButtonPrefab: {fileID: 0}
-  answerBoard: {fileID: 0}
+  answerBoard: {fileID: 305126662}
   answerButtons: []
   image: {fileID: 586002781}
   otherOptionBoard: {fileID: 0}
