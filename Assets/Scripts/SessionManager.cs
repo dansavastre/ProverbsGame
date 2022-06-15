@@ -6,39 +6,92 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using Random = System.Random;
 
 public class SessionManager : MonoBehaviour
 {
     // UI elements
-    [SerializeField] public TMP_InputField PlayerEmail;
+    [SerializeField] public TextMeshProUGUI ApprenticeCount;
+    [SerializeField] public TextMeshProUGUI JourneymanCount;
+    [SerializeField] public TextMeshProUGUI ExpertCount;
+    [SerializeField] public TextMeshProUGUI MasterCount;
+    // [SerializeField] public TMP_InputField PlayerEmail;
     [SerializeField] public Button SessionButton;
 
     // Stores the reference location of the database
     private DatabaseReference dbReference;
+    public static DatabaseReference dbReferenceStatic;
 
     // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
-    public static int wrongAnswers;
+    public static string playerEmail;
+    public static string playerName;
+    public static string playerKey;
 
-    // Stores the player key
-    private static string playerKey;
+    // Progress bar
+    public static int maxValue;
+    public static int correctAnswers;
+
+    private Random random;
+    public static LinkedList<Bucket> allProficiencies;
+    public static Dictionary<Bucket, int> dictionary;
+
+    public static Proverb proverb;
+    public static Proficiency proficiency;
+    public static bool isOnDemandBeforeAnswer;
+
+    public static string[] scenes = 
+    {
+        "FirstScreen",          // First screen on app launch
+        "Register",             // Screen to register
+        "Login",                // Screen to login
+        "SelectionMenu",        // Select singleplayer or multiplayer
+        "SingleplayerMenu",     // Singleplayer menu
+        "TitleMenu",            // Multiplayer menu
+        "InfoScreen",           // Information page
+        "ProfilePage"           // Profile page
+    };
+
+    private TimeSpan[] waitingPeriod = 
+    {
+        new TimeSpan(),             // Always
+        new TimeSpan(2, 0, 0),      // After 2 hours
+        new TimeSpan(4, 0, 0),      // After 4 hours
+        new TimeSpan(8, 0, 0),      // After 8 hours
+        new TimeSpan(1, 0, 0, 0),   // After 1 day
+        new TimeSpan(2, 0, 0, 0)    // After 2 days
+    };
 
     // Start is called before the first frame update
     void Start()
     {
         // Reset the player proficiency
         playerProficiency = null;
-        newProficiency = new Proficiency();
-        wrongAnswers = 0;
+        newProficiency = null;
+        playerEmail = AccountManager.playerEmail;
+        playerName = AccountManager.playerName;
+        playerKey = null;
+        random = new Random();
+        isOnDemandBeforeAnswer = false;
 
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+        dbReferenceStatic = dbReference;
 
         // Make the button inactive
-        SessionButton.gameObject.SetActive(false);
+        if (playerEmail == null)
+        {
+            Debug.Log("No email was given, returning to first screen.");
+            SwitchScene(0);
+        }
+        else
+        {
+            GetPlayerKey();
+        }
     }
 
     // Update is called once per frame
@@ -48,29 +101,36 @@ public class SessionManager : MonoBehaviour
         {
             // Make the button active
             SessionButton.gameObject.SetActive(true);
+
+            // Display amount of proverbs in each proficiency
+            DisplayProverbCount();
+            ApprenticeCount.ForceMeshUpdate(true);
+            JourneymanCount.ForceMeshUpdate(true);
+            ExpertCount.ForceMeshUpdate(true);
+            MasterCount.ForceMeshUpdate(true);
+
+            dbReferenceStatic = dbReference;
         }
     }
 
-    public static void WrongAnswer()
+    // Displays the number of proverbs in each proficiency bucket
+    private void DisplayProverbCount() 
     {
-        wrongAnswers++;
-    }
-
-    public static void RightAnswer()
-    {
-        wrongAnswers = 0;
-    }
-
-    public static string PlayerKey()
-    {
-        return playerKey;
+        ApprenticeCount.text = playerProficiency.apprentice.Count.ToString();
+        JourneymanCount.text = playerProficiency.journeyman.Count.ToString();
+        ExpertCount.text = playerProficiency.expert.Count.ToString();
+        MasterCount.text = playerProficiency.master.Count.ToString();
     }
 
     // Fetches the key of the current player
     public void GetPlayerKey()
     {
+        // Reset the player proficiency
+        playerProficiency = null;
+        newProficiency = null;
+        //email = playerEmail.text;
         // Goes to the 'players' database table and searches for the user
-        dbReference.Child("players").OrderByChild("email").EqualTo(PlayerEmail.text)
+        dbReference.Child("players").OrderByChild("email").EqualTo(playerEmail)
         .ValueChanged += (object sender, ValueChangedEventArgs args) =>
         {
             if (args.DatabaseError != null)
@@ -107,7 +167,6 @@ public class SessionManager : MonoBehaviour
                 Debug.LogError("Task could not be completed.");
                 return;
             }
-            
             else if (task.IsCompleted)
             {
                 // Take a snapshot of the database entry
@@ -115,33 +174,128 @@ public class SessionManager : MonoBehaviour
                 // Convert the JSON back to a Proficiency object
                 string json = snapshot.GetRawJsonValue();
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
+                newProficiency = JsonUtility.FromJson<Proficiency>(json);
                 Debug.Log(json);
+                // RemoveTimedProverbs();
+                InitList();
             }
         });
     }
 
-    // Loads the first scene
+    private void InitList()
+    {
+        // Add all proficiencies to one list
+        allProficiencies = new LinkedList<Bucket>();
+        allProficiencies.AddRange(playerProficiency.apprentice);
+        allProficiencies.AddRange(playerProficiency.journeyman);
+        allProficiencies.AddRange(playerProficiency.expert);
+        allProficiencies.AddRange(playerProficiency.master);
+
+        // Initiate ProgressBar
+        maxValue = allProficiencies.Count;
+        correctAnswers = 0;
+
+        Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
+
+        allProficiencies = Shuffle(allProficiencies.ToList());
+
+        Debug.Log("Post-shuffle: " + LinkedString(allProficiencies));
+
+        // Create a dictionary to keep track of wrong answers
+        List<int> ints = new List<int>(new int[allProficiencies.Count]);
+        dictionary = new Dictionary<Bucket, int>(allProficiencies
+        .Zip(ints, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v));
+    }
+
+    // Print for debugging
+    private string LinkedString(LinkedList<Bucket> list)
+    {
+        string result = "[";
+        foreach (Bucket b in list)
+        {
+            result += "{Key: " + b.key + ", Stage: " + b.stage + "}, ";
+        }
+        return result + "]";
+    }
+
+    // Randomly shuffle the items in the given list
+    private LinkedList<T> Shuffle<T>(IList<T> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = random.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+        return new LinkedList<T>(list);
+    }
+
+    // Remove proverbs from the session list that have been questioned recently
+    private void RemoveTimedProverbs()
+    {
+        playerProficiency.apprentice = LoopProverbs(playerProficiency.apprentice);
+        playerProficiency.journeyman = LoopProverbs(playerProficiency.journeyman);
+        playerProficiency.expert = LoopProverbs(playerProficiency.expert);
+        playerProficiency.master = LoopProverbs(playerProficiency.master);
+    }
+
+    // Loops over the given list and adds buckets to the result that have passed the waiting period
+    private List<Bucket> LoopProverbs(List<Bucket> list)
+    {
+        List<Bucket> result = new List<Bucket>{};
+        foreach (Bucket b in list)
+        {
+            DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            date = date.AddMilliseconds(b.timestamp);
+            TimeSpan interval = DateTime.Now - date;
+            Debug.Log("Timestamp: " + b.timestamp + ", Date: " + date.ToString());
+            if (interval.CompareTo(waitingPeriod[b.stage - 1]) >= 0) 
+            {
+                result.Add(b);
+                Debug.Log("Added: " + b.key);
+            }
+        }
+        return result;
+    }
+
+    // Load the first question 
+    // TODO: fix duplicate code with LoadScene() in SingleplayerManager
     public void NextScene()
     {
-        if (playerProficiency.apprentice.Count > 0)
+        Bucket bucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;
+        switch (bucket.stage)
         {
-            SceneManager.LoadScene("RecognizeImage");
+            case 1:
+                SceneManager.LoadScene("RecognizeImage");
+                break;
+            case 2:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            case 3:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            case 4:
+                SceneManager.LoadScene("FillBlanks");
+                break;
+            case 5:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            case 6:
+                SceneManager.LoadScene("FillBlanks");
+                break;
+            case 7:
+                SceneManager.LoadScene("MultipleChoice");
+                break;
+            default:
+                Debug.Log("No proverbs available.");
+                break;
         }
-        else if (playerProficiency.journeyman.Count > 0)
-        {
-            SceneManager.LoadScene("MultipleChoice");
-        }
-        else if (playerProficiency.expert.Count > 0)
-        {
-            SceneManager.LoadScene("FillBlanks");
-        }
-        else if (playerProficiency.master.Count > 0)
-        {
-            SceneManager.LoadScene("MultipleChoice");
-        }
-        else
-        {
-            Debug.Log("No proverbs available.");
-        }
+    }
+
+    // Switch to the scene corresponding to the sceneIndex
+    public void SwitchScene(int sceneIndex)
+    {
+        SceneManager.LoadScene(scenes[sceneIndex]);
     }
 }
