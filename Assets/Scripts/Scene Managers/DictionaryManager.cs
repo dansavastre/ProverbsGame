@@ -44,7 +44,7 @@ public class DictionaryManager : MonoBehaviour
     void Start()
     {
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-        GetPlayerKey();
+        getProverbsToShow();
         StartCoroutine(wait());
     }
 
@@ -54,59 +54,15 @@ public class DictionaryManager : MonoBehaviour
         UpdateDictionaryContentHolderContents();
     }
 
-    private void GetPlayerKey()
+    private void getProverbsToShow()
     {
-        // Goes to the 'players' database table and searches for the user
-        dbReference.Child("players").OrderByChild("email").EqualTo("dantheodor123@gmail.com")
-            .ValueChanged += (object sender, ValueChangedEventArgs args) =>
-        {
-            if (args.DatabaseError != null)
-            {
-                Debug.LogError(args.DatabaseError.Message);
-                return;
-            }
-
-            // Check to see if there is at least one result
-            if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
-            {
-                string playerKey = args.Snapshot.Children.First().Key;
-                GetProficiencies(playerKey);
-            }
-        };
-    }
-
-    private void GetProficiencies(string playerKey)
-    {
-        // Goes to the 'proficiencies' database table and searches for {playerKey}
-        dbReference.Child("proficiencies").Child(playerKey)
-        .GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsFaulted)
-            {
-                Debug.LogError("Task could not be completed.");
-                return;
-            }
-            else if (task.IsCompleted)
-            {
-                // Take a snapshot of the database entry
-                DataSnapshot snapshot = task.Result;
-                // Convert the JSON back to a Proficiency object
-                string json = snapshot.GetRawJsonValue();
-                Proficiency playerProficiency = JsonUtility.FromJson<Proficiency>(json);
-                // filter out proverbs where user has stage 1 for from playerProficiency
-                List<Bucket> buckets = playerProficiency.apprentice.FindAll(b => b.stage >= 2);
-                buckets.AddRange(playerProficiency.journeyman);
-                buckets.AddRange(playerProficiency.expert);
-                buckets.AddRange(playerProficiency.master);
-                
-                List<string> bucketKeys = buckets.Select(b => b.key).ToList();
-                getProverbsToShow(bucketKeys);
-            }
-        });
-    }
-
-    private void getProverbsToShow(List<string> keysToGetProverbsFor)
-    {
+        List<Bucket> buckets = SessionManager.playerProficiency.apprentice.FindAll(b => b.stage >= 2);
+        buckets.AddRange(SessionManager.playerProficiency.journeyman);
+        buckets.AddRange(SessionManager.playerProficiency.expert);
+        buckets.AddRange(SessionManager.playerProficiency.master);
+        
+        List<string> keysToGetProverbsFor = buckets.Select(b => b.key).ToList();
+        
         dbReference.Child("proverbs").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
