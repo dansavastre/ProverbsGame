@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1929956151825164810}
   - component: {fileID: 1929956151825164805}
   m_Layer: 5
-  m_Name: FillBlanksAnswerButtonPrefab
+  m_Name: SmallAnswerButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
