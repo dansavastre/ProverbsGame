@@ -22,6 +22,10 @@ public class SingleplayerManager : MonoBehaviour
     [SerializeField] protected Button answerButtonPrefab;
     [SerializeField] protected RectTransform answerBoard;
     [SerializeField] protected List<Button> answerButtons;
+    [SerializeField] protected RawImage image;
+
+    // Sprites for MultipleChoice UI 
+    [SerializeField] protected Sprite otherOptionBoard;
 
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
@@ -40,8 +44,7 @@ public class SingleplayerManager : MonoBehaviour
     private bool firstTimeAnswering;
 
     // Progress bar
-    [SerializeField]
-    public ProgressBar progressBar;
+    [SerializeField] public ProgressBar progressBar;
 
     private const int apprenticeStage = 3;
     private const int journeymanStage = 5;
@@ -282,6 +285,7 @@ public class SingleplayerManager : MonoBehaviour
         // Set name, text, sprite, and callback
         newButton.name = "Answer" + answerIndex;
         newButton.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[answerIndex].text;
+        newButton.GetComponent<Image>().sprite = otherOptionBoard;
         newButton.onClick.AddListener(() => CheckAnswer(answerIndex));
         answerButtons.Add(newButton);
     }
@@ -290,6 +294,7 @@ public class SingleplayerManager : MonoBehaviour
     public void CheckAnswer(int index)
     {
         DisplayFeedback(currentQuestion.answers[index].isCorrect);
+        image.enabled = true;
         DeactivateAnswerButtons();
     }
     

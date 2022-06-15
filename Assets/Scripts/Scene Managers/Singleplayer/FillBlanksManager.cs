@@ -14,7 +14,6 @@ using Random = UnityEngine.Random;
 
 public class FillBlanksManager : SingleplayerManager
 {
-    [SerializeField] private RawImage image;
     [SerializeField] private Transform keywordBoard;
     [SerializeField] private List<Button> Buttons;
     [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab;
@@ -193,6 +192,7 @@ public class FillBlanksManager : SingleplayerManager
     {
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
         DisplayFeedback(playerProverb.Equals(correctProverb));
+        image.enabled = true;
         // TODO: Disable the ability to click new answers
         checkButton.SetActive(false);
     }

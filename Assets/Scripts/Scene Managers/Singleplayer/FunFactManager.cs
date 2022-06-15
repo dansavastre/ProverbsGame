@@ -22,7 +22,7 @@ public class FunFactManager : SingleplayerManager
     private string currentImage;
     private byte[] fileContents;
 
-    public async void Start()
+    public void Start()
     {
         Debug.Log("is on demand: " + SessionManager.isOnDemandBeforeAnswer);
         nextProverb = SessionManager.proverb;

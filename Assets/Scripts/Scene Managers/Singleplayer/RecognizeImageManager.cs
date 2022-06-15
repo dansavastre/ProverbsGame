@@ -7,9 +7,6 @@ using UnityEngine.UI;
 
 public class RecognizeImageManager : SingleplayerManager
 {
-    // UI elements
-    [SerializeField] private RawImage image;
-
     // Stores information fetched from the database
     private StorageReference storageRef;
     private string currentImage;
@@ -66,11 +63,5 @@ public class RecognizeImageManager : SingleplayerManager
         });
         
         SetCurrentQuestion(nextProverb.phrase, nextProverb.otherPhrases);
-    }
-
-    // Load the image when a hint is asked for
-    public void GetHint()
-    {
-        image.enabled = true;
     }
 }
