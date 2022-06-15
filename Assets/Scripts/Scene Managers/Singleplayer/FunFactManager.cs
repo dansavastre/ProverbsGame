@@ -16,7 +16,9 @@ public class FunFactManager : SingleplayerManager
 {
 
     [SerializeField] private TextMeshProUGUI funFactText;
+    [SerializeField] private TextMeshProUGUI funFactScrollable;
     [SerializeField] private RawImage image;
+    [SerializeField] private GameObject scrollBar;
 
     private StorageReference storageRef;
     private string currentImage;
@@ -64,8 +66,17 @@ public class FunFactManager : SingleplayerManager
 
     private void DisplayFunFact() 
     {
+        string funFact = nextProverb.funFact;
         nextQuestionButton.SetActive(true);
         Debug.Log(nextProverb.funFact);
-        funFactText.text = nextProverb.funFact;
+        
+        if(funFact.Length > 200)
+        {
+
+        }else
+        {
+
+        }
+        //funFactText.text = nextProverb.funFact;
     }
 }
