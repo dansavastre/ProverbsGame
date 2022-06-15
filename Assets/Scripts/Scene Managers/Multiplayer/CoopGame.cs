@@ -121,16 +121,16 @@ public class CoopGame : SingleplayerManager
                     if (allKeywordsPerPlayer.ContainsKey(player.NickName))
                     {
                         allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].keywords);
-                        // allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
+                        allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
                     }
                     else
                     {
                         allKeywordsPerPlayer.Add(player.NickName, proverbsSelected[i].keywords);
-                        // allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
+                        allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
                     }
                     
                     allKeywords.AddRange(proverbsSelected[i].keywords); // add keywords to list
-                    // allKeywords.AddRange(proverbsSelected[i].otherKeywords);    // add otherKeywords to list  //TODO this is also needed
+                    allKeywords.AddRange(proverbsSelected[i].otherKeywords);    // add otherKeywords to list  //TODO this is also needed, otherKeywords are repeated twice
                 }
 
                 // remove the proverbs sent
@@ -147,7 +147,7 @@ public class CoopGame : SingleplayerManager
             }
             
             // Distribute keywords between players
-            if (PhotonNetwork.CountOfPlayers == 2)
+            if (PhotonNetwork.CountOfPlayers <= 2)
             {
                 SentMyKeywordsToAllPlayers(allKeywords);
             }
