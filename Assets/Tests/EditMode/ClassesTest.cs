@@ -55,4 +55,13 @@ public class ClassesTest
         Assert.AreEqual(otherMeanings, proverb.otherMeanings);
         Assert.AreEqual(otherExamples, proverb.otherExamples);
     }
+
+    [Test]
+    public void BucketTest()
+    {
+        Bucket bucket = new Bucket("key", 2, 0);
+        Assert.AreEqual("key", bucket.key);
+        Assert.AreEqual(2, bucket.stage);
+        Assert.AreEqual(0, bucket.timestamp);
+    }
 }
