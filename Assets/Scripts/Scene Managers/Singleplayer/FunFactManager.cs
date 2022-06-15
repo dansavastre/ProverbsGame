@@ -31,6 +31,10 @@ public class FunFactManager : SingleplayerManager
         newProficiency = SessionManager.proficiency;
         dbReference = SessionManager.dbReferenceStatic;
 
+        // Reset gameobjects
+        funFactText.text = "";
+        scrollBar.SetActive(false);
+
         // Get a reference to the storage service, using the default Firebase App
         storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
 
@@ -70,13 +74,14 @@ public class FunFactManager : SingleplayerManager
         nextQuestionButton.SetActive(true);
         Debug.Log(nextProverb.funFact);
         
-        if(funFact.Length > 200)
+        if(funFact.Length > 150)
         {
-
-        }else
-        {
-
+            scrollBar.SetActive(true);
+            funFactScrollable.text = funFact;
         }
-        //funFactText.text = nextProverb.funFact;
+        else
+        {
+            funFactText.text = funFact;
+        }
     }
 }
