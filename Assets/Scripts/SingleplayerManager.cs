@@ -27,6 +27,8 @@ public class SingleplayerManager : MonoBehaviour
     // Sprites for MultipleChoice UI 
     [SerializeField] protected Sprite otherOptionBoard;
 
+    public UIManager UIManager;
+
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
@@ -181,6 +183,21 @@ public class SingleplayerManager : MonoBehaviour
         {
             currentBucket.stage++;
             Debug.Log(currentBucket.key + " stage upgraded to " + currentBucket.stage.ToString());
+            if (UIManager != null) 
+            {
+                switch (currentBucket.stage)
+                {
+                    case 4:
+                        UIManager.enableCongratulations(GetTypeOfStage(4));
+                        break;
+                    case 6: 
+                        UIManager.enableCongratulations(GetTypeOfStage(6));
+                        break;
+                    case 7: 
+                        UIManager.enableCongratulations(GetTypeOfStage(7));
+                        break;
+                }
+            }
         } else if (dictionary[currentBucket] > 0 && currentBucket.stage > 1)
         {
             currentBucket.stage = ChangeStage(currentBucket.stage, dictionary[currentBucket]);

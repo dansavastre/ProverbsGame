@@ -14,12 +14,19 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        // GameObject[] buttonAudio = GameObject.FindGameObjectsWithTag("WoodButtonAudio");
         if (WoodButton != null) DontDestroyOnLoad(WoodButton);
-        ConfettiPS = GameObject.Find("Confetti").GetComponent<ParticleSystem>();
-        ProficiencyText = GameObject.Find("Proficiency").GetComponent<TextMeshProUGUI>();
-        ProverbLevelUp.SetActive(false);
-        StartCoroutine(enableCongratulations());
+        if (ProverbLevelUp != null) 
+        {
+            ProverbLevelUp.SetActive(true);
+            ConfettiPS = GameObject.Find("Confetti").GetComponent<ParticleSystem>();
+            ProficiencyText = GameObject.Find("Proficiency").GetComponent<TextMeshProUGUI>();
+            disableCongratulations();
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && (ProverbLevelUp != null)) disableCongratulations();
     }
 
     public void onMouseClick() 
@@ -27,18 +34,16 @@ public class UIManager : MonoBehaviour
         WoodButton.Play();
     }
 
-    IEnumerator enableCongratulations()
+    public void enableCongratulations(string proficiencyText)
     {
-        yield return new WaitForSeconds(2);
         ProverbLevelUp.SetActive(true);
         ConfettiPS.Play();
-        yield return new WaitForSeconds(5);
-        disableCongratulations();
+        ProficiencyText.text = proficiencyText + "!";
     }
 
     public void disableCongratulations()
     {
-        ProverbLevelUp.SetActive(false);
         ConfettiPS.Stop();
+        ProverbLevelUp.SetActive(false);
     }
 }
