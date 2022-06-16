@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 public class Launcher_FIB : MonoBehaviourPunCallbacks {
     public static Launcher_FIB Instance;
 
+    public PhotonView _photon;
+
     [SerializeField] TMP_InputField roomNameInputField_FIB;
     [SerializeField] TMP_Text errorText_FIB;
     [SerializeField] TMP_Text roomNameText_FIB;
@@ -28,9 +30,17 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
         Instance = this;
     }
 
-    void Start() {
+    void Start()
+    {
         Debug.Log("Connecting to Master.");
-        PhotonNetwork.ConnectUsingSettings();
+        if (PhotonNetwork.IsConnected)
+        {
+            OnJoinedRoom();
+        }
+        else
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
 
     public override void OnConnectedToMaster() {
@@ -82,7 +92,7 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     }
 
     public void StartGame() {
-        PhotonNetwork.LoadLevel(1); // TODO: change the level to the actual fill in the blanks multiplayer game mode
+        PhotonNetwork.LoadLevel("FillBlankMultiplayer");
     }
 
     public void LeaveRoom() {

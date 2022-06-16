@@ -15,7 +15,7 @@ public class Proverb
     public string funFact;
 
     public Proverb(string phrase, List<string> keywords, string meaning, string example, string image, 
-    List<string> otherPhrases, List<string> otherKeywords, List<string> otherMeanings, List<string> otherExamples) 
+    List<string> otherPhrases, List<string> otherKeywords, List<string> otherMeanings, List<string> otherExamples, string funFact) 
     {
         this.phrase = phrase;
         this.keywords = keywords;
@@ -26,5 +26,6 @@ public class Proverb
         this.otherKeywords = otherKeywords;
         this.otherMeanings = otherMeanings;
         this.otherExamples = otherExamples;
+        this.funFact = funFact;
     }
 }
