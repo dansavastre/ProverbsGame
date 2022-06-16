@@ -44,7 +44,7 @@ public class ClassesTest
         otherExamples.Add("other example 3");
         
         Proverb proverb = new Proverb("proverb phrase", keywords, "proverb meaning", "proverb example", "proverb image", 
-                            otherPhrases, otherKeywords, otherMeanings, otherExamples);
+                            otherPhrases, otherKeywords, otherMeanings, otherExamples, "funFact");
         Assert.AreEqual("proverb phrase", proverb.phrase);
         Assert.AreEqual("proverb meaning", proverb.meaning);
         Assert.AreEqual("proverb example", proverb.example);
@@ -54,6 +54,7 @@ public class ClassesTest
         Assert.AreEqual(otherPhrases, proverb.otherPhrases);
         Assert.AreEqual(otherMeanings, proverb.otherMeanings);
         Assert.AreEqual(otherExamples, proverb.otherExamples);
+        Assert.AreEqual("funFact", proverb.funFact);
     }
 
     [Test]
