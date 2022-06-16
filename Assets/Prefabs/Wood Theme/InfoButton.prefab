@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 8273886479111321921}
   - component: {fileID: 5410978016729983875}
   m_Layer: 5
-  m_Name: FunFactButtonPrefab
+  m_Name: InfoButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
