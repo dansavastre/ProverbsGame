@@ -304,12 +304,15 @@ public class CoopGame : SingleplayerManager
     //Remove a word from the proverb
     private void RemoveWord(string word, int wordIndex)
     {
+        answerProverb = questionText.text;
         string[] splits = questionText.text.Split(" ");
 
-        splits[wordIndex] = "";
-
-        answerProverb = questionText.text;
+        splits[wordIndex] = splits[wordIndex].Replace(word, "<u>BLANK</u>");
+        
         answerProverb = string.Join(" ", splits);
+        answerProverb = answerProverb.Replace("  ", " ");
+        //remove triple spaces;
+        answerProverb = answerProverb.Replace("  ", " ");
 
         questionText.text = answerProverb;
     }
@@ -342,7 +345,7 @@ public class CoopGame : SingleplayerManager
     {
         answerProverb = questionText.text;
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
-        bool correct = playerProverb.ToLower().Equals(answerProverb.ToLower());
+        bool correct = playerProverb.ToLower().Equals(correctProverb.ToLower());
 
         if (correct)
         {
