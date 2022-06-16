@@ -16,6 +16,8 @@ public class FunFactManager : SingleplayerManager
 {
 
     [SerializeField] private TextMeshProUGUI funFactText;
+    [SerializeField] private TextMeshProUGUI funFactScrollable;
+    [SerializeField] private GameObject scrollBar;
 
     private StorageReference storageRef;
     private string currentImage;
@@ -27,6 +29,10 @@ public class FunFactManager : SingleplayerManager
         nextProverb = SessionManager.proverb;
         newProficiency = SessionManager.proficiency;
         dbReference = SessionManager.dbReferenceStatic;
+
+        // Reset gameobjects
+        funFactText.text = "";
+        scrollBar.SetActive(false);
 
         // Get a reference to the storage service, using the default Firebase App
         storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
@@ -63,8 +69,24 @@ public class FunFactManager : SingleplayerManager
 
     private void DisplayFunFact() 
     {
+        string funFact = nextProverb.funFact;
+
+        //funFact = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
+        //    " Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." +
+        //    " Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." +
+        //    " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
+
         nextQuestionButton.SetActive(true);
         Debug.Log(nextProverb.funFact);
-        funFactText.text = nextProverb.funFact;
+        
+        if(funFact.Length > 210)
+        {
+            scrollBar.SetActive(true);
+            funFactScrollable.text = funFact;
+        }
+        else
+        {
+            funFactText.text = funFact;
+        }
     }
 }

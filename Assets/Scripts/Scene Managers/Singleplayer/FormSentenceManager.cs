@@ -143,7 +143,7 @@ public class FormSentenceManager : SingleplayerManager
             {
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
                 Debug.Log(LastClickedWord);
-
+                //If a keyword inside of the proverb is clicked, remove that keyword from the proverb and create a button
                 if (allWords.Contains(LastClickedWord))
                 {
                     removeWord(LastClickedWord);
@@ -152,6 +152,7 @@ public class FormSentenceManager : SingleplayerManager
         }
     }
 
+    //Check if text is able to be put in the sentence
     public bool canInput(string text, string search)
     {
         int pos = text.IndexOf(search);
@@ -162,12 +163,14 @@ public class FormSentenceManager : SingleplayerManager
         return true;
     }
 
+    //Input a word inside of the proverb
     private void inputWord(string word)
     {
         answerProverb = answerProverb + " " + word;
         questionText.text = answerProverb;
     }
 
+    //Remove a word from the proverb
     private void removeWord(string word)
     {
         Button[] buttons = keywordBoard.GetComponentsInChildren<Button>();
@@ -182,6 +185,7 @@ public class FormSentenceManager : SingleplayerManager
         questionText.text = answerProverb;
     }
 
+    //Function that replaces the first occurance of a string "search" inside of a string "text" with a string "replace"
     public string ReplaceFirst(string text, string search, string replace)
     {
         if (!canInput(answerProverb, search))
@@ -191,6 +195,7 @@ public class FormSentenceManager : SingleplayerManager
         return text.Substring(0, text.IndexOf(search)) + replace + text.Substring(text.IndexOf(search) + search.Length);
     }
 
+    //Detect the press of a button
     public void buttonPressed(int index)
     {
           inputWord(keywordBoard.GetComponentsInChildren<Button>()[index].GetComponentInChildren<TextMeshProUGUI>().text);
