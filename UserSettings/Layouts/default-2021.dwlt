@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 0
-    y: 43
-    width: 1920
-    height: 997
+    x: 863
+    y: 51
+    width: 1056
+    height: 988
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Project
   m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
-  m_Maximized: 1
+  m_Maximized: 0
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -43,12 +43,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 30
-    width: 1920
-    height: 947
+    width: 1056
+    height: 938
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 50
+  controlID: 77
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -64,10 +64,10 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1450
+    x: 671
     y: 0
-    width: 470
-    height: 947
+    width: 385
+    height: 938
   m_MinSize: {x: 276, y: 71}
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 13}
@@ -92,8 +92,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 331
-    height: 688
+    width: 211
+    height: 669
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 14}
@@ -117,15 +117,15 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 688
-    width: 1450
-    height: 259
+    y: 669
+    width: 671
+    height: 269
   m_MinSize: {x: 231, y: 271}
   m_MaxSize: {x: 10001, y: 10021}
   m_ActualView: {fileID: 12}
   m_Panes:
   - {fileID: 12}
-  - {fileID: 17}
+  - {fileID: 16}
   m_Selected: 0
   m_LastSelected: 1
 --- !u!114 &6
@@ -148,8 +148,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
-    height: 997
+    width: 1056
+    height: 988
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_UseTopView: 1
@@ -173,7 +173,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
+    width: 1056
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -194,8 +194,8 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 977
-    width: 1920
+    y: 968
+    width: 1056
     height: 20
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -218,12 +218,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1450
-    height: 947
+    width: 671
+    height: 938
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 51
+  controlID: 61
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -243,12 +243,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1450
-    height: 688
+    width: 671
+    height: 669
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 52
+  controlID: 62
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -264,16 +264,16 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 331
+    x: 211
     y: 0
-    width: 1119
-    height: 688
+    width: 460
+    height: 669
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
-  - {fileID: 16}
+  - {fileID: 17}
   m_Selected: 0
   m_LastSelected: 1
 --- !u!114 &12
@@ -296,10 +296,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 0
-    y: 761
-    width: 1449
-    height: 238
+    x: 863
+    y: 750
+    width: 670
+    height: 248
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -317,22 +317,22 @@ MonoBehaviour:
     m_SkipHidden: 1
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Scenes/Multiplayer
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Scenes/Multiplayer
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: C:\Users\vlad_\Desktop\Software Project\proverbs-game
+  m_LastProjectPath: C:\Users\Elvira\Documents\proverbs-game
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 38}
-    m_SelectedIDs: 46680000
-    m_LastClickedID: 26694
-    m_ExpandedIDs: 00000000ec6700004668000048680000a0690000
+    scrollPos: {x: 0, y: 156}
+    m_SelectedIDs: 1a670000
+    m_LastClickedID: 26394
+    m_ExpandedIDs: 00000000e6660000e8660000ea660000ec660000ee660000f06600001867000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -360,7 +360,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ec670000
+    m_ExpandedIDs: 00000000e6660000e8660000ea660000ec660000ee660000f0660000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -387,7 +387,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -436,10 +436,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1450
-    y: 73
-    width: 469
-    height: 926
+    x: 1534
+    y: 81
+    width: 384
+    height: 917
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -477,10 +477,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 0
-    y: 73
-    width: 330
-    height: 667
+    x: 863
+    y: 81
+    width: 210
+    height: 648
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -488,23 +488,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 5c1bffff
-      m_LastClickedID: -58532
-      m_ExpandedIDs: 881bffff8c1effffca25ffff802bffffe630ffff9235ffffce3effffa242ffff5046ffff1e48ffff0049ffff324affff8c63ffff486bffffd678fffff88fffffc290ffff2a91ffff2a92ffff7c94ffff7e99ffffac9affff82a1ffffb2a3ffffeaa6ffff0aabffff7cafffff04b3ffff92b6ffff20baffffecc0ffff6cc5ffffd0cbfffff0d0ffff38d3ffffb0d7ffff9edbffff00e2ffffb6e5ffff40e7ffff50e8ffff20eaffff90f1ffff82f2ffff48f4ffffd6f9ffff10fbffff9e6800001c6b00003a8d00005e8d0000d09e0000229f00001ea00000d6a0000004aa000028aa00009eb300002cb9000070bd000068c100008cc1000090c90000b4c9000006d300002ad3000040d9000064d90000b8e20000dce2000044e8000068e80000d0ed0000f4ed00005cf3000080f3000036fa00005afa0000c2ff0000e6ff00004e050100720501006a0801008e0801000217010028170100241b01004a1b0100401f010068200100442101009c4e010004590100a068010008960100b6960100ee9c01009ca30100eea3010028a901007aa9010050b60100a2b6010020bd010072bd010012c5010064c5010048ce01009ace010028da0100b4df010006e00100
+      m_SelectedIDs: ee6f0100
+      m_LastClickedID: 94190
+      m_ExpandedIDs: 9c41feff1c42feffd444feff7a45feff2846feff9c53feff7a61feff5465feffe265feff9a70feff3c7dfeffbe91feff4092feff0293feffdc93fefff6b2feffdcbafeff1abbfeff1cbbfeff88d6feff36d7feff68d8feff46d9feff04ddfeffe0defeff2ee0feff96e4feff42e5feff44ebfeffc2ebfeff64f2feff7cf4feffdef4feff5202ffffaa02fffffc02ffff6a05ffffde08ffff6c09ffffbe09ffff080afffff60effff460fffffb013ffff9214ffffe414ffff2e15ffff7815ffffe617ffff9420ffff5621ffff5c2affff102bffff882dffff402effff682fffffe42fffff6230ffffb230ffff0831ffff8631ffff4834ffffca34ffff2635ffffa635fffffa35ffff0870ffff5470ffffa870ffff448bfffff291ffff0e92ffff0293ffffea98ffff849dffffc6a4ffff1aa8ffff68a9ffff52b3ffffe0b7ffff74b8ffff32bcffff80bcffff94c1ffff96c1ffffbac5ffff48c6ffff58c9ffff20caffff6ccaffff14cbffffeccbffff5accffffc8ccffff34cdffff9ecdffff06ceffff70ceffffdcceffff48cfffffb6cfffff0cd0ffff60d0ffffb8d0ffff20d1ffff72d1ffffdad1ffff2ad2ffff7ed2ffffe8d2ffff38d3ffff92d3ffffe4d3ffff36d4ffffeed7ffff74d8ffffd6d8ffff2cd9ffffd6daffffa6dbffffdadcffff44ddffff0adeffff8cdeffffd2e1ffffb2e2ffff72e3ffffb0e3ffff1eeaffffa8f9ffff24fbffffc29a0000069b000096a0000018a10000caa300004ca40000b6b4000038b5000044b60000b0b60000c6b6000014b8000080b8000096b8000034bb0000a2bc0000e8bc000038bd00007cbd00008abd000074bf0000c6bf000016c10000eac3000002c4000092c60000aac600007cc800008cc90000c0c90000dcc90000a8ca0000c0ca000074cc000080cc000094cc0000b2cc000008cd000036d6000042d6000074d6000024e5000096e8000012eb000030ed00002eee0000c6ee000028f300005cf30000e4f3000054f400008af4000020fb000046fc00007cfc0000dcfe000012ff0000120201004003010076030100360601006c060100ae090100c2090100d4090100dc0a01002c0e01002c1001004210010072100100da15010034160100f0160100a21b0100681c0100b61c0100bc1c0100ea1e01004a1f0100c21f0100a223010060240100e0240100cc2601004c27010020290100e22901005a2a0100082c0100b02c0100e02c0100582d01004c3d01007c3d0100f23d01004a44010020520100b45201006e540100425d0100505d01000e630100b86401002e6a0100e06c0100ae6d0100346e0100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: KeywordBoard
-        m_OriginalName: KeywordBoard
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 26854
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 4}
       m_SearchString: 
@@ -534,10 +534,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 331
-    y: 73
-    width: 1117
-    height: 667
+    x: 1074
+    y: 81
+    width: 458
+    height: 648
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -761,9 +761,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 162.74043, y: 322.30017, z: 24.711258}
+    m_Target: {x: 574.42395, y: 892.8881, z: -2.2570024}
     speed: 2
-    m_Value: {x: 162.74043, y: 322.30017, z: 24.711258}
+    m_Value: {x: 548.4338, y: 894.24023, z: -2.6010318}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -814,9 +814,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 340.8965
+    m_Target: 730.11237
     speed: 2
-    m_Value: 340.8965
+    m_Value: 764.51556
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -850,98 +850,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 1
-  m_Script: {fileID: 12015, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
-  m_TitleContent:
-    m_Text: Game
-    m_Image: {fileID: -6423792434712278376, guid: 0000000000000000d000000000000000, type: 0}
-    m_Tooltip: 
-  m_Pos:
-    serializedVersion: 2
-    x: 331
-    y: 73
-    width: 1117
-    height: 667
-  m_ViewDataDictionary: {fileID: 0}
-  m_OverlayCanvas:
-    m_LastAppliedPresetName: Default
-    m_SaveData: []
-  m_SerializedViewNames: []
-  m_SerializedViewValues: []
-  m_PlayModeViewName: GameView
-  m_ShowGizmos: 0
-  m_TargetDisplay: 0
-  m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 363, y: 646}
-  m_TextureFilterMode: 0
-  m_TextureHideFlags: 61
-  m_RenderIMGUI: 1
-  m_EnterPlayModeBehavior: 0
-  m_UseMipMap: 0
-  m_VSyncEnabled: 0
-  m_Gizmos: 0
-  m_Stats: 0
-  m_SelectedSizes: 0000000000000000000000000d000000000000000000000000000000000000000000000000000000
-  m_ZoomArea:
-    m_HRangeLocked: 0
-    m_VRangeLocked: 0
-    hZoomLockedByDefault: 0
-    vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -181.5
-    m_HBaseRangeMax: 181.5
-    m_VBaseRangeMin: -323
-    m_VBaseRangeMax: 323
-    m_HAllowExceedBaseRangeMin: 1
-    m_HAllowExceedBaseRangeMax: 1
-    m_VAllowExceedBaseRangeMin: 1
-    m_VAllowExceedBaseRangeMax: 1
-    m_ScaleWithWindow: 0
-    m_HSlider: 0
-    m_VSlider: 0
-    m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
-    m_EnableSliderZoomHorizontal: 0
-    m_EnableSliderZoomVertical: 0
-    m_UniformScale: 1
-    m_UpDirection: 1
-    m_DrawArea:
-      serializedVersion: 2
-      x: 0
-      y: 21
-      width: 1117
-      height: 646
-    m_Scale: {x: 1, y: 1}
-    m_Translation: {x: 558.5, y: 323}
-    m_MarginLeft: 0
-    m_MarginRight: 0
-    m_MarginTop: 0
-    m_MarginBottom: 0
-    m_LastShownAreaInsideMargins:
-      serializedVersion: 2
-      x: -558.5
-      y: -323
-      width: 1117
-      height: 646
-    m_MinimalGUI: 1
-  m_defaultScale: 1
-  m_LastWindowPixelSize: {x: 1117, y: 667}
-  m_ClearInEditMode: 1
-  m_NoCameraWarning: 1
-  m_LowResolutionForAspectRatios: 01000001000000000000
-  m_XRRenderMode: 0
-  m_RenderTexture: {fileID: 0}
---- !u!114 &17
-MonoBehaviour:
-  m_ObjectHideFlags: 52
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 1
   m_Script: {fileID: 12003, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -953,11 +861,70 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 0
-    y: 761
-    width: 1449
-    height: 238
+    x: 863
+    y: 750
+    width: 670
+    height: 248
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
+--- !u!114 &17
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 13974, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Simulator
+    m_Image: {fileID: 8720083202187608617, guid: 0000000000000000d000000000000000, type: 0}
+    m_Tooltip: 
+  m_Pos:
+    serializedVersion: 2
+    x: 1074
+    y: 81
+    width: 458
+    height: 648
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+  m_SerializedViewNames:
+  - UnityEditor.GameView
+  m_SerializedViewValues:
+  - C:\Users\Elvira\Documents\proverbs-game\Library\PlayModeViewStates\c403dc4defc3581448c031702d83d0f2
+  m_PlayModeViewName: Device Simulator
+  m_ShowGizmos: 0
+  m_TargetDisplay: 0
+  m_ClearColor: {r: 0, g: 0, b: 0, a: 1}
+  m_TargetSize: {x: 1080, y: 1920}
+  m_TextureFilterMode: 0
+  m_TextureHideFlags: 61
+  m_RenderIMGUI: 1
+  m_EnterPlayModeBehavior: 2
+  m_UseMipMap: 0
+  m_SimulatorState:
+    controlPanelVisible: 0
+    controlPanelWidth: 0
+    controlPanelFoldoutKeys:
+    - UnityEditor.DeviceSimulation.ApplicationSettingsPlugin
+    controlPanelFoldoutValues: 00
+    pluginNames:
+    - UnityEditor.DeviceSimulation.ApplicationSettingsPlugin
+    pluginStates:
+    - '{}'
+    scale: 27
+    fitToScreenEnabled: 1
+    rotationDegree: 0
+    highlightSafeAreaEnabled: 0
+    friendlyName: LG Nexus 5
+    networkReachability: 1
+    systemLanguage: 10
