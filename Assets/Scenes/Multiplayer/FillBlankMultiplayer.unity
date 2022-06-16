@@ -589,7 +589,7 @@ MonoBehaviour:
   progressBar: {fileID: 0}
   _photon: {fileID: 1151029734}
   keywordBoard: {fileID: 1151029732}
-  dragDropButtonPrefab: {fileID: 1929956151825164805, guid: af2be71e72734ce4cb057bb4fb9f0526, type: 3}
+  dragDropButtonPrefab: {fileID: 3265820505575547767, guid: f9a2da42e09b114439c8d12d86fedcd8, type: 3}
   canvas: {fileID: 1151029731}
   otherPlayerNames:
   - {fileID: 86398733}
