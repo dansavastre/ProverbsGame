@@ -171,11 +171,11 @@ test-editmode-with-junit-reports:
 #   variables:
 #     BUILD_TARGET: StandaloneOSXUniversal
 
-build-StandaloneWindows64:
-  <<: *build
-  image: $IMAGE:$UNITY_VERSION-windows-mono-$IMAGE_VERSION
-  variables:
-    BUILD_TARGET: StandaloneWindows64
+#build-StandaloneWindows64:
+#  <<: *build
+#  image: $IMAGE:$UNITY_VERSION-windows-mono-$IMAGE_VERSION
+#  variables:
+#    BUILD_TARGET: StandaloneWindows64
 
 # For webgl support, you need to set Compression Format to Disabled for v0.9. See https://github.com/game-ci/docker/issues/75
 #build-WebGL:
