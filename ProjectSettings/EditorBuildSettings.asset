@@ -21,19 +21,19 @@ EditorBuildSettings:
     path: Assets/Scenes/SingleplayerMenu.unity
     guid: 63ddc795d44241743bfb0580af442bed
   - enabled: 1
-    path: Assets/Scenes/Singleplayer/MultipleChoice.unity
+    path: Assets/Scenes/Singleplayer/Gameplay/MultipleChoice.unity
     guid: 86dc8b8eee83f0d47b913e7effb9ce78
   - enabled: 1
-    path: Assets/Scenes/Singleplayer/FillBlanks.unity
+    path: Assets/Scenes/Singleplayer/Gameplay/FillBlanks.unity
     guid: 3ceac13bc2428734d9011e5c46da099f
   - enabled: 1
-    path: Assets/Scenes/Singleplayer/RecognizeImage.unity
+    path: Assets/Scenes/Singleplayer/Gameplay/RecognizeImage.unity
     guid: 62d4742ce6119384983b68a286b11043
   - enabled: 1
-    path: Assets/Scenes/Singleplayer/FormSentence.unity
+    path: Assets/Scenes/Singleplayer/Gameplay/FormSentence.unity
     guid: 4174db22e8f08eb42950f6889ac2391d
   - enabled: 1
-    path: Assets/Scenes/Singleplayer/FunFact.unity
+    path: Assets/Scenes/Singleplayer/Gameplay/FunFact.unity
     guid: bad80b0f2fcd46847bed07f763e65974
   - enabled: 1
     path: Assets/Scenes/Multiplayer/TitleMenu.unity

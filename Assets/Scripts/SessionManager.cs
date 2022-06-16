@@ -33,7 +33,7 @@ public class SessionManager : MonoBehaviour
     public static string playerKey;
 
     // Progress bar
-    public static int maxValue;
+    public static int maxValue = 10; // The number of questions that should be allowed in a single session
     public static int correctAnswers;
 
     private Random random;
@@ -43,8 +43,6 @@ public class SessionManager : MonoBehaviour
     public static Proverb proverb;
     public static Proficiency proficiency;
     public static bool isOnDemandBeforeAnswer;
-
-    private static int SESSION_SIZE = 10; // The number of questions that should be allowed in a single session
 
     public static string[] scenes = 
     {
@@ -194,15 +192,16 @@ public class SessionManager : MonoBehaviour
         allProficiencies.AddRange(playerProficiency.master);
 
         // Initiate ProgressBar
-        maxValue = allProficiencies.Count;
         correctAnswers = 0;
 
         Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
+        Debug.Log("List size pre-shuffle:" + allProficiencies.Count);
 
         allProficiencies = Shuffle(allProficiencies.ToList());
-        ResizeList<Bucket>(allProficiencies, SESSION_SIZE, null); // Resize the list
+        ResizeList<Bucket>(ref allProficiencies, maxValue); // Resize the list
 
         Debug.Log("Post-shuffle: " + LinkedString(allProficiencies));
+        Debug.Log("List size post-shuffle:" + allProficiencies.Count);
 
         // Create a dictionary to keep track of wrong answers
         List<int> ints = new List<int>(new int[allProficiencies.Count]);
@@ -217,23 +216,13 @@ public class SessionManager : MonoBehaviour
      * size - the number of elements that the list should be resized to
      * c - placeholder element for padding the end of the list
      */
-    private void ResizeList<T>(LinkedList<T> list, int size, T c) {
-        T[] arr = new T[size];
-        list.CopyTo(arr, 0);
-
+    private void ResizeList<T>(ref LinkedList<T> list, int size) {
         int curr = list.Count;
         if (size < curr) {
-            // Fill the answer array iteratively
-            for (int i = 0; i < size; ++i) {
-                T element = list.First();
-                list.RemoveFirst();
-                arr[i] = element;
-            }
-
+            T[] arr = list.ToArray();
+            Array.Resize(ref arr, size);
             list = new LinkedList<T>(arr);
         }
-        else if (size > curr)
-            list.AddRange(Enumerable.Repeat(c, size - curr));
     }
 
     // Print for debugging
