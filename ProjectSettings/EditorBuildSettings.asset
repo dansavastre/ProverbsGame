@@ -21,6 +21,12 @@ EditorBuildSettings:
     path: Assets/Scenes/SingleplayerMenu.unity
     guid: 63ddc795d44241743bfb0580af442bed
   - enabled: 1
+    path: Assets/Scenes/Singleplayer/InfoScreen.unity
+    guid: efd42dd8ddd0ebb40ac392151b5a2e62
+  - enabled: 1
+    path: Assets/Scenes/Singleplayer/ProfilePage.unity
+    guid: 480f430189714ff489a8ba1d360d100b
+  - enabled: 1
     path: Assets/Scenes/Singleplayer/Gameplay/MultipleChoice.unity
     guid: 86dc8b8eee83f0d47b913e7effb9ce78
   - enabled: 1
