@@ -290,7 +290,7 @@ public class SessionManager : MonoBehaviour
                 SceneManager.LoadScene("MultipleChoice");
                 break;
             case 6:
-                SceneManager.LoadScene("FillBlanks");
+                SceneManager.LoadScene("FormSentence");
                 break;
             case 7:
                 SceneManager.LoadScene("MultipleChoice");
