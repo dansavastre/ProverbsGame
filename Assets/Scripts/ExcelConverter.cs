@@ -1,5 +1,6 @@
 using Firebase;
 using Firebase.Database;
+using Firebase.Storage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,6 +28,9 @@ public class ExcelConverter : MonoBehaviour
     {
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        // Remove existing proverbs from the database
+        dbReference.Child("proverbs").SetRawJsonValueAsync(JsonUtility.ToJson(string.Empty));
 
         // Fetch the .csv file from the Resources folder
         TextAsset proverbsCSV = Resources.Load<TextAsset>("Proverbs");
