@@ -38,6 +38,7 @@ public class SessionManager : MonoBehaviour
 
     private Random random;
     public static LinkedList<Bucket> allProficiencies;
+    public static List<Bucket> allProficienciesNoFilter;
     public static Dictionary<Bucket, int> dictionary;
 
     public static Proverb proverb;
@@ -175,6 +176,13 @@ public class SessionManager : MonoBehaviour
                 string json = snapshot.GetRawJsonValue();
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
                 newProficiency = JsonUtility.FromJson<Proficiency>(json);
+
+                allProficienciesNoFilter = new List<Bucket>();
+                allProficienciesNoFilter.AddRange(playerProficiency.apprentice);
+                allProficienciesNoFilter.AddRange(playerProficiency.journeyman);
+                allProficienciesNoFilter.AddRange(playerProficiency.expert);
+                allProficienciesNoFilter.AddRange(playerProficiency.master);
+
                 Debug.Log(json);
                 // RemoveTimedProverbs();
                 InitList();

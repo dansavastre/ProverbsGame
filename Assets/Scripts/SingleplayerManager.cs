@@ -37,6 +37,7 @@ public class SingleplayerManager : MonoBehaviour
 
     // Variables
     protected Question currentQuestion;
+    public static List<Bucket> allProficienciesNoFilter;
     private static LinkedList<Bucket> allProficiencies;
     private static Dictionary<Bucket, int> dictionary;
     private bool answeredCorrect;
@@ -61,6 +62,7 @@ public class SingleplayerManager : MonoBehaviour
 
         // Initialize new variables
         allProficiencies = SessionManager.allProficiencies;
+        allProficienciesNoFilter = SessionManager.allProficienciesNoFilter;
         dictionary = SessionManager.dictionary;
         answeredCorrect = false;
         SessionManager.isOnDemandBeforeAnswer = false;
@@ -220,6 +222,8 @@ public class SingleplayerManager : MonoBehaviour
      */
     public void SetCurrentQuestion(string correctAnswer, List<string> wrongAnswers)
     {
+        Debug.Log(wrongAnswers.Count());
+
         answerButtons = new List<Button>();
         // randomize order of the answers with help of numbers
         int[] numbers = new int[wrongAnswers.Count + 1]; // there are 1 + len(other phrases) answers
