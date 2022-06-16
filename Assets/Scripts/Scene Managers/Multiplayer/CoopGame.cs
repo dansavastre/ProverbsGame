@@ -357,17 +357,30 @@ public class CoopGame : SingleplayerManager
      */
     private void CreateButton(int i, string text)
     {
+        int boardRightEdge = (int)keywordBoard.GetComponent<RectTransform>().rect.width;
+        int boardTopEdge = (int)keywordBoard.GetComponent<RectTransform>().rect.height;
+
         Button newButton = Instantiate(dragDropButtonPrefab, keywordBoard, false);
         newButton.GetComponentInChildren<TextMeshProUGUI>().text = text;
-        int xPos = (i % 3 - 1) * 230;
-        int yPos = -(i / 3) * 70;
+
+        int buttonHeight = (int)newButton.GetComponent<RectTransform>().rect.height;
+        int buttonWidth = (int)newButton.GetComponent<RectTransform>().rect.width;
+        int xStart = boardRightEdge / 2 - buttonWidth / 2, yStart = boardTopEdge / 2 - buttonHeight / 2; // Get the starting location of the buttons
+        int row = i % 3 - 1, col = i / 3; // Get the row and the column of the button in the table
+
+        int spaceLength = 25;
+        int widthSpacing = row * spaceLength, heightSpacing = col * spaceLength; // Keep track of the spacing between buttons in the table
+
+        // Compute the final position of the button
+        int xPos = row * buttonWidth + widthSpacing;
+        int yPos = yStart - col * buttonHeight - heightSpacing;
         newButton.transform.localPosition = new Vector3(xPos, yPos);
         newButton.name = "AnswerButton" + i;
+
         // Configure the DragDrop script component of the button
         newButton.GetComponent<DragDrop>().canvas = canvas;
         newButton.GetComponent<DragDrop>().proverbText = questionText;
         newButton.GetComponent<DragDrop>().startingPosition = newButton.transform.localPosition;
-        // newButton.onClick.AddListener(() => buttonPressed(newButton));
         
         if (i >= buttonIndices.Count)
         {
