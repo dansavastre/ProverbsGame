@@ -51,6 +51,7 @@ public class CoopGame : SingleplayerManager
         allWords = new List<string>();
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         proverbs = new List<Proverb>();
+        nextQuestionButton.SetActive(false);
         
         // variables needed here
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
@@ -121,16 +122,16 @@ public class CoopGame : SingleplayerManager
                     if (allKeywordsPerPlayer.ContainsKey(player.NickName))
                     {
                         allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].keywords);
-                        allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
+                        // allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
                     }
                     else
                     {
                         allKeywordsPerPlayer.Add(player.NickName, proverbsSelected[i].keywords);
-                        allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
+                        // allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
                     }
                     
                     allKeywords.AddRange(proverbsSelected[i].keywords); // add keywords to list
-                    allKeywords.AddRange(proverbsSelected[i].otherKeywords);    // add otherKeywords to list  //TODO this is also needed, otherKeywords are repeated twice
+                    // allKeywords.AddRange(proverbsSelected[i].otherKeywords);    // add otherKeywords to list  //TODO this is also needed, otherKeywords are repeated twice
                 }
 
                 // remove the proverbs sent
@@ -324,19 +325,32 @@ public class CoopGame : SingleplayerManager
     public void CheckAnswer()
     {
         answerProverb = questionText.text;
-        string playerProverb = answerProverb.Replace("<u>", "").Replace("<alpha=#00>", "").Replace("</color>", "").Replace("</u>", "");
+        string playerProverb = answerProverb.Replace("<u>", "").Replace("</u>", "");
         Debug.Log(playerProverb);
         bool correct = playerProverb.Equals(correctProverb);
 
         if (correct)
         {
-            LoadNextProverb();
+            resultText.text = "Correct";
+            nextQuestionButton.SetActive(true);
+            checkButton.SetActive(false);
         }
         else
         {
-            StartCoroutine(DisplayFeedbackMulti());
+            resultText.text = "Incorrect";
         }
         // TODO: Disable the ability to click and check new answers
+    }
+
+    /**
+     * <summary>Called when next question button is clicked. Loads the next proverb and resets the scene for it.</summary>
+     */
+    public void NextQuestionButtonClicked()
+    {
+        LoadNextProverb();
+        resultText.text = "";
+        checkButton.SetActive(true);
+        nextProverb.Serialize(false);
     }
 
     /**
@@ -407,13 +421,6 @@ public class CoopGame : SingleplayerManager
             Debug.Log("Everyone's done");
             _photon.RPC("LoadRoomAgain", RpcTarget.All);
         }
-    }
-
-    IEnumerator DisplayFeedbackMulti()
-    {
-        resultText.text = "Incorrect!";
-        yield return new WaitForSeconds(3);
-        resultText.text = "";
     }
 
     /**
