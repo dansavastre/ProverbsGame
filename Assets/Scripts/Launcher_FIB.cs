@@ -87,7 +87,7 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
         for (int i = 0; i < players.Count(); ++i)
             Instantiate(playerListItemPrefab_FIB, playerListContent_FIB).GetComponent<PlayerListItem>().SetUp(players[i]);
 
-        startGameButton_FIB.SetActive((PhotonNetwork.IsMasterClient) && (PhotonNetwork.CurrentRoom.PlayerCount >= 2)); // only the host of the game can start the game
+        startGameButton_FIB.SetActive(PhotonNetwork.IsMasterClient); // only the host of the game can start the game
     }
 
     /**
@@ -103,7 +103,10 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     }
 
     public void StartGame() {
-        PhotonNetwork.LoadLevel("FillBlankMultiplayer");
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        {
+            PhotonNetwork.LoadLevel("FillBlankMultiplayer");
+        }
     }
 
     public void LeaveRoom() {
