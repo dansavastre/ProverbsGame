@@ -84,10 +84,10 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         int wordIndex = TMP_TextUtilities.FindIntersectingWord(proverbText, Input.mousePosition, null);
         string[] splits = proverbText.text.Split(" ");
 
-        if ((wordIndex > -1) && (splits[wordIndex].Contains("<u>BLANK</u>")))
+        if ((wordIndex > -1) && (splits[wordIndex].Contains("<u><alpha=#00>xxxxx</color></u>")))
         {
             Debug.Log(splits[wordIndex]);
-            splits[wordIndex] = Regex.Replace(splits[wordIndex], "<u>BLANK</u>", draggedButtonText, RegexOptions.IgnoreCase);
+            splits[wordIndex] = Regex.Replace(splits[wordIndex], "<u><alpha=#00>xxxxx</color></u>", draggedButtonText, RegexOptions.IgnoreCase);
             proverbText.text = string.Join(" ", splits);
             Destroy(eventData.pointerDrag, 0);
             CoopGame.buttonIndices[CoopGame.buttonIndices.IndexOf(draggedButtonText)] = "";

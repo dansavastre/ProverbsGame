@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Firebase.Extensions;
+using Firebase.Storage;
 using MiniJSON;
 using TMPro;
 using Unity.VisualScripting;
@@ -25,8 +27,11 @@ public class CoopGame : SingleplayerManager
     [SerializeField] private Button dragDropButtonPrefab;
     [SerializeField] private Canvas canvas;
     [SerializeField] private TextMeshProUGUI[] otherPlayerNames;
+    [SerializeField] private GameObject popupPanel;
+    [SerializeField] private GameObject hintButton;
 
     // Variables
+    private DateTime now;
     private int playersDone = 0;
     private static string correctProverb;
     private string answerProverb;
@@ -36,6 +41,8 @@ public class CoopGame : SingleplayerManager
     public static List<string> buttonIndices;
     private List<Proverb> proverbs;
     readonly Random random = new Random();
+    private StorageReference storageRef;
+    private int playerCount;
 
     /**
      * Called before the first frame update
@@ -48,13 +55,16 @@ public class CoopGame : SingleplayerManager
     async void Start()
     {
         // initializations
+        now = DateTime.UtcNow;
         buttonIndices = new List<string>();
         allWords = new List<string>();
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         proverbs = new List<Proverb>();
-        
+        nextQuestionButton.SetActive(false);
+        popupPanel.SetActive(false);
+
         // variables needed here
-        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         int numberOfProverbsPerPlayer = 2;
         int[] randomProverbIndices = {};
         List<DataSnapshot> allProverbs = new List<DataSnapshot>();
@@ -114,10 +124,11 @@ public class CoopGame : SingleplayerManager
                     for (int j = 1; j < Regex.Matches(proverbToAdd.phrase, word).Count; j++)
                     {
                         proverbToAdd.keywords.Add(word);
+                        Debug.Log(word);
                     }
                 }
 
-                proverbsSelected.Add(JsonUtility.FromJson<Proverb>(allProverbs[i].GetRawJsonValue()));
+                proverbsSelected.Add(proverbToAdd);
             }
 
             Dictionary<string, List<string>> allKeywordsPerPlayer = new Dictionary<string, List<string>>(); // keywords with user having them
@@ -134,16 +145,16 @@ public class CoopGame : SingleplayerManager
                     if (allKeywordsPerPlayer.ContainsKey(player.NickName))
                     {
                         allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].keywords);
-                        allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
+                        // allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
                     }
                     else
                     {
                         allKeywordsPerPlayer.Add(player.NickName, proverbsSelected[i].keywords);
-                        allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
+                        // allKeywordsPerPlayer[player.NickName].AddRange(proverbsSelected[i].otherKeywords);   //TODO this is also needed
                     }
                     
                     allKeywords.AddRange(proverbsSelected[i].keywords); // add keywords to list
-                    allKeywords.AddRange(proverbsSelected[i].otherKeywords);    // add otherKeywords to list  //TODO this is also needed, otherKeywords are repeated twice
+                    // allKeywords.AddRange(proverbsSelected[i].otherKeywords);    // add otherKeywords to list  //TODO this is also needed, otherKeywords are repeated twice
                 }
 
                 // remove the proverbs sent
@@ -158,9 +169,9 @@ public class CoopGame : SingleplayerManager
                 allKeywords[i] = allKeywords[randomIndex];
                 allKeywords[randomIndex] = temp;
             }
-            
+
             // Distribute keywords between players
-            if (PhotonNetwork.CountOfPlayers <= 2)
+            if (PhotonNetwork.CurrentRoom.PlayerCount <= 2)
             {
                 SentMyKeywordsToAllPlayers(allKeywords);
             }
@@ -192,8 +203,10 @@ public class CoopGame : SingleplayerManager
         // if no proverbs left, then this player is finished and master should be let known
         if (proverbs.Count == 0)
         {
-            _photon.RPC("PlayerDone", RpcTarget.MasterClient);
             questionText.text = "You are done with your proverbs! Help your teammates finish theirs!";
+            checkButton.SetActive(false);
+            nextQuestionButton.SetActive(false);
+            _photon.RPC("PlayerDone", RpcTarget.MasterClient);
             return;
         }
         Proverb proverb = proverbs.First();
@@ -205,10 +218,36 @@ public class CoopGame : SingleplayerManager
         // Set blank spaces in the proverb based on the keywords
         foreach (string v in buttonsToCreateWords)
         {
-            answerProverb = Regex.Replace(answerProverb, v, "<u>BLANK</u>", RegexOptions.IgnoreCase);
+            answerProverb = Regex.Replace(answerProverb, v, "<u><alpha=#00>xxxxx</color></u>", RegexOptions.IgnoreCase);
         }
 
         questionText.text = answerProverb;
+        popupPanel.SetActive(false);
+        
+        // getting image from database and setting it
+        // Get a reference to the storage service, using the default Firebase App
+        storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
+
+        // Reference for retrieving an image
+        StorageReference imageRef = storageRef.Child("proverbs/" + proverb.image);
+            
+        const long maxAllowedSize = 1 * 1024 * 1024;
+        byte[] fileContents;
+        imageRef.GetBytesAsync(maxAllowedSize).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                Debug.LogError("Task (get image byte array) could not be completed.");
+                return;
+            }
+            else if (task.IsCompleted)
+            {
+                fileContents = task.Result;
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(fileContents);
+                popupPanel.GetComponentInChildren<RawImage>().texture = tex;
+            }
+        });
     }
     
     /**
@@ -223,18 +262,35 @@ public class CoopGame : SingleplayerManager
 
             if (wordIndex != -1)
             {
+                
+
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
 
                 string[] splits = questionText.text.Split(" ");
 
+                bool isKeyword = false;
+
+                foreach (string word in allWords)
+                {
+                    if (splits[wordIndex].Contains(word))
+                    {
+                        isKeyword = true;
+                        LastClickedWord = word;
+                    }
+                }
+
                 //If a keyword inside of the proverb is clicked, remove that keyword from the proverb and create a button
-                if ((wordIndex > -1) && (allWords.Contains(splits[wordIndex])))
+                if ((wordIndex > -1) && (isKeyword))
                 {
                     RemoveWord(LastClickedWord, wordIndex);
                     CreateButtonForKeyword(LastClickedWord);
                 }
-
             }
+        }
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount < playerCount)
+        {
+            StartCoroutine(endGame("A player has unfortunately left your game... Moving you back to the lobby..."));
         }
     }
     
@@ -253,6 +309,7 @@ public class CoopGame : SingleplayerManager
      */
     private void SentMyKeywordsToAllPlayers(List<string> myKeywords)
     {
+        Debug.Log("SentMyKeywordsToAllPlayers");
         int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount;
         int i = 0;
         foreach (string keyword in myKeywords)
@@ -270,12 +327,14 @@ public class CoopGame : SingleplayerManager
      */
     private void SentMyKeywordsToOtherPlayers(List<string> myKeywords, Dictionary<string, List<string>> allKeywordsPerPlayer)
     {
+        Debug.Log("SentMyKeywordsToOtherPlayers");
         int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount;
         int i = 0;
         foreach (string keyword in myKeywords)
         {
             var playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
-            while (allKeywordsPerPlayer[playerToSendTo.NickName].Contains(keyword))
+
+            while (allKeywordsPerPlayer[playerToSendTo.NickName].Contains(keyword)) // TODO what if all players have the specific keyword?
             {
                 i++;
                 playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
@@ -299,7 +358,7 @@ public class CoopGame : SingleplayerManager
     // private void inputWord(string word)
     // {
     //     word = "<u><b>" + word + "</u></b>";
-    //     answerProverb = ReplaceFirst(answerProverb, "<u>BLANK</u>", word);
+    //     answerProverb = ReplaceFirst(answerProverb, "<u><alpha=#00>xxxxx</color></u>", word);
     //     questionText.text = answerProverb;
     // }
 
@@ -309,7 +368,7 @@ public class CoopGame : SingleplayerManager
         answerProverb = questionText.text;
         string[] splits = questionText.text.Split(" ");
 
-        splits[wordIndex] = splits[wordIndex].Replace(word, "<u>BLANK</u>");
+        splits[wordIndex] = splits[wordIndex].Replace(word, "<u><alpha=#00>xxxxx</color></u>");
         
         answerProverb = string.Join(" ", splits);
         answerProverb = answerProverb.Replace("  ", " ");
@@ -332,7 +391,7 @@ public class CoopGame : SingleplayerManager
     // public void buttonPressed(Button button)
     // {
     //     Debug.Log("here");
-    //     if(canInput(answerProverb, "<u>BLANK</u>"))
+    //     if(canInput(answerProverb, "<u><alpha=#00>xxxxx</color></u>"))
     //     {
     //         string buttonText = button.GetComponentInChildren<TextMeshProUGUI>().text;
     //         inputWord(buttonText);
@@ -346,18 +405,31 @@ public class CoopGame : SingleplayerManager
     public void CheckAnswer()
     {
         answerProverb = questionText.text;
-        string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
+        string playerProverb = answerProverb.Replace("<u>", "").Replace("</u>", "");
         bool correct = playerProverb.ToLower().Equals(correctProverb.ToLower());
 
         if (correct)
         {
-            LoadNextProverb();
+            resultText.text = "Correct";
+            nextQuestionButton.SetActive(true);
+            checkButton.SetActive(false);
         }
         else
         {
-            StartCoroutine(DisplayFeedbackMulti());
+            resultText.text = "Incorrect";
         }
         // TODO: Disable the ability to click and check new answers
+    }
+
+    /**
+     * <summary>Called when next question button is clicked. Loads the next proverb and resets the scene for it.</summary>
+     */
+    public void NextQuestionButtonClicked()
+    {
+        LoadNextProverb();
+        resultText.text = "";
+        checkButton.SetActive(true);
+        nextQuestionButton.SetActive(false);
     }
 
     /**
@@ -430,11 +502,14 @@ public class CoopGame : SingleplayerManager
         }
     }
 
-    IEnumerator DisplayFeedbackMulti()
+    IEnumerator endGame(string message)
     {
-        resultText.text = "Incorrect!";
+        checkButton.SetActive(false);
+        nextQuestionButton.SetActive(false);
+        questionText.text = message;
+        PhotonNetwork.CurrentRoom.IsVisible = true;
         yield return new WaitForSeconds(3);
-        resultText.text = "";
+        SceneManager.LoadScene("FillInBlanks");
     }
 
     /**
@@ -443,6 +518,20 @@ public class CoopGame : SingleplayerManager
     [PunRPC]
     private void LoadRoomAgain()
     {
-        PhotonNetwork.LoadLevel("FillInBlanks");
+        double seconds = Math.Round((DateTime.UtcNow - now).TotalSeconds, 2);
+        StartCoroutine(endGame("Good job! You finished all of the proverbs in: " + seconds + " seconds! Moving you to the lobby..."));
+    }
+
+    public void changePopUpState()
+    {
+        if (hintButton.GetComponentInChildren<TextMeshProUGUI>().text.Contains("Show"))
+        {
+            hintButton.GetComponentInChildren<TextMeshProUGUI>().text = "Hide Picture";
+        }
+        else
+        {
+            hintButton.GetComponentInChildren<TextMeshProUGUI>().text = "Show Picture";
+        }
+        popupPanel.SetActive(!popupPanel.activeSelf);
     }
 }
