@@ -262,12 +262,25 @@ public class CoopGame : SingleplayerManager
 
             if (wordIndex != -1)
             {
+                
+
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
 
                 string[] splits = questionText.text.Split(" ");
 
+                bool isKeyword = false;
+
+                foreach (string word in allWords)
+                {
+                    if (splits[wordIndex].Contains(word))
+                    {
+                        isKeyword = true;
+                        LastClickedWord = word;
+                    }
+                }
+
                 //If a keyword inside of the proverb is clicked, remove that keyword from the proverb and create a button
-                if ((wordIndex > -1) && (allWords.Contains(splits[wordIndex])))
+                if ((wordIndex > -1) && (isKeyword))
                 {
                     RemoveWord(LastClickedWord, wordIndex);
                     CreateButtonForKeyword(LastClickedWord);
