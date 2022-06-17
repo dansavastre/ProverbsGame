@@ -180,6 +180,9 @@ public class FormSentenceManager : SingleplayerManager
     private void inputWord(string word)
     {
         answerProverb = answerProverb + " " + word;
+        answerProverb = answerProverb.Replace("  ", " ");
+        //remove triple spaces;
+        answerProverb = answerProverb.Replace("  ", " ");
         questionText.text = answerProverb;
     }
 

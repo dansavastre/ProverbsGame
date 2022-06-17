@@ -374,10 +374,10 @@ public class SingleplayerManager : MonoBehaviour
         switch (currentBucket.stage)
         {
             case 1:
-                SceneManager.LoadScene("RecognizeImage");
+                SceneManager.LoadScene("MultipleChoice");
                 break;
             case 2:
-                SceneManager.LoadScene("MultipleChoice");
+                SceneManager.LoadScene("RecognizeImage");
                 break;
             case 3:
                 SceneManager.LoadScene("MultipleChoice");
@@ -392,7 +392,8 @@ public class SingleplayerManager : MonoBehaviour
                 SceneManager.LoadScene("FormSentence");
                 break;
             case 7:
-                SceneManager.LoadScene("MultipleChoice");
+                Debug.Log("Stage 7 encountered!");
+                QuitSession();
                 break;
             default:
                 string json = JsonUtility.ToJson(newProficiency);
