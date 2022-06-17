@@ -297,10 +297,10 @@ public class SessionManager : MonoBehaviour
         switch (bucket.stage)
         {
             case 1:
-                SceneManager.LoadScene("RecognizeImage");
+                SceneManager.LoadScene("MultipleChoice");
                 break;
             case 2:
-                SceneManager.LoadScene("MultipleChoice");
+                SceneManager.LoadScene("RecognizeImage");
                 break;
             case 3:
                 SceneManager.LoadScene("MultipleChoice");
@@ -315,7 +315,7 @@ public class SessionManager : MonoBehaviour
                 SceneManager.LoadScene("FillBlanks");
                 break;
             case 7:
-                SceneManager.LoadScene("MultipleChoice");
+                Debug.Log("Stage 7 encountered!");
                 break;
             default:
                 Debug.Log("No proverbs available.");
