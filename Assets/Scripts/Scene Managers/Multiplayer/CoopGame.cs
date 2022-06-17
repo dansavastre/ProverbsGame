@@ -42,6 +42,7 @@ public class CoopGame : SingleplayerManager
     private List<Proverb> proverbs;
     readonly Random random = new Random();
     private StorageReference storageRef;
+    private int playerCount;
 
     /**
      * Called before the first frame update
@@ -63,7 +64,7 @@ public class CoopGame : SingleplayerManager
         popupPanel.SetActive(false);
 
         // variables needed here
-        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         int numberOfProverbsPerPlayer = 2;
         int[] randomProverbIndices = {};
         List<DataSnapshot> allProverbs = new List<DataSnapshot>();
@@ -273,6 +274,11 @@ public class CoopGame : SingleplayerManager
                 }
             }
         }
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount < playerCount)
+        {
+            StartCoroutine(endGame("A player has unfortunately left your game... Moving you back to the lobby..."));
+        }
     }
     
     /**
@@ -465,11 +471,6 @@ public class CoopGame : SingleplayerManager
         allWords.Add(text);
     }
 
-    void OnApplicationQuit()
-    {
-        _photon.RPC("PlayerLeft", RpcTarget.All);
-    }
-
     /**
      * <summary>Function to be called when any player is finished. This function is only called in the Master's CoopGame class.</summary>
      */
@@ -485,17 +486,14 @@ public class CoopGame : SingleplayerManager
         }
     }
 
-    [PunRPC]
-    private void PlayerLeft()
-    {
-        StartCoroutine(endGame("A player has unfortunately left your game... Moving you back to the lobby..."));
-    }
-
     IEnumerator endGame(string message)
     {
+        checkButton.SetActive(false);
+        nextQuestionButton.SetActive(false);
         questionText.text = message;
-        yield return new WaitForSeconds(5);
-        PhotonNetwork.LoadLevel("FillInBlanks");
+        PhotonNetwork.CurrentRoom.IsVisible = true;
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene("FillInBlanks");
     }
 
     /**
