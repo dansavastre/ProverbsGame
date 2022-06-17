@@ -26,6 +26,7 @@ public class CoopGame : SingleplayerManager
     [SerializeField] private TextMeshProUGUI[] otherPlayerNames;
 
     // Variables
+    private DateTime now;
     private int playersDone = 0;
     private static string correctProverb;
     private string answerProverb;
@@ -47,6 +48,7 @@ public class CoopGame : SingleplayerManager
     async void Start()
     {
         // initializations
+        now = DateTime.UtcNow;
         buttonIndices = new List<string>();
         allWords = new List<string>();
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
@@ -54,7 +56,7 @@ public class CoopGame : SingleplayerManager
         
         // variables needed here
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        int numberOfProverbsPerPlayer = 2;
+        int numberOfProverbsPerPlayer = 1;
         int[] randomProverbIndices = {};
         List<DataSnapshot> allProverbs = new List<DataSnapshot>();
 
@@ -179,8 +181,8 @@ public class CoopGame : SingleplayerManager
         // if no proverbs left, then this player is finished and master should be let known
         if (proverbs.Count == 0)
         {
-            _photon.RPC("PlayerDone", RpcTarget.MasterClient);
             questionText.text = "You are done with your proverbs! Help your teammates finish theirs!";
+            _photon.RPC("PlayerDone", RpcTarget.MasterClient);
             return;
         }
         Proverb proverb = proverbs.First();
@@ -393,6 +395,11 @@ public class CoopGame : SingleplayerManager
         allWords.Add(text);
     }
 
+    void OnApplicationQuit()
+    {
+        _photon.RPC("PlayerLeft", RpcTarget.All);
+    }
+
     /**
      * <summary>Function to be called when any player is finished. This function is only called in the Master's CoopGame class.</summary>
      */
@@ -408,6 +415,19 @@ public class CoopGame : SingleplayerManager
         }
     }
 
+    [PunRPC]
+    private void PlayerLeft()
+    {
+        StartCoroutine(endGame("A player has unfortunately left your game... Moving you back to the lobby..."));
+    }
+
+    IEnumerator endGame(string message)
+    {
+        questionText.text = message;
+        yield return new WaitForSeconds(5);
+        PhotonNetwork.LoadLevel("FillInBlanks");
+    }
+
     IEnumerator DisplayFeedbackMulti()
     {
         resultText.text = "Incorrect!";
@@ -421,6 +441,7 @@ public class CoopGame : SingleplayerManager
     [PunRPC]
     private void LoadRoomAgain()
     {
-        PhotonNetwork.LoadLevel("FillInBlanks");
+        double seconds = Math.Round((DateTime.UtcNow - now).TotalSeconds, 2);
+        StartCoroutine(endGame("Good job! You finished all of the proverbs in: " + seconds + " seconds! Moving you to the lobby..."));
     }
 }
