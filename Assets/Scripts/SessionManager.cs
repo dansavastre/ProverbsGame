@@ -28,17 +28,19 @@ public class SessionManager : MonoBehaviour
 
     // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
+    public static Proficiency playerProficiencyNoFilter;
     public static Proficiency newProficiency;
     public static string playerEmail;
     public static string playerName;
     public static string playerKey;
 
     // Progress bar
-    public static int maxValue;
+    public static int maxValue = 10; // The number of questions that should be allowed in a single session
     public static int correctAnswers;
 
     private Random random;
     public static LinkedList<Bucket> allProficiencies;
+    public static List<Bucket> allProficienciesNoFilter;
     public static Dictionary<Bucket, int> dictionary;
 
     public static Proverb proverb;
@@ -72,6 +74,7 @@ public class SessionManager : MonoBehaviour
     {
         // Reset the player proficiency
         playerProficiency = null;
+        playerProficiencyNoFilter = null;
         newProficiency = null;
         playerEmail = AccountManager.playerEmail;
         playerName = AccountManager.playerName;
@@ -124,10 +127,10 @@ public class SessionManager : MonoBehaviour
     // Displays the number of proverbs in each proficiency bucket
     private void DisplayProverbCount() 
     {
-        ApprenticeCount.text = playerProficiency.apprentice.Count.ToString();
-        JourneymanCount.text = playerProficiency.journeyman.Count.ToString();
-        ExpertCount.text = playerProficiency.expert.Count.ToString();
-        MasterCount.text = playerProficiency.master.Count.ToString();
+        ApprenticeCount.text = playerProficiencyNoFilter.apprentice.Count.ToString();
+        JourneymanCount.text = playerProficiencyNoFilter.journeyman.Count.ToString();
+        ExpertCount.text = playerProficiencyNoFilter.expert.Count.ToString();
+        MasterCount.text = playerProficiencyNoFilter.master.Count.ToString();
     }
 
     // Fetches the key of the current player
@@ -182,9 +185,11 @@ public class SessionManager : MonoBehaviour
                 // Convert the JSON back to a Proficiency object
                 string json = snapshot.GetRawJsonValue();
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
+                playerProficiencyNoFilter = JsonUtility.FromJson<Proficiency>(json);
                 newProficiency = JsonUtility.FromJson<Proficiency>(json);
+
                 Debug.Log(json);
-                // RemoveTimedProverbs();
+                //RemoveTimedProverbs();
                 InitList();
             }
         });
@@ -199,20 +204,45 @@ public class SessionManager : MonoBehaviour
         allProficiencies.AddRange(playerProficiency.expert);
         allProficiencies.AddRange(playerProficiency.master);
 
+        // Add all proficiences to a list which is not to be filtered
+        allProficienciesNoFilter = new List<Bucket>();
+        allProficienciesNoFilter.AddRange(playerProficiency.apprentice);
+        allProficienciesNoFilter.AddRange(playerProficiency.journeyman);
+        allProficienciesNoFilter.AddRange(playerProficiency.expert);
+        allProficienciesNoFilter.AddRange(playerProficiency.master);
+
         // Initiate ProgressBar
-        maxValue = allProficiencies.Count;
         correctAnswers = 0;
 
         Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
+        Debug.Log("List size pre-shuffle:" + allProficiencies.Count);
 
         allProficiencies = Shuffle(allProficiencies.ToList());
+        ResizeList<Bucket>(ref allProficiencies, maxValue); // Resize the list
 
         Debug.Log("Post-shuffle: " + LinkedString(allProficiencies));
+        Debug.Log("List size post-shuffle:" + allProficiencies.Count);
 
         // Create a dictionary to keep track of wrong answers
         List<int> ints = new List<int>(new int[allProficiencies.Count]);
         dictionary = new Dictionary<Bucket, int>(allProficiencies
         .Zip(ints, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v));
+    }
+
+    /**
+     * Method for resizing a list to the desired size.
+     * 
+     * list - the list to be resized
+     * size - the number of elements that the list should be resized to
+     * c - placeholder element for padding the end of the list
+     */
+    private void ResizeList<T>(ref LinkedList<T> list, int size) {
+        int curr = list.Count;
+        if (size < curr) {
+            T[] arr = list.ToArray();
+            Array.Resize(ref arr, size);
+            list = new LinkedList<T>(arr);
+        }
     }
 
     // Print for debugging

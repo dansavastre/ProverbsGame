@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
+using System.Text.RegularExpressions;
 
 public class FillBlanksManager : SingleplayerManager
 {
@@ -20,7 +21,7 @@ public class FillBlanksManager : SingleplayerManager
 
     // Stores information fetched from the database
     private StorageReference storageRef;
-    private string currentImage;
+    private string currentImage; 
     private byte[] fileContents;
 
     // Variables
@@ -91,9 +92,17 @@ public class FillBlanksManager : SingleplayerManager
         allWords = nextProverb.keywords;
         allWords.AddRange(nextProverb.otherKeywords);
 
-        foreach (string v in nextProverb.keywords)
+        List<string> keyWordsClone = nextProverb.keywords.Select(item => (string)item.Clone()).ToList();
+
+        foreach (string v in keyWordsClone)
         {
-            answerProverb = answerProverb.Replace(v, "...");
+
+            for (int i = 1; i < Regex.Matches(nextProverb.phrase, v).Count; i++)
+            {
+                nextProverb.keywords.Add(v);
+            }
+
+            answerProverb = Regex.Replace(answerProverb, v, "<u>BLANK</u>", RegexOptions.IgnoreCase);
         }
 
         // Shuffling list of words
@@ -145,10 +154,24 @@ public class FillBlanksManager : SingleplayerManager
             {
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
                 Debug.Log(LastClickedWord);
+
                 //If a keyword inside of the proverb is clicked, remove that keyword from the proverb and create a button
-                if (allWords.Contains(LastClickedWord))
+                string[] splits = questionText.text.Split(" ");
+
+                bool isKeyword = false;
+
+                foreach  (string word in allWords)
                 {
-                    removeWord(LastClickedWord);
+                    if (splits[wordIndex].Contains(word))
+                    {
+                        isKeyword = true;
+                        LastClickedWord = word;
+                    }
+                }
+
+                if ((wordIndex > -1) && (isKeyword))
+                {
+                    removeWord(LastClickedWord, wordIndex);
                 }
             }
         }
@@ -168,22 +191,31 @@ public class FillBlanksManager : SingleplayerManager
     //Input a word inside of the proverb
     private void inputWord(string word)
     {
+        Debug.Log(answerProverb);
+        
         word = "<u><b>" + word + "</u></b>";
-        answerProverb = ReplaceFirst(answerProverb, "...", word);
+        answerProverb = ReplaceFirst(answerProverb, "<u>BLANK</u>", word);
+        Debug.Log(answerProverb);
         questionText.text = answerProverb;
     }
 
     //Remove a word from the proverb
-    private void removeWord(string word)
+    private void removeWord(string word, int wordIndex)
     {
         Button[] buttons = keywordBoard.GetComponentsInChildren<Button>();
         for(int i = 0 ; i < buttons.Length; i++) {
             if(buttons[i].GetComponentInChildren<TextMeshProUGUI>().text.Equals(word)) {
                 buttons[i].interactable = true;
+                break;
             }
         }
-        word = "<u><b>" + word + "</u></b>";
-        answerProverb = ReplaceFirst(answerProverb, word, "...");
+        answerProverb = questionText.text;
+        string[] splits = questionText.text.Split(" ");
+
+        splits[wordIndex] = splits[wordIndex].Replace(word, "<u>BLANK</u>");
+        
+        answerProverb = string.Join(" ", splits);
+
         questionText.text = answerProverb;
     }
 
@@ -200,7 +232,7 @@ public class FillBlanksManager : SingleplayerManager
     //Detect the press of a button
     public void buttonPressed(int index)
     {
-        if(canInput(answerProverb, "...")) 
+        if(canInput(answerProverb, "<u>BLANK</u>")) 
         {
             inputWord(keywordBoard.GetComponentsInChildren<Button>()[index].GetComponentInChildren<TextMeshProUGUI>().text);
             keywordBoard.GetComponentsInChildren<Button>()[index].interactable = false;
@@ -211,7 +243,11 @@ public class FillBlanksManager : SingleplayerManager
     public void CheckAnswer()
     {
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
-        DisplayFeedback(playerProverb.Equals(correctProverb));
+
+        Debug.Log(correctProverb.ToLower().Replace(" ", ""));
+        Debug.Log(playerProverb.ToLower());
+
+        DisplayFeedback(playerProverb.ToLower().Equals(correctProverb.ToLower()));
         if (continueOverlay != null) continueOverlay.SetActive(true);
         image.enabled = true;
         // TODO: Disable the ability to click new answers
