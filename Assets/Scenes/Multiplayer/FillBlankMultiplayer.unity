@@ -290,6 +290,41 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7621868297547622750, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
   m_PrefabInstance: {fileID: 75835176}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &75835179
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75835177}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3f8f51e1476672745aa7da8c5007b4ed, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!111 &75835180
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75835177}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &105648760 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6314567295258596421, guid: 5ffcb38efe735a94eb699e8365736158, type: 3}
@@ -604,7 +639,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1748840966593167841, guid: a438d03717113e64381ee9783a1a79fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1748840966593167842, guid: a438d03717113e64381ee9783a1a79fc, type: 3}
       propertyPath: m_Pivot.x
@@ -980,7 +1015,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1748840966593167841, guid: a438d03717113e64381ee9783a1a79fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1748840966593167842, guid: a438d03717113e64381ee9783a1a79fc, type: 3}
       propertyPath: m_Pivot.x
@@ -1113,7 +1148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1748840966593167841, guid: a438d03717113e64381ee9783a1a79fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1748840966593167842, guid: a438d03717113e64381ee9783a1a79fc, type: 3}
       propertyPath: m_Pivot.x
@@ -1279,7 +1314,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1420758456
 RectTransform:
   m_ObjectHideFlags: 0
