@@ -74,11 +74,11 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
 
         if (PhotonNetwork.PlayerList.Count() >= 4)
         {
-            PhotonNetwork.CurrentRoom.IsVisible = true;
+            PhotonNetwork.CurrentRoom.IsVisible = false;
         }
         else
         {
-            PhotonNetwork.CurrentRoom.IsVisible = false;
+            PhotonNetwork.CurrentRoom.IsVisible = true;
         }
 
         Photon.Realtime.Player[] players = PhotonNetwork.PlayerList;
