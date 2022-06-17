@@ -11,8 +11,7 @@ using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using Random = System.Random;
 
-public class SessionManager : MonoBehaviour
-{
+public class SessionManager : MonoBehaviour {
     // UI elements
     [SerializeField] public TextMeshProUGUI ApprenticeCount;
     [SerializeField] public TextMeshProUGUI JourneymanCount;
@@ -45,7 +44,7 @@ public class SessionManager : MonoBehaviour
     public static Proficiency proficiency;
     public static bool isOnDemandBeforeAnswer;
 
-    public static string[] scenes = 
+    public static string[] scenes =
     {
         "FirstScreen",          // First screen on app launch
         "Register",             // Screen to register
@@ -54,10 +53,10 @@ public class SessionManager : MonoBehaviour
         "SingleplayerMenu",     // Singleplayer menu
         "TitleMenu",            // Multiplayer menu
         "InfoScreen",           // Information page
-        "ProfilePage"           // Profile page
+        "ProfilePage"          // Profile page
     };
 
-    private TimeSpan[] waitingPeriod = 
+    private TimeSpan[] waitingPeriod =
     {
         new TimeSpan(),             // Always
         new TimeSpan(2, 0, 0),      // After 2 hours
@@ -68,8 +67,7 @@ public class SessionManager : MonoBehaviour
     };
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         // Reset the player proficiency
         playerProficiency = null;
         newProficiency = null;
@@ -86,27 +84,21 @@ public class SessionManager : MonoBehaviour
         dbReferenceStatic = dbReference;
 
         // Make the button inactive
-        if (playerEmail == null)
-        {
+        if (playerEmail == null) {
             Debug.Log("No email was given, returning to first screen.");
             SwitchScene(0);
-        }
-        else
-        {
+        } else {
             GetPlayerKey();
         }
     }
 
-    public void PlonkNoise()
-    {
+    public void PlonkNoise() {
         WoodButton.Play();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (playerProficiency != null)
-        {
+    void Update() {
+        if (playerProficiency != null) {
             // Make the button active
             SessionButton.gameObject.SetActive(true);
 
@@ -122,8 +114,7 @@ public class SessionManager : MonoBehaviour
     }
 
     // Displays the number of proverbs in each proficiency bucket
-    private void DisplayProverbCount() 
-    {
+    private void DisplayProverbCount() {
         ApprenticeCount.text = playerProficiency.apprentice.Count.ToString();
         JourneymanCount.text = playerProficiency.journeyman.Count.ToString();
         ExpertCount.text = playerProficiency.expert.Count.ToString();
@@ -131,28 +122,23 @@ public class SessionManager : MonoBehaviour
     }
 
     // Fetches the key of the current player
-    public void GetPlayerKey()
-    {
+    public void GetPlayerKey() {
         // Reset the player proficiency
         playerProficiency = null;
         newProficiency = null;
         //email = playerEmail.text;
         // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(playerEmail)
-        .ValueChanged += (object sender, ValueChangedEventArgs args) =>
-        {
-            if (args.DatabaseError != null)
-            {
+        .ValueChanged += (object sender, ValueChangedEventArgs args) => {
+            if (args.DatabaseError != null) {
                 Debug.LogError(args.DatabaseError.Message);
                 return;
             }
 
             // Check to see if there is at least one result
-            if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
-            {
+            if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0) {
                 // Unity does not know we expect exactly one result, so we must iterate 
-                foreach (var childSnapshot in args.Snapshot.Children)
-                {
+                foreach (var childSnapshot in args.Snapshot.Children) {
                     // Get the key of the current database entry
                     playerKey = childSnapshot.Key;
                     Debug.Log(childSnapshot.Key);
@@ -164,19 +150,14 @@ public class SessionManager : MonoBehaviour
     }
 
     // Fetches the proficiency of a player 
-    private void GetPlayerProficiencies()
-    {
+    private void GetPlayerProficiencies() {
         // Goes to the 'proficiencies' database table and searches for the key
         dbReference.Child("proficiencies").Child(playerKey)
-        .GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsFaulted)
-            {
+        .GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted) {
                 Debug.LogError("Task could not be completed.");
                 return;
-            }
-            else if (task.IsCompleted)
-            {
+            } else if (task.IsCompleted) {
                 // Take a snapshot of the database entry
                 DataSnapshot snapshot = task.Result;
                 // Convert the JSON back to a Proficiency object
@@ -190,8 +171,7 @@ public class SessionManager : MonoBehaviour
         });
     }
 
-    private void InitList()
-    {
+    private void InitList() {
         // Add all proficiencies to one list
         allProficiencies = new LinkedList<Bucket>();
         allProficiencies.AddRange(playerProficiency.apprentice);
@@ -216,22 +196,18 @@ public class SessionManager : MonoBehaviour
     }
 
     // Print for debugging
-    private string LinkedString(LinkedList<Bucket> list)
-    {
+    private string LinkedString(LinkedList<Bucket> list) {
         string result = "[";
-        foreach (Bucket b in list)
-        {
+        foreach (Bucket b in list) {
             result += "{Key: " + b.key + ", Stage: " + b.stage + "}, ";
         }
         return result + "]";
     }
 
     // Randomly shuffle the items in the given list
-    private LinkedList<T> Shuffle<T>(IList<T> list)
-    {
+    private LinkedList<T> Shuffle<T>(IList<T> list) {
         int n = list.Count;
-        while (n > 1)
-        {
+        while (n > 1) {
             n--;
             int k = random.Next(n + 1);
             (list[k], list[n]) = (list[n], list[k]);
@@ -240,8 +216,7 @@ public class SessionManager : MonoBehaviour
     }
 
     // Remove proverbs from the session list that have been questioned recently
-    private void RemoveTimedProverbs()
-    {
+    private void RemoveTimedProverbs() {
         playerProficiency.apprentice = LoopProverbs(playerProficiency.apprentice);
         playerProficiency.journeyman = LoopProverbs(playerProficiency.journeyman);
         playerProficiency.expert = LoopProverbs(playerProficiency.expert);
@@ -249,17 +224,14 @@ public class SessionManager : MonoBehaviour
     }
 
     // Loops over the given list and adds buckets to the result that have passed the waiting period
-    private List<Bucket> LoopProverbs(List<Bucket> list)
-    {
-        List<Bucket> result = new List<Bucket>{};
-        foreach (Bucket b in list)
-        {
+    private List<Bucket> LoopProverbs(List<Bucket> list) {
+        List<Bucket> result = new List<Bucket> { };
+        foreach (Bucket b in list) {
             DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             date = date.AddMilliseconds(b.timestamp);
             TimeSpan interval = DateTime.Now - date;
             Debug.Log("Timestamp: " + b.timestamp + ", Date: " + date.ToString());
-            if (interval.CompareTo(waitingPeriod[b.stage - 1]) >= 0) 
-            {
+            if (interval.CompareTo(waitingPeriod[b.stage - 1]) >= 0) {
                 result.Add(b);
                 Debug.Log("Added: " + b.key);
             }
@@ -269,11 +241,9 @@ public class SessionManager : MonoBehaviour
 
     // Load the first question 
     // TODO: fix duplicate code with LoadScene() in SingleplayerManager
-    public void NextScene()
-    {
+    public void NextScene() {
         Bucket bucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;
-        switch (bucket.stage)
-        {
+        switch (bucket.stage) {
             case 1:
                 SceneManager.LoadScene("RecognizeImage");
                 break;
@@ -302,8 +272,7 @@ public class SessionManager : MonoBehaviour
     }
 
     // Switch to the scene corresponding to the sceneIndex
-    public void SwitchScene(int sceneIndex)
-    {
+    public void SwitchScene(int sceneIndex) {
         SceneManager.LoadScene(scenes[sceneIndex]);
     }
 }
