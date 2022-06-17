@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Firebase.Extensions;
+using Firebase.Storage;
 using MiniJSON;
 using TMPro;
 using Unity.VisualScripting;
@@ -24,6 +26,8 @@ public class CoopGame : SingleplayerManager
     [SerializeField] private Button dragDropButtonPrefab;
     [SerializeField] private Canvas canvas;
     [SerializeField] private TextMeshProUGUI[] otherPlayerNames;
+    [SerializeField] private GameObject popupPanel;
+    [SerializeField] private GameObject hintButton;
 
     // Variables
     private int playersDone = 0;
@@ -35,6 +39,7 @@ public class CoopGame : SingleplayerManager
     public static List<string> buttonIndices;
     private List<Proverb> proverbs;
     readonly Random random = new Random();
+    private StorageReference storageRef;
 
     /**
      * Called before the first frame update
@@ -52,7 +57,8 @@ public class CoopGame : SingleplayerManager
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         proverbs = new List<Proverb>();
         nextQuestionButton.SetActive(false);
-        
+        popupPanel.SetActive(false);
+
         // variables needed here
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         int numberOfProverbsPerPlayer = 2;
@@ -197,6 +203,32 @@ public class CoopGame : SingleplayerManager
         }
 
         questionText.text = answerProverb;
+        popupPanel.SetActive(false);
+        
+        // getting image from database and setting it
+        // Get a reference to the storage service, using the default Firebase App
+        storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
+
+        // Reference for retrieving an image
+        StorageReference imageRef = storageRef.Child("proverbs/" + proverb.image);
+            
+        const long maxAllowedSize = 1 * 1024 * 1024;
+        byte[] fileContents;
+        imageRef.GetBytesAsync(maxAllowedSize).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                Debug.LogError("Task (get image byte array) could not be completed.");
+                return;
+            }
+            else if (task.IsCompleted)
+            {
+                fileContents = task.Result;
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(fileContents);
+                popupPanel.GetComponentInChildren<RawImage>().texture = tex;
+            }
+        });
     }
     
     /**
@@ -430,5 +462,18 @@ public class CoopGame : SingleplayerManager
     private void LoadRoomAgain()
     {
         PhotonNetwork.LoadLevel("FillInBlanks");
+    }
+
+    public void changePopUpState()
+    {
+        if (hintButton.GetComponentInChildren<TextMeshProUGUI>().text.Contains("Show"))
+        {
+            hintButton.GetComponentInChildren<TextMeshProUGUI>().text = "Hide Picture";
+        }
+        else
+        {
+            hintButton.GetComponentInChildren<TextMeshProUGUI>().text = "Show Picture";
+        }
+        popupPanel.SetActive(!popupPanel.activeSelf);
     }
 }
