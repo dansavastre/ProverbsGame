@@ -245,55 +245,22 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\rLorem ipsum dolor sit amet, consectetur adipiscing elit. Duis blandit,
-    augue quis suscipit ullamcorper, felis enim congue tortor, a feugiat odio velit
-    a sem. Mauris placerat vulputate orci, quis tempor tortor imperdiet quis. Mauris
-    quis ipsum non massa convallis sagittis vel eget orci. In et mauris vulputate,
-    sodales orci iaculis, viverra tellus. In sit amet semper felis. Vestibulum bibendum
-    libero lorem, et cursus quam laoreet ac. Fusce mollis commodo lorem, id imperdiet
-    elit eleifend non. Fusce lobortis magna quis nibh gravida, interdum volutpat
-    diam egestas. Vestibulum faucibus accumsan dolor, et consequat augue vulputate
-    quis. Mauris sapien velit, consequat ac volutpat id, condimentum et diam. Interdum
-    et malesuada fames ac ante ipsum primis in faucibus. Curabitur ante magna, vulputate
-    sed pulvinar egestas, eleifend sed magna. Phasellus a elit ex. Morbi sollicitudin,
-    massa auctor aliquam accumsan, est metus porttitor quam, vel tincidunt magna
-    neque vel urna. Donec nulla urna, finibus eu malesuada a, porta ac sapien.\r\n\r\nDuis
-    mauris lacus, sollicitudin vel risus quis, placerat blandit risus. Pellentesque
-    felis odio, egestas vulputate rhoncus vel, cursus vel elit. Nullam id ex non
-    enim interdum faucibus. In pretium tortor vel magna ornare ultrices non ut tortor.
-    Maecenas accumsan erat vel maximus tempus. Vestibulum purus nibh, maximus at
-    mauris eu, semper gravida massa. Donec metus dui, iaculis sed iaculis ut, efficitur
-    eget felis. Etiam vulputate nisi vitae arcu aliquet, et tristique quam dapibus.
-    Sed rutrum nisi sit amet mi pretium porta. Sed dolor metus, congue et malesuada
-    quis, tempor at lorem. Integer tincidunt finibus convallis. Vivamus eu accumsan
-    velit. Phasellus condimentum ipsum tincidunt elementum pretium. Pellentesque
-    fringilla, tellus at congue consequat, dolor felis interdum nunc, in volutpat
-    massa nisl nec enim. In id magna sit amet enim semper commodo in ut libero. Phasellus
-    magna tellus, pellentesque quis felis at, bibendum iaculis diam.\r\n\r\nClass
-    aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-    Sed volutpat eu sem eget ullamcorper. Nam maximus ut nibh non hendrerit. Duis
-    nunc orci, rhoncus vel arcu sed, convallis vulputate sem. Cras ultrices facilisis
-    pulvinar. Sed blandit, nulla in congue tristique, mi nunc tincidunt sem, eu feugiat
-    libero ligula id leo. Donec at imperdiet odio, et consectetur mi. Phasellus quis
-    leo in urna pellentesque elementum. Aenean bibendum ornare purus, ac blandit
-    erat sollicitudin eget. Praesent sollicitudin purus quis pharetra venenatis.\r\n\r\nNunc
-    imperdiet efficitur turpis lacinia suscipit. Ut tortor arcu, commodo ut ex eget,
-    finibus congue nibh. Proin tincidunt leo lorem, id cursus dui gravida mollis.
-    Mauris porta eros sit amet metus dapibus, sit amet porta elit convallis. Maecenas
-    a tincidunt quam. Class aptent taciti sociosqu ad litora torquent per conubia
-    nostra, per inceptos himenaeos. Ut sagittis nunc eu libero eleifend suscipit.
-    Maecenas convallis interdum eros, nec luctus erat. Vestibulum luctus diam nec
-    sem dictum, posuere suscipit metus maximus. Donec suscipit augue urna, non consectetur
-    erat rutrum eu. Nulla lacus libero, vulputate eget dapibus sed, semper eget ligula.\r\n\r\nQuisque
-    odio ante, pharetra ut elit nec, euismod finibus felis. Nulla egestas neque arcu,
-    non pellentesque ligula finibus ac. Integer diam mauris, ultrices et diam eget,
-    tempor pulvinar arcu. Aenean augue libero, vestibulum nec finibus a, eleifend
-    in erat. Etiam lacinia felis lectus, pulvinar lobortis massa sollicitudin id.
-    Sed risus nibh, ultricies fringilla consequat nec, luctus in turpis. Class aptent
-    taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-    In lacinia hendrerit elit, a varius lacus accumsan vel. Phasellus risus felis,
-    imperdiet id congue et, ornare vel tortor. Etiam id justo neque. Aenean sed lacinia
-    mi. "
+  m_text: 'Hi, there!
+
+
+    Thank you for showing interest in finding out who the
+    creators of this game are.
+
+
+    We are a small development team consisting of
+    2nd year students from the Delft University of Technology in the Netherlands.
+    The team developed this game as part of the Software Project course at the end
+    of the academic year.
+
+
+    We took great pleasure in creating this game for
+    you to enjoy! If you would like to give us feedback, or if you want to help us
+    improve the game, don''t hesitate to contact us!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -320,8 +287,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1626,7 +1593,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -466.49976, y: 661.6829}
-  m_SizeDelta: {x: 912.176, y: 5603.57}
+  m_SizeDelta: {x: 912.176, y: 5999.96}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &945004092
 MonoBehaviour:
@@ -1662,55 +1629,87 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\rLorem ipsum dolor sit amet, consectetur adipiscing elit. Duis blandit,
-    augue quis suscipit ullamcorper, felis enim congue tortor, a feugiat odio velit
-    a sem. Mauris placerat vulputate orci, quis tempor tortor imperdiet quis. Mauris
-    quis ipsum non massa convallis sagittis vel eget orci. In et mauris vulputate,
-    sodales orci iaculis, viverra tellus. In sit amet semper felis. Vestibulum bibendum
-    libero lorem, et cursus quam laoreet ac. Fusce mollis commodo lorem, id imperdiet
-    elit eleifend non. Fusce lobortis magna quis nibh gravida, interdum volutpat
-    diam egestas. Vestibulum faucibus accumsan dolor, et consequat augue vulputate
-    quis. Mauris sapien velit, consequat ac volutpat id, condimentum et diam. Interdum
-    et malesuada fames ac ante ipsum primis in faucibus. Curabitur ante magna, vulputate
-    sed pulvinar egestas, eleifend sed magna. Phasellus a elit ex. Morbi sollicitudin,
-    massa auctor aliquam accumsan, est metus porttitor quam, vel tincidunt magna
-    neque vel urna. Donec nulla urna, finibus eu malesuada a, porta ac sapien.\r\n\r\nDuis
-    mauris lacus, sollicitudin vel risus quis, placerat blandit risus. Pellentesque
-    felis odio, egestas vulputate rhoncus vel, cursus vel elit. Nullam id ex non
-    enim interdum faucibus. In pretium tortor vel magna ornare ultrices non ut tortor.
-    Maecenas accumsan erat vel maximus tempus. Vestibulum purus nibh, maximus at
-    mauris eu, semper gravida massa. Donec metus dui, iaculis sed iaculis ut, efficitur
-    eget felis. Etiam vulputate nisi vitae arcu aliquet, et tristique quam dapibus.
-    Sed rutrum nisi sit amet mi pretium porta. Sed dolor metus, congue et malesuada
-    quis, tempor at lorem. Integer tincidunt finibus convallis. Vivamus eu accumsan
-    velit. Phasellus condimentum ipsum tincidunt elementum pretium. Pellentesque
-    fringilla, tellus at congue consequat, dolor felis interdum nunc, in volutpat
-    massa nisl nec enim. In id magna sit amet enim semper commodo in ut libero. Phasellus
-    magna tellus, pellentesque quis felis at, bibendum iaculis diam.\r\n\r\nClass
-    aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-    Sed volutpat eu sem eget ullamcorper. Nam maximus ut nibh non hendrerit. Duis
-    nunc orci, rhoncus vel arcu sed, convallis vulputate sem. Cras ultrices facilisis
-    pulvinar. Sed blandit, nulla in congue tristique, mi nunc tincidunt sem, eu feugiat
-    libero ligula id leo. Donec at imperdiet odio, et consectetur mi. Phasellus quis
-    leo in urna pellentesque elementum. Aenean bibendum ornare purus, ac blandit
-    erat sollicitudin eget. Praesent sollicitudin purus quis pharetra venenatis.\r\n\r\nNunc
-    imperdiet efficitur turpis lacinia suscipit. Ut tortor arcu, commodo ut ex eget,
-    finibus congue nibh. Proin tincidunt leo lorem, id cursus dui gravida mollis.
-    Mauris porta eros sit amet metus dapibus, sit amet porta elit convallis. Maecenas
-    a tincidunt quam. Class aptent taciti sociosqu ad litora torquent per conubia
-    nostra, per inceptos himenaeos. Ut sagittis nunc eu libero eleifend suscipit.
-    Maecenas convallis interdum eros, nec luctus erat. Vestibulum luctus diam nec
-    sem dictum, posuere suscipit metus maximus. Donec suscipit augue urna, non consectetur
-    erat rutrum eu. Nulla lacus libero, vulputate eget dapibus sed, semper eget ligula.\r\n\r\nQuisque
-    odio ante, pharetra ut elit nec, euismod finibus felis. Nulla egestas neque arcu,
-    non pellentesque ligula finibus ac. Integer diam mauris, ultrices et diam eget,
-    tempor pulvinar arcu. Aenean augue libero, vestibulum nec finibus a, eleifend
-    in erat. Etiam lacinia felis lectus, pulvinar lobortis massa sollicitudin id.
-    Sed risus nibh, ultricies fringilla consequat nec, luctus in turpis. Class aptent
-    taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-    In lacinia hendrerit elit, a varius lacus accumsan vel. Phasellus risus felis,
-    imperdiet id congue et, ornare vel tortor. Etiam id justo neque. Aenean sed lacinia
-    mi. "
+  m_text: 'Welcome to Proverbs Game!
+
+
+    This game will help you learn proverbs
+    in an engaging and entertaining manner.
+
+
+    It features 2 game modes for you
+    to choose from:
+
+    - a single-player game mode, where you will learn how to
+    use proverbs through different question types;
+
+    - a cooperative multi-player
+    game mode, which allows for endless entertainment.
+
+
+    The bucket system:
+
+    Each
+    of the available proverbs is categorized in one of 4 possible "buckets" (proficiency
+    categories) depending on how well you know them. The buckets are named in increasing
+    order of their respective proficiency as follows:
+
+    1. Apprentice
+
+    2.
+    Journeyman
+
+    3. Expert
+
+    4. Master
+
+    In the beginning, all proverbs
+    are put in the journeyman bucket. While playing the single-player game mode,
+    answering a question correctly will move the respective proverb in a higher bucket,
+    while answering a question incorrectly will move it in a lower bucket.
+
+
+    The
+    single-player game mode:
+
+    This game mode is played in sessions of 10 questions
+    each. Each question can be of a certain type, ranging from recognizing proverbs
+    that are depicted in images, to filling in keywords in incomplete proverbs, to
+    forming proverbs yourself from a given array of keywords. The questions that
+    you will receive about a certain proverb will conform to the proficiency that
+    you currently have with that proverb.
+
+    To answer a question, you have to
+    tap on the answer that you want to give.
+
+    If you struggle with a certain
+    question, or if you are simply unsure of what to answer, you can always use the
+    hint box, which you can identify as a large box in the center of the screen featuring
+    a question mark.
+
+    You can end the session early, without answering every
+    question in it, and the game will automatically save the answers that you gave.
+
+
+    The
+    multi-player game mode:
+
+    This game mode is played in groups of 2-4 players.
+
+    Each
+    player is given 2 proverb with missing keywords, as well as an array of possible
+    keywords. The purpose of the game is to communicate with your teammates and exchange
+    keywords with them such that everyone completes their given proverbs.
+
+    To
+    give a keyword to a teammate, simply drag the keyword you wish to exchange and
+    drop it onto the box containing the teammate''s name at the top of the screen.
+
+    After
+    you completed a proverb, click "CHECK" to verify whether your answer is the correct
+    one, before clicking on the "NEXT QUESTION" button.
+
+    The game automatically
+    ends when all players have completed their keywords.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1737,8 +1736,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2441,7 +2440,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1954548799}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.23616478
+  m_Size: 0.22056243
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2818,7 +2817,7 @@ RectTransform:
   m_Father: {fileID: 425006610}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.7638352}
+  m_AnchorMin: {x: 0, y: 0.77943754}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
