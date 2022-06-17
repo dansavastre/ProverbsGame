@@ -9,14 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/FirstScreen.unity
     guid: 3d5b46d1167a17940b2b1de6a46c0816
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 63ddc795d44241743bfb0580af442bed
+  - enabled: 1
     path: Assets/Scenes/Other/Login.unity
     guid: 33dd05e7c72d3a24c95264806623df47
   - enabled: 1
     path: Assets/Scenes/Other/Register.unity
     guid: 5499b88afb62a4341a8ca8ef182a4f7a
-  - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: 63ddc795d44241743bfb0580af442bed
   - enabled: 1
     path: Assets/Scenes/Other/Dictionary.unity
     guid: 85288a60c4ac6744e8bd3e37f3e7e14d
@@ -47,10 +47,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Multiplayer/FillBlankMultiplayer.unity
     guid: ea6aebfe120847041be3abb12b11d2d8
-  - enabled: 0
-    path: Assets/Scenes/Multiplayer/TitleMenu.unity
-    guid: 931dec943d418f8448b854ab1cc3a299
-  - enabled: 0
-    path: Assets/Scenes/Multiplayer/MeaningMatching.unity
-    guid: b83125fe8f450c34a9451fe4e0c72415
   m_configObjects: {}

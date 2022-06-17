@@ -42,6 +42,7 @@ public class RecognizeImageManager : SingleplayerManager
 
         // Reference for retrieving an image
         StorageReference imageRef = storageRef.Child("proverbs/" + nextProverb.image);
+        Debug.Log(nextProverb);
         Debug.Log("proverbs/" + nextProverb.image);
 
         const long maxAllowedSize = 1 * 1024 * 1024;

@@ -397,7 +397,7 @@ public class SingleplayerManager : MonoBehaviour
             Debug.Log("Saving progress.");
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-            SceneManager.LoadScene("singleplayerMenu");
+            SceneManager.LoadScene("MainMenu");
             return;
         }
         switch (currentBucket.stage)

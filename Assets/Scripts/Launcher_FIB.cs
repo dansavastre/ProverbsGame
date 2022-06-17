@@ -23,7 +23,7 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     [SerializeField] GameObject startGameButton_FIB;
 
     public void OpenMultiplayerTitleMenuScene() {
-        SceneManager.LoadScene("TitleMenu");
+        SceneManager.LoadScene("MainMenu");
         PhotonNetwork.Disconnect();
     }
 
