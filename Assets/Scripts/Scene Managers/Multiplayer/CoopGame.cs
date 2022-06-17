@@ -169,9 +169,9 @@ public class CoopGame : SingleplayerManager
                 allKeywords[i] = allKeywords[randomIndex];
                 allKeywords[randomIndex] = temp;
             }
-            
+
             // Distribute keywords between players
-            if (PhotonNetwork.CountOfPlayers <= 2)
+            if (PhotonNetwork.CurrentRoom.PlayerCount <= 2)
             {
                 SentMyKeywordsToAllPlayers(allKeywords);
             }
@@ -296,6 +296,7 @@ public class CoopGame : SingleplayerManager
      */
     private void SentMyKeywordsToAllPlayers(List<string> myKeywords)
     {
+        Debug.Log("SentMyKeywordsToAllPlayers");
         int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount;
         int i = 0;
         foreach (string keyword in myKeywords)
@@ -313,11 +314,13 @@ public class CoopGame : SingleplayerManager
      */
     private void SentMyKeywordsToOtherPlayers(List<string> myKeywords, Dictionary<string, List<string>> allKeywordsPerPlayer)
     {
+        Debug.Log("SentMyKeywordsToOtherPlayers");
         int playerCountThisRoom = PhotonNetwork.CurrentRoom.PlayerCount;
         int i = 0;
         foreach (string keyword in myKeywords)
         {
             var playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
+
             while (allKeywordsPerPlayer[playerToSendTo.NickName].Contains(keyword))
             {
                 i++;

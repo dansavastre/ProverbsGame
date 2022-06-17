@@ -72,8 +72,6 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
         foreach (Transform child in playerListContent_FIB)
             Destroy(child.gameObject);
 
-        Debug.Log(PhotonNetwork.PlayerList.Count());
-
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 4)
         {
             PhotonNetwork.CurrentRoom.IsVisible = false;
