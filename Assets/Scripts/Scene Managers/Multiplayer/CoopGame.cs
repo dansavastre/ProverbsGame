@@ -123,10 +123,11 @@ public class CoopGame : SingleplayerManager
                     for (int j = 1; j < Regex.Matches(proverbToAdd.phrase, word).Count; j++)
                     {
                         proverbToAdd.keywords.Add(word);
+                        Debug.Log(word);
                     }
                 }
 
-                proverbsSelected.Add(JsonUtility.FromJson<Proverb>(allProverbs[i].GetRawJsonValue()));
+                proverbsSelected.Add(proverbToAdd);
             }
 
             Dictionary<string, List<string>> allKeywordsPerPlayer = new Dictionary<string, List<string>>(); // keywords with user having them
@@ -202,6 +203,8 @@ public class CoopGame : SingleplayerManager
         if (proverbs.Count == 0)
         {
             questionText.text = "You are done with your proverbs! Help your teammates finish theirs!";
+            checkButton.SetActive(false);
+            nextQuestionButton.SetActive(false);
             _photon.RPC("PlayerDone", RpcTarget.MasterClient);
             return;
         }
@@ -404,7 +407,7 @@ public class CoopGame : SingleplayerManager
         LoadNextProverb();
         resultText.text = "";
         checkButton.SetActive(true);
-        nextProverb.Serialize(false);
+        nextQuestionButton.SetActive(false);
     }
 
     /**
