@@ -137,16 +137,29 @@ public class FormSentenceManager : SingleplayerManager
     {
         if (Input.GetMouseButtonDown(0))
         {
-            var wordIndex = TMP_TextUtilities.FindIntersectingWord(questionText, Input.mousePosition, null);
+            int wordIndex = TMP_TextUtilities.FindIntersectingWord(questionText, Input.mousePosition, null);
 
             if (wordIndex != -1)
             {
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
-                Debug.Log(LastClickedWord);
+
                 //If a keyword inside of the proverb is clicked, remove that keyword from the proverb and create a button
-                if (allWords.Contains(LastClickedWord))
+                string[] splits = questionText.text.Split(" ");
+
+                bool isKeyword = false;
+
+                foreach (string word in allWords)
                 {
-                    removeWord(LastClickedWord);
+                    if (splits[wordIndex].Contains(word))
+                    {
+                        isKeyword = true;
+                        LastClickedWord = word;
+                    }
+                }
+
+                if ((wordIndex > -1) && (isKeyword))
+                {
+                    removeWord(LastClickedWord, wordIndex);
                 }
             }
         }
@@ -171,7 +184,7 @@ public class FormSentenceManager : SingleplayerManager
     }
 
     //Remove a word from the proverb
-    private void removeWord(string word)
+    private void removeWord(string word, int wordIndex)
     {
         Button[] buttons = keywordBoard.GetComponentsInChildren<Button>();
         for (int i = 0; i < buttons.Length; i++)
@@ -181,7 +194,18 @@ public class FormSentenceManager : SingleplayerManager
                 buttons[i].interactable = true;
             }
         }
-        answerProverb = ReplaceFirst(answerProverb, word, "");
+
+        string[] splits = questionText.text.Split(" ");
+
+        Debug.Log(splits.Count());
+
+        splits[wordIndex] = "";
+        answerProverb = questionText.text;
+        answerProverb = string.Join(" ", splits);
+        answerProverb = answerProverb.Replace("  ", " ");
+        //remove triple spaces;
+        answerProverb = answerProverb.Replace("  ", " ");
+
         questionText.text = answerProverb;
     }
 
@@ -208,8 +232,12 @@ public class FormSentenceManager : SingleplayerManager
         // Do string manipulation to verify that the sentences are the same or not
         string playerProverb = answerProverb.Replace(" ", "");
 
+        Debug.Log(correctProverb.ToLower().Replace(" ", ""));
+        Debug.Log(playerProverb.ToLower());
+
         DisplayFeedback(playerProverb.ToLower().Equals(correctProverb.ToLower().Replace(" ", "")));
+        if (continueOverlay != null) continueOverlay.SetActive(true);
         // TODO: Disable the ability to click new answers
-        checkButton.SetActive(false);
+        checkButton.enabled = false;
     }
 }
