@@ -192,7 +192,7 @@ public class CoopGame : SingleplayerManager
         // Set blank spaces in the proverb based on the keywords
         foreach (string v in buttonsToCreateWords)
         {
-            answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
+            answerProverb = answerProverb.Replace(v, "<u><alpha=#00>xxxxx</color></u>");
         }
 
         questionText.text = answerProverb;
@@ -284,7 +284,7 @@ public class CoopGame : SingleplayerManager
     // private void inputWord(string word)
     // {
     //     word = "<u><b>" + word + "</u></b>";
-    //     answerProverb = ReplaceFirst(answerProverb, "<u>BLANK</u>", word);
+    //     answerProverb = ReplaceFirst(answerProverb, "<u><alpha=#00>xxxxx</color></u>", word);
     //     questionText.text = answerProverb;
     // }
 
@@ -293,7 +293,7 @@ public class CoopGame : SingleplayerManager
     {
         word = "<u>" + word + "</u>";
         answerProverb = questionText.text;
-        answerProverb = ReplaceFirst(answerProverb, word, "<u>BLANK</u>");
+        answerProverb = ReplaceFirst(answerProverb, word, "<u><alpha=#00>xxxxx</color></u>");
         questionText.text = answerProverb;
     }
 
@@ -310,7 +310,7 @@ public class CoopGame : SingleplayerManager
     // public void buttonPressed(Button button)
     // {
     //     Debug.Log("here");
-    //     if(canInput(answerProverb, "<u>BLANK</u>"))
+    //     if(canInput(answerProverb, "<u><alpha=#00>xxxxx</color></u>"))
     //     {
     //         string buttonText = button.GetComponentInChildren<TextMeshProUGUI>().text;
     //         inputWord(buttonText);
@@ -324,7 +324,8 @@ public class CoopGame : SingleplayerManager
     public void CheckAnswer()
     {
         answerProverb = questionText.text;
-        string playerProverb = answerProverb.Replace("<u>", "").Replace("</u>", "");
+        string playerProverb = answerProverb.Replace("<u>", "").Replace("<alpha=#00>", "").Replace("</color>", "").Replace("</u>", "");
+        Debug.Log(playerProverb);
         bool correct = playerProverb.Equals(correctProverb);
 
         if (correct)
