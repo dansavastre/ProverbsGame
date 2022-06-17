@@ -51,21 +51,21 @@ public class SessionManager : MonoBehaviour {
         "FirstScreen",          // First screen on app launch
         "Register",             // Screen to register
         "Login",                // Screen to login
-        "SelectionMenu",        // Select singleplayer or multiplayer
-        "SingleplayerMenu",     // Singleplayer menu
-        "TitleMenu",            // Multiplayer menu
+        "MainMenu",             // Singleplayer menu
+        "FillInBlanks",         // Multiplayer menu
         "InfoScreen",           // Information page
-        "ProfilePage"          // Profile page
+        "ProfilePage",          // Profile page
+        "Dictionary"            // Proverb dictionary
     };
 
     private TimeSpan[] waitingPeriod =
     {
         new TimeSpan(),             // Always
+        new TimeSpan(0, 30, 0),     // After 30 minutes
+        new TimeSpan(1, 0, 0),      // After 1 hour
         new TimeSpan(2, 0, 0),      // After 2 hours
         new TimeSpan(4, 0, 0),      // After 4 hours
-        new TimeSpan(8, 0, 0),      // After 8 hours
-        new TimeSpan(1, 0, 0, 0),   // After 1 day
-        new TimeSpan(2, 0, 0, 0)    // After 2 days
+        new TimeSpan(8, 0, 0)       // After 8 hours
     };
 
     // Start is called before the first frame update

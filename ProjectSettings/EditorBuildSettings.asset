@@ -15,14 +15,14 @@ EditorBuildSettings:
     path: Assets/Scenes/Register.unity
     guid: 5499b88afb62a4341a8ca8ef182a4f7a
   - enabled: 1
-    path: Assets/Scenes/SelectionMenu.unity
-    guid: 09ed07576e4bdb0478ece94b0cb08e53
-  - enabled: 1
-    path: Assets/Scenes/SingleplayerMenu.unity
+    path: Assets/Scenes/MainMenu.unity
     guid: 63ddc795d44241743bfb0580af442bed
   - enabled: 1
+    path: Assets/Scenes/Dictionary.unity
+    guid: 85288a60c4ac6744e8bd3e37f3e7e14d
+  - enabled: 1
     path: Assets/Scenes/Singleplayer/InfoScreen.unity
-    guid: efd42dd8ddd0ebb40ac392151b5a2e62
+    guid: 6ca38ba3f4d35bb4c860e99abef68eb4
   - enabled: 1
     path: Assets/Scenes/Singleplayer/ProfilePage.unity
     guid: 480f430189714ff489a8ba1d360d100b
@@ -30,11 +30,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Singleplayer/Gameplay/MultipleChoice.unity
     guid: 86dc8b8eee83f0d47b913e7effb9ce78
   - enabled: 1
-    path: Assets/Scenes/Singleplayer/Gameplay/FillBlanks.unity
-    guid: 3ceac13bc2428734d9011e5c46da099f
-  - enabled: 1
     path: Assets/Scenes/Singleplayer/Gameplay/RecognizeImage.unity
     guid: 62d4742ce6119384983b68a286b11043
+  - enabled: 1
+    path: Assets/Scenes/Singleplayer/Gameplay/FillBlanks.unity
+    guid: 3ceac13bc2428734d9011e5c46da099f
   - enabled: 1
     path: Assets/Scenes/Singleplayer/Gameplay/FormSentence.unity
     guid: 4174db22e8f08eb42950f6889ac2391d
@@ -42,15 +42,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Singleplayer/Gameplay/FunFact.unity
     guid: bad80b0f2fcd46847bed07f763e65974
   - enabled: 1
-    path: Assets/Scenes/Multiplayer/TitleMenu.unity
-    guid: 931dec943d418f8448b854ab1cc3a299
-  - enabled: 1
     path: Assets/Scenes/Multiplayer/FillInBlanks.unity
     guid: 482efb976eea5754ea09e2faafb7d234
   - enabled: 1
     path: Assets/Scenes/Multiplayer/FillBlankMultiplayer.unity
     guid: ea6aebfe120847041be3abb12b11d2d8
-  - enabled: 1
+  - enabled: 0
+    path: Assets/Scenes/Multiplayer/TitleMenu.unity
+    guid: 931dec943d418f8448b854ab1cc3a299
+  - enabled: 0
     path: Assets/Scenes/Multiplayer/MeaningMatching.unity
     guid: b83125fe8f450c34a9451fe4e0c72415
   m_configObjects: {}

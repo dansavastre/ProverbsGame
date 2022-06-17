@@ -481,6 +481,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 952644610}
     m_Modifications:
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 952644606}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 952644606}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SwitchScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlonkNoise
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: AccountManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: AccountManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3659744418583650412, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1b697a5a91a6c2445adb59737501fdb1, type: 3}
     - target: {fileID: 6772493863151582320, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -629,7 +661,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
 --- !u!224 &1140807263 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6772493863151582320, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7267063160260048509, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
   m_PrefabInstance: {fileID: 1140807262}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1278180581

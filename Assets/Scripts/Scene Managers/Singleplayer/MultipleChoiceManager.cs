@@ -186,42 +186,4 @@ public class MultipleChoiceManager : SingleplayerManager
     public void HintClicked() {
         image.enabled = !image.enabled;
     }
-
-    //public async string fetchOtherPhrase(string proverb)
-    //{
-    //    int randIndex = Random.Range(0, allProficienciesNoFilter.Count);
-    //    string key = allProficienciesNoFilter[randIndex].key;
-
-
-    //    // Goes to the 'proverbs' database table and searches for the key
-    //    await dbReference.Child("proverbs").Child(key)
-    //    .GetValueAsync().ContinueWith(task =>
-    //    {
-    //        if (task.IsFaulted)
-    //        {
-    //            Debug.LogError("Task could not be completed.");
-    //            return ("Database error!");
-    //        }
-
-    //        if (task.IsCompleted)
-    //        {
-    //            // Take a snapshot of the database entry
-    //            DataSnapshot snapshot = task.Result;
-    //            // Convert the JSON back to a Proverb object
-    //            string json = snapshot.GetRawJsonValue();
-    //            string fetchedPhrase = JsonUtility.FromJson<Proverb>(json).phrase;
-
-    //            if (fetchedPhrase.Equals(proverb))
-    //            {
-    //                return fetchOtherPhrase(proverb);
-    //            }
-    //            else
-    //            {
-    //                return fetchedPhrase;
-    //            }
-    //        }
-    //        return ("Database error!");
-    //    });
-    //    return ("Database error!");
-    //}
 }

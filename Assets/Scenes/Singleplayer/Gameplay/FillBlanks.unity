@@ -461,6 +461,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 972827055}
     m_Modifications:
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 560862404}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 560862404}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: QuitSession
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlonkNoise
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SingleplayerManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: SingleplayerManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6772493863151582320, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -607,6 +635,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+--- !u!224 &538240976 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7267063160260048509, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+  m_PrefabInstance: {fileID: 538240975}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &560862399
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,7 +927,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1242624097}
+  - {fileID: 538240976}
   - {fileID: 1737922377}
   m_Father: {fileID: 560862403}
   m_RootOrder: 0
@@ -1037,11 +1070,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &1242624097 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6772493863151582320, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
-  m_PrefabInstance: {fileID: 538240975}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1538423108
 GameObject:
   m_ObjectHideFlags: 0

@@ -756,6 +756,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1770482686}
     m_Modifications:
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1185331186}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1185331186}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: QuitSession
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlonkNoise
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SingleplayerManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: SingleplayerManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6772493863151582320, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -900,12 +928,12 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
 --- !u!224 &1691918387 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6772493863151582320, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7267063160260048509, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
   m_PrefabInstance: {fileID: 1691918386}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1691918388 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 6772493863151582321, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
+  m_CorrespondingSourceObject: {fileID: 627838491477547958, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
   m_PrefabInstance: {fileID: 1691918386}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1770482685

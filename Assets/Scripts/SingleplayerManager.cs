@@ -66,7 +66,7 @@ public class SingleplayerManager : MonoBehaviour
         playerProficiency = SessionManager.playerProficiency;
         newProficiency = SessionManager.newProficiency;
 
-        WoodButton = GameObject.Find("WoodButtonAudio").GetComponent<AudioSource>();
+        WoodButton = AccountManager.WoodButton;
 
         // Initialize new variables
         allProficiencies = SessionManager.allProficiencies;
@@ -370,7 +370,7 @@ public class SingleplayerManager : MonoBehaviour
         Debug.Log("Quitting session.");
         string json = JsonUtility.ToJson(newProficiency);
         dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-        SceneManager.LoadScene("SingleplayerMenu");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void LoadNextScene()
@@ -426,7 +426,7 @@ public class SingleplayerManager : MonoBehaviour
             default:
                 string json = JsonUtility.ToJson(newProficiency);
                 dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-                SceneManager.LoadScene("SingleplayerMenu");
+                SceneManager.LoadScene("MainMenu");
                 break;
         }
     }

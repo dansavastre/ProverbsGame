@@ -6,19 +6,11 @@ using UnityEngine.SceneManagement;
 public class InfoScreenManager : MonoBehaviour {
     private static AudioSource WoodButton;
 
-    public static string[] scenes = {
-        "FirstScreen",          // First screen on app launch
-        "Register",             // Screen to register
-        "Login",                // Screen to login
-        "SelectionMenu",        // Select singleplayer or multiplayer
-        "SingleplayerMenu",     // Singleplayer menu
-        "TitleMenu",            // Multiplayer menu
-        "InfoScreen",           // Information page
-        "ProfilePage",          // Profile page
-    };
+    public static string[] scenes;
 
     private void Start() {
         WoodButton = AccountManager.WoodButton;
+        scenes = SessionManager.scenes;
     }
 
     public void PlonkNoise() {

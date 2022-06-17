@@ -21,6 +21,7 @@ public class DictionaryManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dictionaryContentHolder;
     [SerializeField] private Button wordButtonPrefab;
 
+    private static AudioSource WoodButton;
     private static string[] scenes;
     
     // Start is called before the first frame update
@@ -28,6 +29,7 @@ public class DictionaryManager : MonoBehaviour
     {
         scenes = SessionManager.scenes;
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+        WoodButton = AccountManager.WoodButton;
         getProverbsToShow();
         StartCoroutine(wait());
     }
@@ -119,6 +121,11 @@ public class DictionaryManager : MonoBehaviour
             filteredProverbsList = filteredProverbsList.Where(s => s.proverb.ToLower().Contains(wordToFilterOn)).ToList();
         }
         UpdateDictionaryContentHolderContents();
+    }
+
+    public void PlonkNoise()
+    {
+        WoodButton.Play();
     }
 
     // Switch to the scene corresponding to the sceneIndex
