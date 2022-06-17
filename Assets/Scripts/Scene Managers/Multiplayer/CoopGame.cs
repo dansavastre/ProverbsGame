@@ -107,7 +107,9 @@ public class CoopGame : SingleplayerManager
             {
                 Proverb proverbToAdd = JsonUtility.FromJson<Proverb>(allProverbs[i].GetRawJsonValue());
 
-                foreach(string word in proverbToAdd.keywords)
+                List<string> keyWordsClone = proverbToAdd.keywords.Select(item => (string)item.Clone()).ToList();
+
+                foreach (string word in keyWordsClone)
                 {
                     for (int j = 1; j < Regex.Matches(proverbToAdd.phrase, word).Count; j++)
                     {
