@@ -144,7 +144,7 @@ public class MultipleChoiceManager : SingleplayerManager
                 string json = snapshot.GetRawJsonValue();
                         string fetchedPhrase = JsonUtility.FromJson<Proverb>(json).phrase;
 
-                        if (fetchedPhrase.Equals(nextProverb.phrase))
+                        if (fetchedPhrase.Equals(nextProverb.phrase) || otherPhrases.Contains(fetchedPhrase))
                         {
                             i--;
                         }

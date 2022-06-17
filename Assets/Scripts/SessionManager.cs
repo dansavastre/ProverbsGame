@@ -27,6 +27,7 @@ public class SessionManager : MonoBehaviour
 
     // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
+    public static Proficiency playerProficiencyNoFilter;
     public static Proficiency newProficiency;
     public static string playerEmail;
     public static string playerName;
@@ -72,6 +73,7 @@ public class SessionManager : MonoBehaviour
     {
         // Reset the player proficiency
         playerProficiency = null;
+        playerProficiencyNoFilter = null;
         newProficiency = null;
         playerEmail = AccountManager.playerEmail;
         playerName = AccountManager.playerName;
@@ -117,10 +119,10 @@ public class SessionManager : MonoBehaviour
     // Displays the number of proverbs in each proficiency bucket
     private void DisplayProverbCount() 
     {
-        ApprenticeCount.text = playerProficiency.apprentice.Count.ToString();
-        JourneymanCount.text = playerProficiency.journeyman.Count.ToString();
-        ExpertCount.text = playerProficiency.expert.Count.ToString();
-        MasterCount.text = playerProficiency.master.Count.ToString();
+        ApprenticeCount.text = playerProficiencyNoFilter.apprentice.Count.ToString();
+        JourneymanCount.text = playerProficiencyNoFilter.journeyman.Count.ToString();
+        ExpertCount.text = playerProficiencyNoFilter.expert.Count.ToString();
+        MasterCount.text = playerProficiencyNoFilter.master.Count.ToString();
     }
 
     // Fetches the key of the current player
@@ -175,16 +177,11 @@ public class SessionManager : MonoBehaviour
                 // Convert the JSON back to a Proficiency object
                 string json = snapshot.GetRawJsonValue();
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
+                playerProficiencyNoFilter = JsonUtility.FromJson<Proficiency>(json);
                 newProficiency = JsonUtility.FromJson<Proficiency>(json);
 
-                allProficienciesNoFilter = new List<Bucket>();
-                allProficienciesNoFilter.AddRange(playerProficiency.apprentice);
-                allProficienciesNoFilter.AddRange(playerProficiency.journeyman);
-                allProficienciesNoFilter.AddRange(playerProficiency.expert);
-                allProficienciesNoFilter.AddRange(playerProficiency.master);
-
                 Debug.Log(json);
-                // RemoveTimedProverbs();
+                //RemoveTimedProverbs();
                 InitList();
             }
         });
@@ -198,6 +195,13 @@ public class SessionManager : MonoBehaviour
         allProficiencies.AddRange(playerProficiency.journeyman);
         allProficiencies.AddRange(playerProficiency.expert);
         allProficiencies.AddRange(playerProficiency.master);
+
+        // Add all proficiences to a list which is not to be filtered
+        allProficienciesNoFilter = new List<Bucket>();
+        allProficienciesNoFilter.AddRange(playerProficiency.apprentice);
+        allProficienciesNoFilter.AddRange(playerProficiency.journeyman);
+        allProficienciesNoFilter.AddRange(playerProficiency.expert);
+        allProficienciesNoFilter.AddRange(playerProficiency.master);
 
         // Initiate ProgressBar
         maxValue = allProficiencies.Count;
