@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+using System.Text.RegularExpressions;
+
 public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public Canvas canvas;
@@ -82,10 +84,10 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         int wordIndex = TMP_TextUtilities.FindIntersectingWord(proverbText, Input.mousePosition, null);
         string[] splits = proverbText.text.Split(" ");
 
-        if ((wordIndex > -1) && (splits[wordIndex].Equals("<u>BLANK</u>")))
+        if ((wordIndex > -1) && (splits[wordIndex].Contains("<u>BLANK</u>")))
         {
             Debug.Log(splits[wordIndex]);
-            splits[wordIndex] = "<u>" + draggedButtonText + "</u>";
+            splits[wordIndex] = Regex.Replace(splits[wordIndex], "<u>BLANK</u>", draggedButtonText, RegexOptions.IgnoreCase);
             proverbText.text = string.Join(" ", splits);
             Destroy(eventData.pointerDrag, 0);
             CoopGame.buttonIndices[CoopGame.buttonIndices.IndexOf(draggedButtonText)] = "";

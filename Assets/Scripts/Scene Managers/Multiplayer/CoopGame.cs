@@ -12,6 +12,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using Random = System.Random;
 using UnityEngine.SceneManagement;
+using System.Text.RegularExpressions;
 
 public class CoopGame : SingleplayerManager
 {
@@ -104,6 +105,18 @@ public class CoopGame : SingleplayerManager
             List<Proverb> proverbsSelected = new List<Proverb>();
             foreach (int i in randomProverbIndices)
             {
+                Proverb proverbToAdd = JsonUtility.FromJson<Proverb>(allProverbs[i].GetRawJsonValue());
+
+                List<string> keyWordsClone = proverbToAdd.keywords.Select(item => (string)item.Clone()).ToList();
+
+                foreach (string word in keyWordsClone)
+                {
+                    for (int j = 1; j < Regex.Matches(proverbToAdd.phrase, word).Count; j++)
+                    {
+                        proverbToAdd.keywords.Add(word);
+                    }
+                }
+
                 proverbsSelected.Add(JsonUtility.FromJson<Proverb>(allProverbs[i].GetRawJsonValue()));
             }
 
@@ -192,7 +205,7 @@ public class CoopGame : SingleplayerManager
         // Set blank spaces in the proverb based on the keywords
         foreach (string v in buttonsToCreateWords)
         {
-            answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
+            answerProverb = Regex.Replace(answerProverb, v, "<u>BLANK</u>", RegexOptions.IgnoreCase);
         }
 
         questionText.text = answerProverb;
@@ -212,13 +225,15 @@ public class CoopGame : SingleplayerManager
             {
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
 
+                string[] splits = questionText.text.Split(" ");
 
                 //If a keyword inside of the proverb is clicked, remove that keyword from the proverb and create a button
-                if (allWords.Contains(LastClickedWord))
+                if ((wordIndex > -1) && (allWords.Contains(splits[wordIndex])))
                 {
-                    RemoveWord(LastClickedWord);
+                    RemoveWord(LastClickedWord, wordIndex);
                     CreateButtonForKeyword(LastClickedWord);
                 }
+
             }
         }
     }
@@ -289,11 +304,18 @@ public class CoopGame : SingleplayerManager
     // }
 
     //Remove a word from the proverb
-    private void RemoveWord(string word)
+    private void RemoveWord(string word, int wordIndex)
     {
-        word = "<u>" + word + "</u>";
         answerProverb = questionText.text;
-        answerProverb = ReplaceFirst(answerProverb, word, "<u>BLANK</u>");
+        string[] splits = questionText.text.Split(" ");
+
+        splits[wordIndex] = splits[wordIndex].Replace(word, "<u>BLANK</u>");
+        
+        answerProverb = string.Join(" ", splits);
+        answerProverb = answerProverb.Replace("  ", " ");
+        //remove triple spaces;
+        answerProverb = answerProverb.Replace("  ", " ");
+
         questionText.text = answerProverb;
     }
 
@@ -324,8 +346,8 @@ public class CoopGame : SingleplayerManager
     public void CheckAnswer()
     {
         answerProverb = questionText.text;
-        string playerProverb = answerProverb.Replace("<u>", "").Replace("</u>", "");
-        bool correct = playerProverb.Equals(correctProverb);
+        string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
+        bool correct = playerProverb.ToLower().Equals(correctProverb.ToLower());
 
         if (correct)
         {
