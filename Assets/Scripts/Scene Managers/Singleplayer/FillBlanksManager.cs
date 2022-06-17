@@ -92,7 +92,9 @@ public class FillBlanksManager : SingleplayerManager
         allWords = nextProverb.keywords;
         allWords.AddRange(nextProverb.otherKeywords);
 
-        foreach (string v in nextProverb.keywords)
+        List<string> keyWordsClone = nextProverb.keywords.Select(item => (string)item.Clone()).ToList();
+
+        foreach (string v in keyWordsClone)
         {
 
             for (int i = 1; i < Regex.Matches(nextProverb.phrase, v).Count; i++)
@@ -204,6 +206,7 @@ public class FillBlanksManager : SingleplayerManager
         for(int i = 0 ; i < buttons.Length; i++) {
             if(buttons[i].GetComponentInChildren<TextMeshProUGUI>().text.Equals(word)) {
                 buttons[i].interactable = true;
+                break;
             }
         }
         answerProverb = questionText.text;
