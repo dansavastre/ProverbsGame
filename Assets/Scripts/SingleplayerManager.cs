@@ -13,10 +13,13 @@ using Random = UnityEngine.Random;
 
 public class SingleplayerManager : MonoBehaviour
 {
+    [SerializeField] public GameObject continueOverlay;
+    [SerializeField] public TextMeshProUGUI answerText;
+
     // UI elements
     [SerializeField] protected TextMeshProUGUI questionText;
     [SerializeField] protected TextMeshProUGUI resultText;
-    [SerializeField] protected GameObject checkButton;
+    [SerializeField] protected Button checkButton;
     [SerializeField] protected GameObject nextQuestionButton;
     [SerializeField] protected Button funFactButtonPrefab;
     [SerializeField] protected Button answerButtonPrefab;
@@ -327,6 +330,7 @@ public class SingleplayerManager : MonoBehaviour
     {
         DisplayFeedback(currentQuestion.answers[index].isCorrect);
         image.enabled = true;
+        if (continueOverlay != null) continueOverlay.SetActive(true);
         DeactivateAnswerButtons();
     }
     

@@ -209,7 +209,8 @@ public class FormSentenceManager : SingleplayerManager
         string playerProverb = answerProverb.Replace(" ", "");
 
         DisplayFeedback(playerProverb.ToLower().Equals(correctProverb.ToLower().Replace(" ", "")));
+        if (continueOverlay != null) continueOverlay.SetActive(true);
         // TODO: Disable the ability to click new answers
-        checkButton.SetActive(false);
+        checkButton.enabled = false;
     }
 }

@@ -212,9 +212,10 @@ public class FillBlanksManager : SingleplayerManager
     {
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
         DisplayFeedback(playerProverb.Equals(correctProverb));
+        if (continueOverlay != null) continueOverlay.SetActive(true);
         image.enabled = true;
         // TODO: Disable the ability to click new answers
-        checkButton.SetActive(false);
+        checkButton.enabled = false;
     }
 
     /** 
