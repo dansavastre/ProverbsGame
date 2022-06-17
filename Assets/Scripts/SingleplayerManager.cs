@@ -168,6 +168,7 @@ public class SingleplayerManager : MonoBehaviour
         long time = (long) DateTime.Now.ToUniversalTime()
         .Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
         currentBucket.timestamp = time;
+
         // Check if we should go up or down a stage
         if (dictionary[currentBucket] == 0 && currentBucket.stage < 7)
         {
@@ -178,6 +179,7 @@ public class SingleplayerManager : MonoBehaviour
             currentBucket.stage = ChangeStage(currentBucket.stage, dictionary[currentBucket]);
             Debug.Log(currentBucket.key + " stage downgraded to " + currentBucket.stage.ToString());
         }
+
         // Add bucket to the proficiency that corresponds to its stage
         string newType = GetTypeOfStage(currentBucket.stage);
         switch (newType)

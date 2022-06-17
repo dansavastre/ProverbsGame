@@ -33,7 +33,7 @@ public class SessionManager : MonoBehaviour
     public static string playerKey;
 
     // Progress bar
-    public static int maxValue;
+    public static int maxValue = 10; // The number of questions that should be allowed in a single session
     public static int correctAnswers;
 
     private Random random;
@@ -192,19 +192,37 @@ public class SessionManager : MonoBehaviour
         allProficiencies.AddRange(playerProficiency.master);
 
         // Initiate ProgressBar
-        maxValue = allProficiencies.Count;
         correctAnswers = 0;
 
         Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
+        Debug.Log("List size pre-shuffle:" + allProficiencies.Count);
 
         allProficiencies = Shuffle(allProficiencies.ToList());
+        ResizeList<Bucket>(ref allProficiencies, maxValue); // Resize the list
 
         Debug.Log("Post-shuffle: " + LinkedString(allProficiencies));
+        Debug.Log("List size post-shuffle:" + allProficiencies.Count);
 
         // Create a dictionary to keep track of wrong answers
         List<int> ints = new List<int>(new int[allProficiencies.Count]);
         dictionary = new Dictionary<Bucket, int>(allProficiencies
         .Zip(ints, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v));
+    }
+
+    /**
+     * Method for resizing a list to the desired size.
+     * 
+     * list - the list to be resized
+     * size - the number of elements that the list should be resized to
+     * c - placeholder element for padding the end of the list
+     */
+    private void ResizeList<T>(ref LinkedList<T> list, int size) {
+        int curr = list.Count;
+        if (size < curr) {
+            T[] arr = list.ToArray();
+            Array.Resize(ref arr, size);
+            list = new LinkedList<T>(arr);
+        }
     }
 
     // Print for debugging
