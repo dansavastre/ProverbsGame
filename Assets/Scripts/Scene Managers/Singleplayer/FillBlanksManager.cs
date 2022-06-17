@@ -103,7 +103,7 @@ public class FillBlanksManager : SingleplayerManager
                 nextProverb.keywords.Add(v);
             }
 
-            answerProverb = Regex.Replace(answerProverb, v, "<u>BLANK</u>", RegexOptions.IgnoreCase);
+            answerProverb = Regex.Replace(answerProverb, v, "<u><alpha=#00>xxxxx</color></u>", RegexOptions.IgnoreCase);
         }
 
         // Shuffling list of words
@@ -204,7 +204,7 @@ public class FillBlanksManager : SingleplayerManager
         Debug.Log(answerProverb);
         
         word = "<u><b>" + word + "</u></b>";
-        answerProverb = ReplaceFirst(answerProverb, "<u>BLANK</u>", word);
+        answerProverb = ReplaceFirst(answerProverb, "<u><alpha=#00>xxxxx</color></u>", word);
         Debug.Log(answerProverb);
         questionText.text = answerProverb;
     }
@@ -214,7 +214,7 @@ public class FillBlanksManager : SingleplayerManager
     {
         Button[] buttons = keywordBoard.GetComponentsInChildren<Button>();
         for(int i = 0 ; i < buttons.Length; i++) {
-            if(buttons[i].GetComponentInChildren<TextMeshProUGUI>().text.Equals(word)) {
+            if(buttons[i].GetComponentInChildren<TextMeshProUGUI>().text.Equals(word) && buttons[i].interactable == false) {
                 buttons[i].interactable = true;
                 break;
             }
@@ -222,7 +222,7 @@ public class FillBlanksManager : SingleplayerManager
         answerProverb = questionText.text;
         string[] splits = questionText.text.Split(" ");
 
-        splits[wordIndex] = splits[wordIndex].Replace(word, "<u>BLANK</u>");
+        splits[wordIndex] = splits[wordIndex].Replace(word, "<u><alpha=#00>xxxxx</color></u>");
         
         answerProverb = string.Join(" ", splits);
 
@@ -242,7 +242,7 @@ public class FillBlanksManager : SingleplayerManager
     //Detect the press of a button
     public void buttonPressed(int index)
     {
-        if(canInput(answerProverb, "<u>BLANK</u>")) 
+        if(canInput(answerProverb, "<u><alpha=#00>xxxxx</color></u>")) 
         {
             inputWord(keywordBoard.GetComponentsInChildren<Button>()[index].GetComponentInChildren<TextMeshProUGUI>().text);
             keywordBoard.GetComponentsInChildren<Button>()[index].interactable = false;

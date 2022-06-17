@@ -43,7 +43,7 @@ public class MultipleChoiceManager : SingleplayerManager
 
         image.enabled = false;
 
-        if (currentBucket.stage == 2) gamemode = Mode.ProverbMeaning;
+        if (currentBucket.stage == 1) gamemode = Mode.ProverbMeaning;
         else if (currentBucket.stage == 3) gamemode = Mode.MeaningProverb;
         else 
         {
