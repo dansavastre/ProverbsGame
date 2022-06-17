@@ -192,7 +192,7 @@ public class CoopGame : SingleplayerManager
         // Set blank spaces in the proverb based on the keywords
         foreach (string v in buttonsToCreateWords)
         {
-            answerProverb = answerProverb.Replace(v, "<u>BLANK</u>");
+            answerProverb = answerProverb.Replace(v, "<u>xxx</u>");
         }
 
         questionText.text = answerProverb;
@@ -284,7 +284,7 @@ public class CoopGame : SingleplayerManager
     // private void inputWord(string word)
     // {
     //     word = "<u><b>" + word + "</u></b>";
-    //     answerProverb = ReplaceFirst(answerProverb, "<u>BLANK</u>", word);
+    //     answerProverb = ReplaceFirst(answerProverb, "<u>xxx</u>", word);
     //     questionText.text = answerProverb;
     // }
 
@@ -293,7 +293,7 @@ public class CoopGame : SingleplayerManager
     {
         word = "<u>" + word + "</u>";
         answerProverb = questionText.text;
-        answerProverb = ReplaceFirst(answerProverb, word, "<u>BLANK</u>");
+        answerProverb = ReplaceFirst(answerProverb, word, "<u>xxx</u>");
         questionText.text = answerProverb;
     }
 
@@ -310,7 +310,7 @@ public class CoopGame : SingleplayerManager
     // public void buttonPressed(Button button)
     // {
     //     Debug.Log("here");
-    //     if(canInput(answerProverb, "<u>BLANK</u>"))
+    //     if(canInput(answerProverb, "<u>xxx</u>"))
     //     {
     //         string buttonText = button.GetComponentInChildren<TextMeshProUGUI>().text;
     //         inputWord(buttonText);
