@@ -100,7 +100,8 @@ public class SessionManager : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update() 
+    {
         if (playerProficiency != null) {
             // Make the button active
             SessionButton.gameObject.SetActive(true);

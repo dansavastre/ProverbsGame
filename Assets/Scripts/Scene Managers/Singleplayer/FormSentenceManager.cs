@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
+using SRandom = System.Random;
 
 public class FormSentenceManager : SingleplayerManager
 {
@@ -128,9 +129,18 @@ public class FormSentenceManager : SingleplayerManager
             newButton.name = "AnswerButton" + i;
             int x = i;
             newButton.onClick.AddListener(() => buttonPressed(x));
+            StartCoroutine(DelayedAnimation(newButton));
         }
-
         questionText.text = answerProverb;
+    }
+
+    private IEnumerator DelayedAnimation(Button newButton)
+    {
+        SRandom rnd = new SRandom();
+        float randomWait = (float)rnd.Next(1, 9)/20;
+        Debug.Log(randomWait);
+        yield return new WaitForSeconds(randomWait);
+        newButton.gameObject.SetActive(true);
     }
 
     private void Update()
