@@ -11,6 +11,7 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     public static Launcher_FIB Instance;
 
     public PhotonView _photon;
+    private List<RoomInfo> allRooms = new List<RoomInfo>();
 
     [SerializeField] TMP_InputField roomNameInputField_FIB;
     [SerializeField] TMP_Text errorText_FIB;
@@ -64,6 +65,11 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
         MenuManager.Instance.OpenMenu("Loading");
     }
 
+    public override void OnLeftRoom()
+    {
+        allRooms = new List<RoomInfo>();
+    }
+    
     public override void OnJoinedRoom() {
         MenuManager.Instance.OpenMenu("Room");
         roomNameText_FIB.text = PhotonNetwork.CurrentRoom.Name;
@@ -122,12 +128,24 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList) {
+        foreach (var roomInfo in roomList)
+        {
+            if (roomInfo.RemovedFromList)
+            {
+                allRooms.Remove(roomInfo);
+            }
+            else
+            {
+                allRooms.Add(roomInfo);
+            }
+        }
+
+        allRooms = allRooms.ToHashSet().ToList();
+        
         foreach (Transform transform in roomListContent_FIB)
             Destroy(transform.gameObject);
-
-        foreach (RoomInfo roomInfo in roomList) {
-            if (roomInfo.RemovedFromList) // remove closed rooms from the list
-                continue;
+        
+        foreach (RoomInfo roomInfo in allRooms) {
             Instantiate(roomListItemPrefab_FIB, roomListContent_FIB).GetComponent<RoomListItem>().SetUp(roomInfo);
         }
     }

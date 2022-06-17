@@ -321,7 +321,7 @@ public class CoopGame : SingleplayerManager
         {
             var playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
 
-            while (allKeywordsPerPlayer[playerToSendTo.NickName].Contains(keyword))
+            while (allKeywordsPerPlayer[playerToSendTo.NickName].Contains(keyword)) // TODO what if all players have the specific keyword?
             {
                 i++;
                 playerToSendTo = PhotonNetwork.PlayerList[i % playerCountThisRoom];
