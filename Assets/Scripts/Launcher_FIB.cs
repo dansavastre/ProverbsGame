@@ -53,7 +53,7 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     public override void OnJoinedLobby() {
         MenuManager.Instance.OpenMenu("Fill In The Gaps"); // open the title menu on joining lobby
         Debug.Log("Joined Lobby.");
-        PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
+        PhotonNetwork.NickName = AccountManager.playerName;
     }
 
     public void CreateRoom() {
@@ -71,6 +71,15 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
         // Remove all the players in the previous room to start with a clean slate
         foreach (Transform child in playerListContent_FIB)
             Destroy(child.gameObject);
+
+        if (PhotonNetwork.PlayerList.Count() >= 4)
+        {
+            PhotonNetwork.CurrentRoom.IsVisible = true;
+        }
+        else
+        {
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+        }
 
         Photon.Realtime.Player[] players = PhotonNetwork.PlayerList;
         for (int i = 0; i < players.Count(); ++i)
