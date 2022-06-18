@@ -32,14 +32,12 @@ public class SingleplayerManager : MonoBehaviour
 
     // UI prefabs
     [SerializeField] protected Button answerButtonPrefab;       // Prefab for the answer buttons
-    [SerializeField] protected Button funFactButtonPrefab;      // Prefab for the fun fact button
 
     // Stores the reference location of the database
     public static DatabaseReference dbReference;
 
     // Stores information fetched from the database
     public StorageReference storageRef;
-    public string currentImage; 
     public byte[] fileContents;
 
     // The maximum number of bytes that will be retrieved
@@ -152,13 +150,6 @@ public class SingleplayerManager : MonoBehaviour
     protected void DisplayFeedback(bool correct)
     {
         answered = true;
-        
-        if(!firstTimeAnswering && funFactButtonPrefab != null)
-        {
-                Debug.Log("Instantiate");
-                Button newButton = Instantiate(funFactButtonPrefab, this.transform);
-                newButton.onClick.AddListener(() => LoadFunFactOnDemand());
-        }
 
         if (correct)
         {
@@ -328,6 +319,7 @@ public class SingleplayerManager : MonoBehaviour
             answers[numbers[i]].text = wrongAnswers[i-1];
         }
 
+        answerText.text = correctAnswer;
         currentQuestion.answers = answers;
 
         // Set the question and create the answer buttons
@@ -353,7 +345,7 @@ public class SingleplayerManager : MonoBehaviour
         // Get the starting location of the buttons
         int startLocation = boardHeight / 2 - buttonHeight / 2; 
         // Determine the spacing between buttons
-        int spaceLength = 25;
+        int spaceLength = 20;
         // The spacing that must be added between the buttons
         int spacing = answerIndex * spaceLength;
         

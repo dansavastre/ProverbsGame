@@ -819,20 +819,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd96da88a4706f4ab7207698a1289ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continueOverlay: {fileID: 211817046}
-  answerText: {fileID: 224385165}
+  progressBar: {fileID: 1048332964}
   questionText: {fileID: 2077129859}
-  resultText: {fileID: 1643515757}
-  checkButton: {fileID: 0}
-  nextQuestionButton: {fileID: 4468596444585904564}
-  funFactButtonPrefab: {fileID: 5410978016729983875, guid: 33a8ec32b6adbd4418ea1eb88a4b2613, type: 3}
-  answerButtonPrefab: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
+  image: {fileID: 755107124}
   answerBoard: {fileID: 875248372}
   answerButtons: []
-  image: {fileID: 755107124}
+  resultText: {fileID: 1643515757}
+  answerText: {fileID: 224385165}
+  checkButton: {fileID: 0}
+  nextQuestionButton: {fileID: 4468596444585904564}
+  continueOverlay: {fileID: 211817046}
   otherOptionBoard: {fileID: 21300000, guid: 4718b3b74e48df94cb3b1d3847df6749, type: 3}
-  UIManager: {fileID: 1185331187}
-  progressBar: {fileID: 1048332964}
+  answerButtonPrefab: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
+  fileContents: 
+  maxAllowedSize: 1048576
   taskText: {fileID: 1149138168}
   homeButton: {fileID: 1525436639}
   barBackground: {fileID: 1048332965}
@@ -1567,6 +1567,34 @@ PrefabInstance:
     - target: {fileID: 4468596444395068389, guid: 05b2ae40e1c5ba041a579a365f40edf9, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724615175016414327, guid: 05b2ae40e1c5ba041a579a365f40edf9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724615175016414327, guid: 05b2ae40e1c5ba041a579a365f40edf9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724615175016414327, guid: 05b2ae40e1c5ba041a579a365f40edf9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1185331186}
+    - target: {fileID: 7724615175016414327, guid: 05b2ae40e1c5ba041a579a365f40edf9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724615175016414327, guid: 05b2ae40e1c5ba041a579a365f40edf9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadFunFactOnDemand
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724615175016414327, guid: 05b2ae40e1c5ba041a579a365f40edf9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SingleplayerManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724615175016414327, guid: 05b2ae40e1c5ba041a579a365f40edf9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05b2ae40e1c5ba041a579a365f40edf9, type: 3}

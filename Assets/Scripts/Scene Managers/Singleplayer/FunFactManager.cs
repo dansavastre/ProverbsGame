@@ -19,11 +19,6 @@ public class FunFactManager : SingleplayerManager
     [SerializeField] private TextMeshProUGUI funFactScrollable;
     [SerializeField] private GameObject scrollBar;
 
-    // Stores the reference location of the image storage
-    private StorageReference storageRef;
-    private string currentImage;
-    private byte[] fileContents;
-
     // The maximum number of bytes that will be retrieved
     private long maxAllowedSize = 1 * 1024 * 1024;
 
@@ -37,29 +32,7 @@ public class FunFactManager : SingleplayerManager
         funFactText.text = "";
         scrollBar.SetActive(false);
 
-        // Get a reference to the storage service, using the default Firebase App
-        storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
-
-        // Get the root reference location of the image storage
-        StorageReference imageRef = storageRef.Child("proverbs/" + nextProverb.image);
-
-        // TODO: Share this method, has no await
-        // Load the proverb image from the storage
-        imageRef.GetBytesAsync(maxAllowedSize).ContinueWithOnMainThread(task =>
-        {
-            if (task.IsFaulted || task.IsCanceled)
-            {
-                Debug.LogError("Task (get image byte array) could not be completed.");
-                return;
-            }
-            else if (task.IsCompleted)
-            {
-                fileContents = task.Result;
-                Texture2D tex = new Texture2D(2, 2);
-                tex.LoadImage(fileContents);
-                image.GetComponent<RawImage>().texture = tex;
-            }
-        });
+        GetImage();
 
         questionText.text = nextProverb.phrase;
 

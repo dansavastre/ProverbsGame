@@ -61,7 +61,12 @@ public class FormSentenceManager : SingleplayerManager
         }
 
         // Add the keywords to allwords, and add some flukes
-        allWords.AddRange(nextProverb.otherKeywords);
+        for (int i = 0; allWords.Count < 15 && i < nextProverb.otherKeywords.Count; i++)
+        {
+            allWords.Add(nextProverb.otherKeywords[i]);
+        }
+
+        Debug.Log(allWords.Count);
 
         // Shuffling list of words
         for (int i = 0; i < allWords.Count; i++)
@@ -74,6 +79,7 @@ public class FormSentenceManager : SingleplayerManager
 
         CreateButtons();
         questionText.text = answerProverb;
+        answerText.text = correctProverb;
     }
 
     private void Update()

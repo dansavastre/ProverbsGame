@@ -82,6 +82,7 @@ public class FillBlanksManager : SingleplayerManager
         }
         CreateButtons();
         questionText.text = answerProverb;
+        answerText.text = correctProverb;
     }
 
     private void Update()
