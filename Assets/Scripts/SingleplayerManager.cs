@@ -1,10 +1,10 @@
-using Firebase;
-using Firebase.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Firebase;
+using Firebase.Database;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -82,11 +82,6 @@ public class SingleplayerManager : MonoBehaviour
         // Update Progress bar
         Debug.Log("ProgressBar: " + SessionManager.correctAnswers + " / " + SessionManager.maxValue);
         progressBar.SetProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
-    }
-
-    public void PlonkNoise()
-    {
-        WoodButton.Play();
     }
 
     // Get the key for the next proverb in the session in chronological order
@@ -446,5 +441,12 @@ public class SingleplayerManager : MonoBehaviour
         SessionManager.proverb = nextProverb;
         SessionManager.proficiency = newProficiency;
         SceneManager.LoadScene("FunFact");
+    }
+
+    // Plays the button clicked sound once
+    // TODO: Share method
+    public void PlonkNoise()
+    {
+        WoodButton.Play();
     }
 }

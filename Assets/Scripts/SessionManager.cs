@@ -1,29 +1,27 @@
-using Firebase;
-using Firebase.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Firebase;
+using Firebase.Database;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using Random = System.Random;
 
-public class SessionManager : MonoBehaviour {
+public class SessionManager : MonoBehaviour 
+{
     // UI elements
-    [SerializeField] public TextMeshProUGUI ApprenticeCount;
-    [SerializeField] public TextMeshProUGUI JourneymanCount;
-    [SerializeField] public TextMeshProUGUI ExpertCount;
-    [SerializeField] public TextMeshProUGUI MasterCount;
+    [SerializeField] private TextMeshProUGUI ApprenticeCount;
+    [SerializeField] private TextMeshProUGUI JourneymanCount;
+    [SerializeField] private TextMeshProUGUI ExpertCount;
+    [SerializeField] private TextMeshProUGUI MasterCount;
     [SerializeField] public Button SessionButton;
 
-    private static AudioSource WoodButton;
-
     // Stores the reference location of the database
-    private DatabaseReference dbReference;
-    public static DatabaseReference dbReferenceStatic;
+    public static DatabaseReference dbReference;
 
     // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
@@ -32,6 +30,8 @@ public class SessionManager : MonoBehaviour {
     public static string playerEmail;
     public static string playerName;
     public static string playerKey;
+
+    private static AudioSource WoodButton;
 
     // Progress bar
     public static int maxValue = 10; // The number of questions that should be allowed in a single session
@@ -69,30 +69,29 @@ public class SessionManager : MonoBehaviour {
     };
 
     // Start is called before the first frame update
-    void Start() {
+    void Start() 
+    {
+        // Get the root reference location of the database
+        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+
         // Reset the player proficiency
         playerProficiency = null;
         playerProficiencyNoFilter = null;
         newProficiency = null;
+
+        // Set player properties
         playerEmail = AccountManager.playerEmail;
         playerName = AccountManager.playerName;
         playerKey = null;
+
+        // Instantiate variables
         random = new Random();
         isOnDemandBeforeAnswer = false;
-
         WoodButton = AccountManager.WoodButton;
 
-        // Get the root reference location of the database
-        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-        dbReferenceStatic = dbReference;
-
-        // Make the button inactive
-        if (playerEmail == null) {
-            Debug.Log("No email was given, returning to first screen.");
-            SwitchScene(0);
-        } else {
-            GetPlayerKey();
-        }
+        // Only continue if player email is given
+        if (playerEmail == null) SwitchScene(0);
+        else GetPlayerKey();
     }
 
     public void PlonkNoise() {
@@ -112,8 +111,6 @@ public class SessionManager : MonoBehaviour {
             JourneymanCount.ForceMeshUpdate(true);
             ExpertCount.ForceMeshUpdate(true);
             MasterCount.ForceMeshUpdate(true);
-
-            dbReferenceStatic = dbReference;
         }
     }
 

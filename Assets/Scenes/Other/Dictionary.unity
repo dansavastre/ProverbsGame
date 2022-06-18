@@ -563,7 +563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   filterText: {fileID: 1436490758}
-  filterTextHolderPanel: {fileID: 4745527}
+  filterHolderPanel: {fileID: 4745527}
   dictionaryContentHolder: {fileID: 851859001}
   wordButtonPrefab: {fileID: 5176199197588525093, guid: 5de84d10f98bd2e46b0394739b05af7c, type: 3}
 --- !u!1 &632370699
@@ -845,7 +845,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -466.49966, y: 650.00006}
+  m_AnchoredPosition: {x: -466.49966, y: 650}
   m_SizeDelta: {x: 912.176, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &851859000
@@ -1043,7 +1043,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2118548686}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.7153407
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

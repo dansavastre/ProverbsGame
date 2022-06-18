@@ -2,39 +2,47 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Firebase.Database;
 using TMPro;
+using Firebase.Database;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 
+// TODO: Add more comments to this file
+
 public class DictionaryManager : MonoBehaviour
 {
+    // UI elements
+    [SerializeField] private TextMeshProUGUI filterText;
+    [SerializeField] private Transform filterHolderPanel;
+    [SerializeField] private TextMeshProUGUI dictionaryContentHolder;
+
+    // UI prefabs
+    [SerializeField] private Button wordButtonPrefab;
+
+    // Audio source for button sound
+    public static AudioSource WoodButton;
+    
+    // Proverb information
     private List<ProverbsDictionary> allProverbs;
     private List<ProverbsDictionary> filteredProverbsList;
     private HashSet<string> wordsToFilterOn;
     private DatabaseReference dbReference;
-
-    [SerializeField] private TextMeshProUGUI filterText;
-    [SerializeField] private Transform filterTextHolderPanel;
-    [SerializeField] private TextMeshProUGUI dictionaryContentHolder;
-    [SerializeField] private Button wordButtonPrefab;
-
-    private static AudioSource WoodButton;
-    private static string[] scenes;
     
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        scenes = SessionManager.scenes;
+        // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        // Get the GameObject that contains the audio source for button sound
         WoodButton = AccountManager.WoodButton;
+
         getProverbsToShow();
-        StartCoroutine(wait());
+        StartCoroutine(Wait());
     }
 
-    IEnumerator wait()
+    private IEnumerator Wait()
     {
         yield return new WaitForSeconds(1);
         UpdateDictionaryContentHolderContents();
@@ -69,7 +77,39 @@ public class DictionaryManager : MonoBehaviour
             }
         });
     }
-    
+
+    private void UpdateDictionaryContentHolderContents()
+    {
+        filteredProverbsList = filteredProverbsList.OrderBy(p => p.proverb).ToList();
+        dictionaryContentHolder.text = "";
+
+        foreach (var proverbsDictionary in filteredProverbsList)
+        {
+            dictionaryContentHolder.text += 
+                proverbsDictionary.proverb + ":" + Environment.NewLine + "  " +
+                proverbsDictionary.meaning + Environment.NewLine + Environment.NewLine;
+        }
+    }
+
+    private void WordButtonPressed(string wordOfButton)
+    {
+        wordsToFilterOn.Remove(wordOfButton);
+
+        foreach (var tmp in filterHolderPanel.GetComponentsInChildren<TextMeshProUGUI>())
+        {
+            if (tmp.text == wordOfButton)
+            {
+                Destroy(tmp.transform.parent.GameObject());
+            }
+        }
+        filteredProverbsList = new List<ProverbsDictionary>(allProverbs);
+        foreach (var wordToFilterOn in wordsToFilterOn)
+        {
+            filteredProverbsList = filteredProverbsList.Where(s => s.proverb.ToLower().Contains(wordToFilterOn)).ToList();
+        }
+        UpdateDictionaryContentHolderContents();
+    }
+
     public void FilterAdded()
     {
         string filter = filterText.text.Replace("\u200B", "");
@@ -83,8 +123,8 @@ public class DictionaryManager : MonoBehaviour
             filteredProverbsList = filteredProverbsList.Where(s => s.proverb.ToLower().Contains(wordToFilterOn))
                 .ToList();
 
-            // add button for word filtered on 
-            Button wordButton = Instantiate(wordButtonPrefab, filterTextHolderPanel);
+            // Add button for word filtered on 
+            Button wordButton = Instantiate(wordButtonPrefab, filterHolderPanel);
             wordButton.GetComponentInChildren<TextMeshProUGUI>().text = wordToFilterOn;
             wordButton.onClick.AddListener(() => WordButtonPressed(wordToFilterOn));
         }
@@ -92,45 +132,17 @@ public class DictionaryManager : MonoBehaviour
         UpdateDictionaryContentHolderContents();
     }
 
-    private void UpdateDictionaryContentHolderContents()
-    {
-        filteredProverbsList = filteredProverbsList.OrderBy(p => p.proverb).ToList();
-        dictionaryContentHolder.text = "";
-        foreach (var proverbsDictionary in filteredProverbsList)
-        {
-            dictionaryContentHolder.text += proverbsDictionary.proverb + ":" + Environment.NewLine + "  " +
-                                            proverbsDictionary.meaning + Environment.NewLine + Environment.NewLine;
-        }
-    }
-
-    private void WordButtonPressed(string wordOfButton)
-    {
-        wordsToFilterOn.Remove(wordOfButton);
-
-        foreach (var tmp in filterTextHolderPanel.GetComponentsInChildren<TextMeshProUGUI>())
-        {
-            if (tmp.text == wordOfButton)
-            {
-                Destroy(tmp.transform.parent.GameObject());
-            }
-        }
-
-        filteredProverbsList = new List<ProverbsDictionary>(allProverbs);
-        foreach (var wordToFilterOn in wordsToFilterOn)
-        {
-            filteredProverbsList = filteredProverbsList.Where(s => s.proverb.ToLower().Contains(wordToFilterOn)).ToList();
-        }
-        UpdateDictionaryContentHolderContents();
-    }
-
+    // Plays the button clicked sound once
+    // TODO: Share method
     public void PlonkNoise()
     {
         WoodButton.Play();
     }
 
-    // Switch to the scene corresponding to the sceneIndex
+    // Switches to another scene
+    // TODO: Share method
     public void SwitchScene(int sceneIndex)
     {
-        SceneManager.LoadScene(scenes[sceneIndex]);
+        SceneManager.LoadScene(SessionManager.scenes[sceneIndex]);
     }
 }

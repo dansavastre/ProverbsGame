@@ -6,15 +6,20 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    // UI elements
     [SerializeField] public AudioSource WoodButton;
     [SerializeField] private GameObject ProverbLevelUp;
+
+    // Proverb level up variables
     private ParticleSystem ConfettiPS;
     private TextMeshProUGUI ProficiencyText;
 
-    // Start is called before the first frame update
     void Awake()
     {
+        // Makes sure the sound effect is not destroyed when switching scenes
         if (WoodButton != null) DontDestroyOnLoad(WoodButton);
+
+        // Initializes the proverb level up variables
         if (ProverbLevelUp != null) 
         {
             ProverbLevelUp.SetActive(true);
@@ -29,11 +34,7 @@ public class UIManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && (ProverbLevelUp != null)) disableCongratulations();
     }
 
-    public void onMouseClick() 
-    {
-        WoodButton.Play();
-    }
-
+    // Shows the proverb level up pop up
     public void enableCongratulations(string proficiencyText)
     {
         ProverbLevelUp.SetActive(true);
@@ -41,6 +42,7 @@ public class UIManager : MonoBehaviour
         ProficiencyText.text = proficiencyText + "!";
     }
 
+    // Hides the proverb level up pop up
     public void disableCongratulations()
     {
         ConfettiPS.Stop();
