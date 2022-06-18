@@ -19,17 +19,19 @@ public class MultipleChoiceManager : SingleplayerManager
     [SerializeField] private GameObject barBackground;
     [SerializeField] private GameObject questionBoard;
     [SerializeField] private GameObject imageBoard;
+    [SerializeField] private GameObject funFactButton;
     [SerializeField] private GameObject nextButton;
 
     // Sprites for UI elements
     [SerializeField] private Sprite otherHomeButton;
     [SerializeField] private Sprite otherBarBackground;
     [SerializeField] private Sprite otherImageBoard;
+    [SerializeField] private Sprite otherFunFactButton;
     [SerializeField] private Sprite otherNextButton;
 
     // Variables for storing the type of multiple choice question
     public enum Mode { ProverbMeaning, MeaningProverb, ExampleSentence}
-    public Mode gamemode;
+    public static Mode gamemode;
 
     protected async override void Start()
     {
@@ -126,6 +128,7 @@ public class MultipleChoiceManager : SingleplayerManager
             barBackground.GetComponent<Image>().sprite = otherBarBackground;
             questionBoard.GetComponent<Image>().sprite = otherOptionBoard;
             imageBoard.GetComponent<Image>().sprite = otherImageBoard;
+            funFactButton.GetComponent<Image>().sprite = otherFunFactButton;
             nextButton.GetComponent<Image>().sprite = otherNextButton;
         }
     }

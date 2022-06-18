@@ -12,6 +12,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using Random = UnityEngine.Random;
+using SRandom = System.Random;
 
 public class SingleplayerManager : MonoBehaviour
 {
@@ -357,9 +358,11 @@ public class SingleplayerManager : MonoBehaviour
         // Add button properties
         newButton.name = "Answer" + answerIndex;
         newButton.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[answerIndex].text;
-        newButton.GetComponent<Image>().sprite = otherOptionBoard;
+        if (MultipleChoiceManager.gamemode == MultipleChoiceManager.Mode.ExampleSentence) newButton.GetComponent<Image>().sprite = otherOptionBoard;
         newButton.onClick.AddListener(() => CheckAnswer(answerIndex));
         answerButtons.Add(newButton);
+
+        StartCoroutine(DelayedAnimation(newButton));
     }
     
     // Display the feedback after the player answers the question
@@ -468,6 +471,17 @@ public class SingleplayerManager : MonoBehaviour
             6 => "FormSentence",
             _ => ""
         };
+    }
+
+    // Plays an animation on the given button with a random delay
+    // TODO: Share method
+    private IEnumerator DelayedAnimation(Button newButton)
+    {
+        SRandom rnd = new SRandom();
+        float randomWait = (float)rnd.Next(1, 7)/20;
+        Debug.Log(randomWait);
+        yield return new WaitForSeconds(randomWait);
+        newButton.gameObject.SetActive(true);
     }
 
     // Plays the button clicked sound once
