@@ -1,12 +1,11 @@
-using Firebase;
-using Firebase.Database;
-using Firebase.Storage;
-using Firebase.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Firebase;
+using Firebase.Database;
+using Firebase.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -16,9 +15,6 @@ using System.Text.RegularExpressions;
 
 public class FillBlanksManager : SingleplayerManager
 {
-    // UI elements
-    [SerializeField] private List<Button> Buttons;
-
     // UI prefabs
     [SerializeField] private Button fillInTheBlanksAnswerButtonPrefab;
 

@@ -1,6 +1,5 @@
 using Firebase;
 using Firebase.Database;
-using Firebase.Storage;
 using Firebase.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
