@@ -48,14 +48,14 @@ public class SessionManager : MonoBehaviour {
 
     public static string[] scenes =
     {
-        "FirstScreen",          // First screen on app launch
-        "Register",             // Screen to register
-        "Login",                // Screen to login
-        "MainMenu",             // Singleplayer menu
-        "FillInBlanks",         // Multiplayer menu
-        "InfoScreen",           // Information page
-        "ProfilePage",          // Profile page
-        "Dictionary"            // Proverb dictionary
+        "FirstScreen",          // 0 First screen on app launch
+        "Register",             // 1 Screen to register
+        "Login",                // 2 Screen to login
+        "MainMenu",             // 3 Singleplayer menu
+        "FillInBlanks",         // 4 Multiplayer menu
+        "InfoScreen",           // 5 Information page
+        "ProfilePage",          // 6 Profile page
+        "Dictionary"            // 7 Proverb dictionary
     };
 
     private TimeSpan[] waitingPeriod =
