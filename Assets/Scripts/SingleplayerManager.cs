@@ -1,52 +1,72 @@
-using Firebase;
-using Firebase.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Firebase;
+using Firebase.Database;
+using Firebase.Storage;
+using Firebase.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using Random = UnityEngine.Random;
+using SRandom = System.Random;
 
 public class SingleplayerManager : MonoBehaviour
 {
     // UI elements
-    [SerializeField] protected TextMeshProUGUI questionText;
-    [SerializeField] protected TextMeshProUGUI resultText;
-    [SerializeField] protected GameObject checkButton;
-    [SerializeField] protected GameObject nextQuestionButton;
-    [SerializeField] protected Button funFactButtonPrefab;
-    [SerializeField] protected Button answerButtonPrefab;
-    [SerializeField] protected RectTransform answerBoard;
-    [SerializeField] protected List<Button> answerButtons;
-    [SerializeField] protected RawImage image;
+    [SerializeField] public ProgressBar progressBar;            // Bar at top of screen to track progress
+    [SerializeField] protected TextMeshProUGUI questionText;    // Displays proverb/meaning/example
+    [SerializeField] protected RawImage image;                  // Stores the image for each scene
+    [SerializeField] protected RectTransform answerBoard;       // Area that answer buttons are put into
+    [SerializeField] protected List<Button> answerButtons;      // Answer buttons for each question
+    [SerializeField] protected TextMeshProUGUI resultText;      // Displays whether answered (in)correctly
+    [SerializeField] protected TextMeshProUGUI answerText;      // Displays correct answer
+    [SerializeField] protected Button checkButton;              // Used in FillBlanks and FormSentence
+    [SerializeField] protected GameObject nextQuestionButton;   // Button that goes to next question
+    [SerializeField] protected GameObject continueOverlay;      // Popup that shows feedback and button
 
-    // Sprites for MultipleChoice UI 
-    [SerializeField] protected Sprite otherOptionBoard;
+    // Sprites for MultipleChoice UI elements
+    [SerializeField] protected Sprite otherOptionBoard;         // Alternative theme for option board
+
+    // UI prefabs
+    [SerializeField] protected Button answerButtonPrefab;       // Prefab for the answer buttons
+
+    // Stores the reference location of the database
+    public static DatabaseReference dbReference;
+
+    // Stores information fetched from the database
+    public StorageReference storageRef;
+    public byte[] fileContents;
+
+    // The maximum number of bytes that will be retrieved
+    public long maxAllowedSize = 1 * 1024 * 1024;
+
+    // Audio source for button sound
+    public static AudioSource WoodButton;
 
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
-    protected DatabaseReference dbReference;
     protected Proverb nextProverb;
-    protected string currentType;
     protected Bucket currentBucket;
+    protected Question currentQuestion;
+    protected string currentType;
 
     // Variables
-    protected Question currentQuestion;
-    public static List<Bucket> allProficienciesNoFilter;
     private static LinkedList<Bucket> allProficiencies;
+    public static List<Bucket> allProficienciesNoFilter;
     private static Dictionary<Bucket, int> dictionary;
     private bool answeredCorrect;
     private bool answered;
     private bool firstTimeAnswering;
 
-    // Progress bar
-    [SerializeField] public ProgressBar progressBar;
+    // UI Manager
+    private UIManager UIManager;
 
+    // Stages corresponding to the proficiency levels
     private const int apprenticeStage = 3;
     private const int journeymanStage = 5;
     private const int expertStage = 6;
@@ -60,7 +80,10 @@ public class SingleplayerManager : MonoBehaviour
         playerProficiency = SessionManager.playerProficiency;
         newProficiency = SessionManager.newProficiency;
 
-        // Initialize new variables
+        // Get the GameObject that contains the audio source for button sound
+        WoodButton = AccountManager.WoodButton;
+
+        // Instantiate variables
         allProficiencies = SessionManager.allProficiencies;
         allProficienciesNoFilter = SessionManager.allProficienciesNoFilter;
         dictionary = SessionManager.dictionary;
@@ -74,6 +97,33 @@ public class SingleplayerManager : MonoBehaviour
         // Update Progress bar
         Debug.Log("ProgressBar: " + SessionManager.correctAnswers + " / " + SessionManager.maxValue);
         progressBar.SetProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
+    }
+
+    protected void GetImage()
+    {
+        // Get a reference to the storage service, using the default Firebase App
+        storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
+
+        // Get the root reference location of the image storage
+        StorageReference imageRef = storageRef.Child("proverbs/" + nextProverb.image);
+
+        // TODO: Share this method, has no await
+        // Load the proverb image from the storage
+        imageRef.GetBytesAsync(maxAllowedSize).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                Debug.LogError("Task (get image byte array) could not be completed.");
+                return;
+            }
+            else if (task.IsCompleted)
+            {
+                fileContents = task.Result;
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(fileContents);
+                image.GetComponent<RawImage>().texture = tex;
+            }
+        });
     }
 
     // Get the key for the next proverb in the session in chronological order
@@ -101,13 +151,6 @@ public class SingleplayerManager : MonoBehaviour
     protected void DisplayFeedback(bool correct)
     {
         answered = true;
-        
-        if(!firstTimeAnswering && funFactButtonPrefab != null)
-        {
-                Debug.Log("Instantiate");
-                Button newButton = Instantiate(funFactButtonPrefab, this.transform);
-                newButton.onClick.AddListener(() => LoadFunFactOnDemand());
-        }
 
         if (correct)
         {
@@ -176,6 +219,21 @@ public class SingleplayerManager : MonoBehaviour
         {
             currentBucket.stage++;
             Debug.Log(currentBucket.key + " stage upgraded to " + currentBucket.stage.ToString());
+            if (UIManager != null) 
+            {
+                switch (currentBucket.stage)
+                {
+                    case 4:
+                        UIManager.enableCongratulations(GetTypeOfStage(4));
+                        break;
+                    case 6: 
+                        UIManager.enableCongratulations(GetTypeOfStage(6));
+                        break;
+                    case 7: 
+                        UIManager.enableCongratulations(GetTypeOfStage(7));
+                        break;
+                }
+            }
         } else if (dictionary[currentBucket] > 0 && currentBucket.stage > 1)
         {
             currentBucket.stage = ChangeStage(currentBucket.stage, dictionary[currentBucket]);
@@ -236,14 +294,8 @@ public class SingleplayerManager : MonoBehaviour
         for (int i = 0; i < numbers.Length; i++)
         {
             int random = Random.Range(0, numbers.Length);
-            if (numbers.Contains(random))
-            {
-                i--;
-            }
-            else
-            {
-                numbers[i] = random;
-            }
+            if (numbers.Contains(random)) i--;
+            else numbers[i] = random;
         }
         // Create question and answer objects from proverb
         currentQuestion = new Question();
@@ -268,6 +320,7 @@ public class SingleplayerManager : MonoBehaviour
             answers[numbers[i]].text = wrongAnswers[i-1];
         }
 
+        answerText.text = correctAnswer;
         currentQuestion.answers = answers;
 
         // Set the question and create the answer buttons
@@ -283,24 +336,33 @@ public class SingleplayerManager : MonoBehaviour
      */
     private void CreateButton(int answerIndex)
     {
+        // Get board and button dimensions
+        int buttonHeight = (int)answerButtonPrefab.GetComponent<RectTransform>().rect.height; 
+        int boardHeight = (int)answerBoard.GetComponent<RectTransform>().rect.height;
+
+        // Instantiate new button from prefab
         Button newButton = Instantiate(answerButtonPrefab, answerBoard, false);
 
-        // Set position
-        int buttonHeight = (int)newButton.GetComponent<RectTransform>().rect.height; 
-        int boardTopEdge = (int)answerBoard.GetComponent<RectTransform>().rect.height;
-        int startLocation = boardTopEdge / 2 - buttonHeight / 2; // Get the starting location of the buttons
-        int spaceLength = 25; // Space size between 2 buttons
-        int spacing = answerIndex * spaceLength; // The spacing that must be added between the buttons
-        int yPos = startLocation - answerIndex * buttonHeight - spacing; // The final position of the button
+        // Get the starting location of the buttons
+        int startLocation = boardHeight / 2 - buttonHeight / 2; 
+        // Determine the spacing between buttons
+        int spaceLength = 20;
+        // The spacing that must be added between the buttons
+        int spacing = answerIndex * spaceLength;
+        
+        // Compute the final position of the button
+        int yPos = startLocation - answerIndex * buttonHeight - spacing;
         var transform1 = newButton.transform;
         transform1.localPosition = new Vector3(transform1.localPosition.x, yPos);
         
-        // Set name, text, sprite, and callback
+        // Add button properties
         newButton.name = "Answer" + answerIndex;
         newButton.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[answerIndex].text;
-        newButton.GetComponent<Image>().sprite = otherOptionBoard;
+        if (MultipleChoiceManager.gamemode == MultipleChoiceManager.Mode.ExampleSentence) newButton.GetComponent<Image>().sprite = otherOptionBoard;
         newButton.onClick.AddListener(() => CheckAnswer(answerIndex));
         answerButtons.Add(newButton);
+
+        StartCoroutine(DelayedAnimation(newButton));
     }
     
     // Display the feedback after the player answers the question
@@ -308,6 +370,7 @@ public class SingleplayerManager : MonoBehaviour
     {
         DisplayFeedback(currentQuestion.answers[index].isCorrect);
         image.enabled = true;
+        if (continueOverlay != null) continueOverlay.SetActive(true);
         DeactivateAnswerButtons();
     }
     
@@ -335,27 +398,24 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
 
-    // Quit the session and return to the start menu
+    // Quit the session and return to the main menu
     public void QuitSession()
     {
         Debug.Log("Quitting session.");
         string json = JsonUtility.ToJson(newProficiency);
         dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-        SceneManager.LoadScene("SingleplayerMenu");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void LoadNextScene()
     {
-        if(firstTimeAnswering && answeredCorrect)
+        if (firstTimeAnswering && answeredCorrect)
         {
             Debug.Log("First time answered correct!");
             firstTimeAnswering = false;
             LoadFunFact();
         }
-        else 
-        {
-            LoadQuestion();
-        }
+        else LoadQuestion();
     }
 
     // Load the next question
@@ -368,38 +428,17 @@ public class SingleplayerManager : MonoBehaviour
             Debug.Log("Saving progress.");
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-            SceneManager.LoadScene("singleplayerMenu");
+            SceneManager.LoadScene("MainMenu");
             return;
         }
-        switch (currentBucket.stage)
+
+        string nextScene = NextSceneName(currentBucket.stage);
+        if (nextScene != "") SceneManager.LoadScene(nextScene);
+        else 
         {
-            case 1:
-                SceneManager.LoadScene("MultipleChoice");
-                break;
-            case 2:
-                SceneManager.LoadScene("RecognizeImage");
-                break;
-            case 3:
-                SceneManager.LoadScene("MultipleChoice");
-                break;
-            case 4:
-                SceneManager.LoadScene("FillBlanks");
-                break;
-            case 5:
-                SceneManager.LoadScene("MultipleChoice");
-                break;
-            case 6:
-                SceneManager.LoadScene("FormSentence");
-                break;
-            case 7:
-                Debug.Log("Stage 7 encountered!");
-                QuitSession();
-                break;
-            default:
-                string json = JsonUtility.ToJson(newProficiency);
-                dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-                SceneManager.LoadScene("SingleplayerMenu");
-                break;
+            string json = JsonUtility.ToJson(newProficiency);
+            dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
+            SceneManager.LoadScene("MainMenu");
         }
     }
 
@@ -413,9 +452,49 @@ public class SingleplayerManager : MonoBehaviour
     // Load the FunFact scene
     public void LoadFunFact() 
     {
-        Debug.Log("Load Fun Fact");
         SessionManager.proverb = nextProverb;
         SessionManager.proficiency = newProficiency;
         SceneManager.LoadScene("FunFact");
+    }
+
+    // Gets the name of the next scene depending on the stage
+    // TODO: Share method with SessionManager
+    public string NextSceneName(int stage)
+    {
+        return stage switch
+        {
+            1 => "MultipleChoice",
+            3 => "MultipleChoice",
+            5 => "MultipleChoice",
+            2 => "RecognizeImage",
+            4 => "FillBlanks",
+            6 => "FormSentence",
+            _ => ""
+        };
+    }
+
+    // Plays an animation on the given button with a random delay
+    // TODO: Share method
+    private IEnumerator DelayedAnimation(Button newButton)
+    {
+        SRandom rnd = new SRandom();
+        float randomWait = (float)rnd.Next(1, 7)/20;
+        Debug.Log(randomWait);
+        yield return new WaitForSeconds(randomWait);
+        newButton.gameObject.SetActive(true);
+    }
+
+    // Plays the button clicked sound once
+    // TODO: Share method
+    public void PlonkNoise()
+    {
+        WoodButton.Play();
+    }
+
+    // Switch to the scene corresponding to the sceneIndex
+    // TODO: Share method
+    public void SwitchScene(int sceneIndex) 
+    {
+        SceneManager.LoadScene(SessionManager.scenes[sceneIndex]);
     }
 }

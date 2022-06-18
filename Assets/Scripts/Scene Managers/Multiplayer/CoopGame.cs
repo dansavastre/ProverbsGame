@@ -121,7 +121,7 @@ public class CoopGame : SingleplayerManager
 
                 foreach (string word in keyWordsClone)
                 {
-                    for (int j = 1; j < Regex.Matches(proverbToAdd.phrase, word).Count; j++)
+                    for (int j = 1; j < Regex.Matches(proverbToAdd.phrase, word, RegexOptions.IgnoreCase).Count; j++)
                     {
                         proverbToAdd.keywords.Add(word);
                         Debug.Log(word);
@@ -204,7 +204,7 @@ public class CoopGame : SingleplayerManager
         if (proverbs.Count == 0)
         {
             questionText.text = "You are done with your proverbs! Help your teammates finish theirs!";
-            checkButton.SetActive(false);
+            checkButton.gameObject.SetActive(false);
             nextQuestionButton.SetActive(false);
             _photon.RPC("PlayerDone", RpcTarget.MasterClient);
             return;
@@ -412,7 +412,7 @@ public class CoopGame : SingleplayerManager
         {
             resultText.text = "Correct";
             nextQuestionButton.SetActive(true);
-            checkButton.SetActive(false);
+            checkButton.gameObject.SetActive(false);
         }
         else
         {
@@ -428,7 +428,7 @@ public class CoopGame : SingleplayerManager
     {
         LoadNextProverb();
         resultText.text = "";
-        checkButton.SetActive(true);
+        checkButton.gameObject.SetActive(true);
         nextQuestionButton.SetActive(false);
     }
 
@@ -504,7 +504,7 @@ public class CoopGame : SingleplayerManager
 
     IEnumerator endGame(string message)
     {
-        checkButton.SetActive(false);
+        checkButton.gameObject.SetActive(false);
         nextQuestionButton.SetActive(false);
         questionText.text = message;
         PhotonNetwork.CurrentRoom.IsVisible = true;

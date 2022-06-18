@@ -14,73 +14,42 @@ using Random = UnityEngine.Random;
 
 public class FunFactManager : SingleplayerManager
 {
-
+    // UI elements
     [SerializeField] private TextMeshProUGUI funFactText;
     [SerializeField] private TextMeshProUGUI funFactScrollable;
-    [SerializeField] private RawImage image;
     [SerializeField] private GameObject scrollBar;
 
-    private StorageReference storageRef;
-    private string currentImage;
-    private byte[] fileContents;
+    // The maximum number of bytes that will be retrieved
+    private long maxAllowedSize = 1 * 1024 * 1024;
 
     public void Start()
     {
         Debug.Log("is on demand: " + SessionManager.isOnDemandBeforeAnswer);
         nextProverb = SessionManager.proverb;
         newProficiency = SessionManager.proficiency;
-        dbReference = SessionManager.dbReferenceStatic;
 
         // Reset gameobjects
         funFactText.text = "";
         scrollBar.SetActive(false);
 
-        // Get a reference to the storage service, using the default Firebase App
-        storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
-
-        // Reference for retrieving an image
-        StorageReference imageRef = storageRef.Child("proverbs/" + nextProverb.image);
-        Debug.Log("proverbs/" + nextProverb.image);
-
-        const long maxAllowedSize = 1 * 1024 * 1024;
-        imageRef.GetBytesAsync(maxAllowedSize).ContinueWithOnMainThread(task =>
-        {
-            if (task.IsFaulted || task.IsCanceled)
-            {
-                Debug.LogError("Task (get image byte array) could not be completed.");
-                return;
-            }
-            if (task.IsCompleted)
-            {
-                fileContents = task.Result;
-                Texture2D tex = new Texture2D(2, 2);
-                tex.LoadImage(fileContents);
-                image.GetComponent<RawImage>().texture = tex;
-                Debug.Log("Finished downloading!");
-            }
-        });
+        GetImage();
 
         questionText.text = nextProverb.phrase;
 
         progressBar.SetProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
-        
 
         DisplayFunFact();
     }
 
+    // Sets the corresponding UI elements and enables scroll bar if necessary
     private void DisplayFunFact() 
     {
         string funFact = nextProverb.funFact;
 
-        //funFact = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
-        //    " Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." +
-        //    " Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." +
-        //    " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
-
         nextQuestionButton.SetActive(true);
         Debug.Log(nextProverb.funFact);
         
-        if(funFact.Length > 210)
+        if (funFact.Length > 210)
         {
             scrollBar.SetActive(true);
             funFactScrollable.text = funFact;
