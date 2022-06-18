@@ -1,12 +1,11 @@
-using Firebase;
-using Firebase.Database;
-using Firebase.Storage;
-using Firebase.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Firebase;
+using Firebase.Database;
+using Firebase.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -27,14 +26,6 @@ public class MultipleChoiceManager : SingleplayerManager
     [SerializeField] private Sprite otherBarBackground;
     [SerializeField] private Sprite otherImageBoard;
     [SerializeField] private Sprite otherNextButton;
-
-    // Stores information fetched from the database
-    private StorageReference storageRef;
-    private string currentImage; 
-    private byte[] fileContents;
-
-    // The maximum number of bytes that will be retrieved
-    private long maxAllowedSize = 1 * 1024 * 1024;
 
     // Variables for storing the type of multiple choice question
     public enum Mode { ProverbMeaning, MeaningProverb, ExampleSentence}
@@ -68,29 +59,7 @@ public class MultipleChoiceManager : SingleplayerManager
             }
         });
         
-        // Get a reference to the storage service, using the default Firebase App
-        storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
-
-        // Get the root reference location of the image storage
-        StorageReference imageRef = storageRef.Child("proverbs/" + nextProverb.image);
-
-        // TODO: Share this method, has no await
-        // Load the proverb image from the storage
-        imageRef.GetBytesAsync(maxAllowedSize).ContinueWithOnMainThread(task =>
-        {
-            if (task.IsFaulted || task.IsCanceled)
-            {
-                Debug.LogError("Task (get image byte array) could not be completed.");
-                return;
-            }
-            else if (task.IsCompleted)
-            {
-                fileContents = task.Result;
-                Texture2D tex = new Texture2D(2, 2);
-                tex.LoadImage(fileContents);
-                image.GetComponent<RawImage>().texture = tex;
-            }
-        });
+        GetImage();
 
         int[] numbers = RandomPositions();
 
@@ -134,7 +103,7 @@ public class MultipleChoiceManager : SingleplayerManager
             }
             
             SetCurrentQuestion(nextProverb.phrase, otherPhrases);
-            
+
             taskText.text = "Select the proverb";
             if (gamemode == Mode.MeaningProverb) currentQuestion.text = nextProverb.meaning;
             else currentQuestion.text = nextProverb.example;

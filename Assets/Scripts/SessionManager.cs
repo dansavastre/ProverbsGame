@@ -18,7 +18,6 @@ public class SessionManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI JourneymanCount;
     [SerializeField] private TextMeshProUGUI ExpertCount;
     [SerializeField] private TextMeshProUGUI MasterCount;
-    [SerializeField] public Button SessionButton;
 
     // Stores the reference location of the database
     public static DatabaseReference dbReference;
@@ -31,20 +30,24 @@ public class SessionManager : MonoBehaviour
     public static string playerName;
     public static string playerKey;
 
-    private static AudioSource WoodButton;
+    // Audio source for button sound
+    public static AudioSource WoodButton;
 
     // Progress bar
-    public static int maxValue = 10; // The number of questions that should be allowed in a single session
     public static int correctAnswers;
 
-    private Random random;
+    // The number of questions that should be allowed in a single session
+    public static int maxValue = 10;
+
+    // Variables
     public static LinkedList<Bucket> allProficiencies;
     public static List<Bucket> allProficienciesNoFilter;
     public static Dictionary<Bucket, int> dictionary;
-
     public static Proverb proverb;
     public static Proficiency proficiency;
     public static bool isOnDemandBeforeAnswer;
+
+    private Random random;
 
     public static string[] scenes =
     {
@@ -94,17 +97,10 @@ public class SessionManager : MonoBehaviour
         else GetPlayerKey();
     }
 
-    public void PlonkNoise() {
-        WoodButton.Play();
-    }
-
     // Update is called once per frame
     void Update() 
     {
         if (playerProficiency != null) {
-            // Make the button active
-            SessionButton.gameObject.SetActive(true);
-
             // Display amount of proverbs in each proficiency
             DisplayProverbCount();
             ApprenticeCount.ForceMeshUpdate(true);
@@ -128,7 +124,6 @@ public class SessionManager : MonoBehaviour
         // Reset the player proficiency
         playerProficiency = null;
         newProficiency = null;
-        //email = playerEmail.text;
         // Goes to the 'players' database table and searches for the user
         dbReference.Child("players").OrderByChild("email").EqualTo(playerEmail)
         .ValueChanged += (object sender, ValueChangedEventArgs args) => {
@@ -272,36 +267,37 @@ public class SessionManager : MonoBehaviour
     // TODO: fix duplicate code with LoadScene() in SingleplayerManager
     public void NextScene() {
         Bucket bucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;
-        switch (bucket.stage) {
-            case 1:
-                SceneManager.LoadScene("MultipleChoice");
-                break;
-            case 2:
-                SceneManager.LoadScene("RecognizeImage");
-                break;
-            case 3:
-                SceneManager.LoadScene("MultipleChoice");
-                break;
-            case 4:
-                SceneManager.LoadScene("FillBlanks");
-                break;
-            case 5:
-                SceneManager.LoadScene("MultipleChoice");
-                break;
-            case 6:
-                SceneManager.LoadScene("FormSentence");
-                break;
-            case 7:
-                Debug.Log("Stage 7 encountered!");
-                break;
-            default:
-                Debug.Log("No proverbs available.");
-                break;
-        }
+        if (bucket != null) SceneManager.LoadScene(NextSceneName(bucket.stage));
+        else Debug.Log("Bucket is null, no proverbs available.");
+    }
+
+    // Gets the name of the next scene depending on the stage
+    // TODO: Share method with SingleplayerManager
+    public string NextSceneName(int stage)
+    {
+        return stage switch
+        {
+            1 => "MultipleChoice",
+            3 => "MultipleChoice",
+            5 => "MultipleChoice",
+            2 => "RecognizeImage",
+            4 => "FillBlanks",
+            6 => "FormSentence",
+            _ => ""
+        };
+    }
+
+    // Plays the button clicked sound once
+    // TODO: Share method
+    public void PlonkNoise()
+    {
+        WoodButton.Play();
     }
 
     // Switch to the scene corresponding to the sceneIndex
-    public void SwitchScene(int sceneIndex) {
+    // TODO: Share method
+    public void SwitchScene(int sceneIndex) 
+    {
         SceneManager.LoadScene(scenes[sceneIndex]);
     }
 }
