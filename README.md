@@ -1,92 +1,61 @@
 # Proverbs Game
 
-
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.ewi.tudelft.nl/cse2000-software-project/2021-2022-q4/cluster-01/group1b/proverbs-game.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.ewi.tudelft.nl/cse2000-software-project/2021-2022-q4/cluster-01/group1b/proverbs-game/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Proverbs Game is an educational video game for Android and iOS that will help you learn and understand proverbs better! It utilizes learning methods such as spaced learning to help you learn in a gamified manner. 
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+The game features a single-player game mode, as well as a multi-player game mode to help you achieve your goal of studying proverbs in an engaging and entertaining manner.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The single-player game mode is played by answering questions about proverbs, their meaning, and visual representations in the form of cute images. This game mode is carried out in short sessions of 10 questions each. What questions you will receive in a session is highly dependent on your proficiency with certain proverbs. All the proverbs available to the game are split into 4 categories according to your proficiency with those specific proverbs. The categories ranked from lowest to highest are the following: Apprentice, Journeyman, Expert, Master.
+In the beginning, all proverbs will be put into the Apprentice category. By answering questions about a certain proverb, that proverb will be then moved in a lower/higher category, depending on whether your answer was correct or not. The questions that you will receive about a proverb is then determined by the category it is currently in, ranging from recognizing a proverb in images for the Apprentice category to forming a proverb based on a set of given words for the Master category.
+The single-player sessions should be a relaxing, but engaging way for you to practice learning proverbs.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+The multi-player game mode is a cooperative fill in the blank mode. It is played in groups of 2-4 players, each player is assigned 2 proverbs with keywords removed from them and a set of possible keywords that they can fill in to the proverbs. The purpose of the game is for the players to communicate and exchange keywords between them, such that all players can complete their assigned proverbs. The game ends when all players completed all of their proverbs.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## Prerequisites
+1. Since this game is intended for Android and iOS mobile devices, you need to own such a device to play the game.
+2. This game was developed using the Unity game engine, so to open the project you must have [Unity](https://unity.com/) installed on your computer.
+
+## Installation 
+To install the game on your device, follow these steps:
+1. Clone this repository to a desired location on your computer;
+2. Navigate to the repository's location on your computer and open it inside Unity. Here is a [tutorial on opening projects in Unity](https://www.youtube.com/watch?v=XIlZNbQ8kzo);
+3. Once the project is open inside Unity, open the "File" menu on the toolbar (it should be the first button on the left at the top of the window);
+4. Inside the "File" menu click the "Build and Run" button.
+5. Now you should be faced with a new window, asking you to select a location for your build. Save it on a desired location on your computer;
+6. Once the build has finished, you can send it to your mobile device by file transfer (easiest way would be by using the USB cable of your mobile device's charger);
+7. Once the file has been successfully transfered to the mobile device, open and install it;
+8. After the installation completes, the game should be ready to play. Enjoy!
 
 ## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+If you need support with installing/using the application, don't hesitate to contact the development team or the course staff.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+The development team can be contacted via the following
+
+The course staff can be contacted via the following
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+This video game is not yet in its final state, so it is open for contribution from anyone who wishes to help!
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+One way of contributing is by providing new proverb entries to the game, or even sets of proverbs in other languages. The database that is used for the current build is scalable and easy to manipulate, but rather small. If you wish to contribute with new proverb phrases, for each of them you also need to provide its meaning, an example of usage, a fun fact about the proverb, an accompanying image, as well as some other wrong phrases, meanings, examples, keywords. These will all be added to the possible question types that a player might be faced with.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Other ways of contributing is by adding new functionality to the game. One of the functionalities that the development team thought of doing was to add a second multi-player game mode, a cooperative meaning matching game mode that should be similar in style to the already-existing multi-player mode. Another possible option would be adding a daily challenge mode, where players receive a more challenging question about a proverb in a daily fashion, while their streak of correctly-answered daily questions is being shown as an incentive to keep playing. The possibilities are endless.
+
+But even if you don't feel like getting your hands dirty with modifying the game yourself, you can contribute by testing the game and providing feedback to the team. For this, I refer you back to the previous section on Support.
 
 ## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+This video game was created by a small team of 2nd year students at the Delft University of Technology in the Netherlands as part of the Software Project course.
+
+The project was created for the client Otilia Ramos, with the help of the Teaching Assistant Ana Băltărețu and the Coach Rafael Bidarra.
+
+The members of the development team
+1. Dan Savastre
+2. Elvira Voorneveld
+3. Ferhan Yildiz
+4. Shayan Ramezani
+5. Vlad Iftimescu
 
 ## License
-For open source projects, say how it is licensed.
+All rights of this project are being reserved by the Delft University of Technology in the Netherlands.
 
 ## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+The product intended for the Software Project course has been completed, but the game can be further worked on by the development team.
