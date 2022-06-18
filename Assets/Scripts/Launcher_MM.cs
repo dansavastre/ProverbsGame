@@ -7,8 +7,15 @@ using TMPro;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
+/**
+ * This class is based on Launcher_FIB.cs and this is quite similar. The best way
+ * to improve everything is by having one base class for these two classes.
+ */
 public class Launcher_MM : MonoBehaviourPunCallbacks {
     public static Launcher_MM Instance;
+
+    public PhotonView _photon;
+    private List<RoomInfo> allRooms = new List<RoomInfo>();
 
     [SerializeField] TMP_InputField roomNameInputField_MM;
     [SerializeField] TMP_Text errorText_MM;
@@ -30,7 +37,14 @@ public class Launcher_MM : MonoBehaviourPunCallbacks {
 
     void Start() {
         Debug.Log("Connecting to Master.");
-        PhotonNetwork.ConnectUsingSettings();
+        if (PhotonNetwork.IsConnected)
+        {
+            OnJoinedRoom();
+        }
+        else
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
 
     public override void OnConnectedToMaster() {
@@ -43,7 +57,7 @@ public class Launcher_MM : MonoBehaviourPunCallbacks {
     public override void OnJoinedLobby() {
         MenuManager.Instance.OpenMenu("Meaning Matching"); // open the title menu on joining lobby
         Debug.Log("Joined Lobby.");
-        PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
+        PhotonNetwork.NickName = "Player " + AccountManager.playerName;
     }
 
     public void CreateRoom() {
@@ -53,7 +67,12 @@ public class Launcher_MM : MonoBehaviourPunCallbacks {
         PhotonNetwork.CreateRoom(roomNameInputField_MM.text);
         MenuManager.Instance.OpenMenu("Loading");
     }
-
+    
+    public override void OnLeftRoom()
+    {
+        allRooms = new List<RoomInfo>();
+    }
+    
     public override void OnJoinedRoom() {
         MenuManager.Instance.OpenMenu("Room");
         roomNameText_MM.text = PhotonNetwork.CurrentRoom.Name;
@@ -61,6 +80,15 @@ public class Launcher_MM : MonoBehaviourPunCallbacks {
         // Remove all the players in the previous room to start with a clean slate
         foreach (Transform child in playerListContent_MM)
             Destroy(child.gameObject);
+        
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 4)
+        {
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+        }
+        else
+        {
+            PhotonNetwork.CurrentRoom.IsVisible = true;
+        }
 
         Photon.Realtime.Player[] players = PhotonNetwork.PlayerList;
         for (int i = 0; i < players.Count(); ++i)
@@ -83,6 +111,10 @@ public class Launcher_MM : MonoBehaviourPunCallbacks {
 
     public void StartGame() {
         PhotonNetwork.LoadLevel(1); // TODO: change the level to the actual fill in the blanks multiplayer game mode
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        {
+            PhotonNetwork.LoadLevel("MeaningMatchingMultiplayer");
+        }
     }
 
     public void LeaveRoom() {
@@ -100,10 +132,24 @@ public class Launcher_MM : MonoBehaviourPunCallbacks {
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList) {
+        foreach (var roomInfo in roomList)
+        {
+            if (roomInfo.RemovedFromList)
+            {
+                allRooms.Remove(roomInfo);
+            }
+            else
+            {
+                allRooms.Add(roomInfo);
+            }
+        }
+
+        allRooms = allRooms.ToHashSet().ToList();
+        
         foreach (Transform transform in roomListContent_MM)
             Destroy(transform.gameObject);
 
-        foreach (RoomInfo roomInfo in roomList) {
+        foreach (RoomInfo roomInfo in allRooms) {
             if (roomInfo.RemovedFromList) // remove closed rooms from the list
                 continue;
             Instantiate(roomListItemPrefab_MM, roomListContent_MM).GetComponent<RoomListItem>().SetUp(roomInfo);
