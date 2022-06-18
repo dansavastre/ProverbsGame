@@ -43,7 +43,7 @@ public class MultipleChoiceManager : SingleplayerManager
 
         image.enabled = false;
 
-        if (currentBucket.stage == 2) gamemode = Mode.ProverbMeaning;
+        if (currentBucket.stage == 1) gamemode = Mode.ProverbMeaning;
         else if (currentBucket.stage == 3) gamemode = Mode.MeaningProverb;
         else 
         {
@@ -101,7 +101,6 @@ public class MultipleChoiceManager : SingleplayerManager
                 Debug.Log("Finished downloading!");
             }
         });
-
         // Create randomized list of question positions
         int[] numbers = { -1, -1, -1, -1 };
         for (int i = 0; i < 4; i++)
@@ -118,7 +117,51 @@ public class MultipleChoiceManager : SingleplayerManager
         }
         else
         {
-            SetCurrentQuestion(nextProverb.phrase, nextProverb.otherPhrases);
+
+            //Get other phrases from other proverbs
+            List<string> otherPhrases = new List<string>();
+            for (int i = 0; i <3; i++)
+            {
+                int randIndex = Random.Range(0, allProficienciesNoFilter.Count);
+                string key = allProficienciesNoFilter[randIndex].key;
+
+
+                // Goes to the 'proverbs' database table and searches for the key
+                await dbReference.Child("proverbs").Child(key)
+                .GetValueAsync().ContinueWith(task =>
+                {
+                    if (task.IsFaulted)
+                    {
+                        Debug.LogError("Task could not be completed.");
+                        i--;
+                    }
+
+                    else if (task.IsCompleted)
+                    {
+                // Take a snapshot of the database entry
+                DataSnapshot snapshot = task.Result;
+                // Convert the JSON back to a Proverb object
+                string json = snapshot.GetRawJsonValue();
+                        string fetchedPhrase = JsonUtility.FromJson<Proverb>(json).phrase;
+
+                        if (fetchedPhrase.Equals(nextProverb.phrase) || otherPhrases.Contains(fetchedPhrase))
+                        {
+                            i--;
+                        }
+                        else
+                        {
+                            otherPhrases.Add(fetchedPhrase);
+                        }
+                    }
+                    else
+                    {
+                        i--;
+                    }
+                });
+            }
+
+
+            SetCurrentQuestion(nextProverb.phrase, otherPhrases);
             if (gamemode == Mode.MeaningProverb)
             {
                 taskText.text = "Select the proverb";
@@ -143,4 +186,42 @@ public class MultipleChoiceManager : SingleplayerManager
     public void HintClicked() {
         image.enabled = !image.enabled;
     }
+
+    //public async string fetchOtherPhrase(string proverb)
+    //{
+    //    int randIndex = Random.Range(0, allProficienciesNoFilter.Count);
+    //    string key = allProficienciesNoFilter[randIndex].key;
+
+
+    //    // Goes to the 'proverbs' database table and searches for the key
+    //    await dbReference.Child("proverbs").Child(key)
+    //    .GetValueAsync().ContinueWith(task =>
+    //    {
+    //        if (task.IsFaulted)
+    //        {
+    //            Debug.LogError("Task could not be completed.");
+    //            return ("Database error!");
+    //        }
+
+    //        if (task.IsCompleted)
+    //        {
+    //            // Take a snapshot of the database entry
+    //            DataSnapshot snapshot = task.Result;
+    //            // Convert the JSON back to a Proverb object
+    //            string json = snapshot.GetRawJsonValue();
+    //            string fetchedPhrase = JsonUtility.FromJson<Proverb>(json).phrase;
+
+    //            if (fetchedPhrase.Equals(proverb))
+    //            {
+    //                return fetchOtherPhrase(proverb);
+    //            }
+    //            else
+    //            {
+    //                return fetchedPhrase;
+    //            }
+    //        }
+    //        return ("Database error!");
+    //    });
+    //    return ("Database error!");
+    //}
 }

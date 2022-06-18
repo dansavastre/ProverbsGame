@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
+using System.Text.RegularExpressions;
 
 public class FillBlanksManager : SingleplayerManager
 {
@@ -20,7 +21,7 @@ public class FillBlanksManager : SingleplayerManager
 
     // Stores information fetched from the database
     private StorageReference storageRef;
-    private string currentImage;
+    private string currentImage; 
     private byte[] fileContents;
 
     // Variables
@@ -91,9 +92,17 @@ public class FillBlanksManager : SingleplayerManager
         allWords = nextProverb.keywords;
         allWords.AddRange(nextProverb.otherKeywords);
 
-        foreach (string v in nextProverb.keywords)
+        List<string> keyWordsClone = nextProverb.keywords.Select(item => (string)item.Clone()).ToList();
+
+        foreach (string v in keyWordsClone)
         {
-            answerProverb = answerProverb.Replace(v, "...");
+
+            for (int i = 1; i < Regex.Matches(nextProverb.phrase, v).Count; i++)
+            {
+                nextProverb.keywords.Add(v);
+            }
+
+            answerProverb = Regex.Replace(answerProverb, v, "<u><alpha=#00>xxxxx</color></u>", RegexOptions.IgnoreCase);
         }
 
         // Shuffling list of words
@@ -105,6 +114,7 @@ public class FillBlanksManager : SingleplayerManager
             allWords[randomIndex] = temp;
         }
 
+        //Create a button for each word option
         int boardRightEdge = (int)answerBoard.GetComponent<RectTransform>().rect.width;
         int boardTopEdge = (int)answerBoard.GetComponent<RectTransform>().rect.height;
 
@@ -145,14 +155,29 @@ public class FillBlanksManager : SingleplayerManager
                 LastClickedWord = questionText.textInfo.wordInfo[wordIndex].GetWord();
                 Debug.Log(LastClickedWord);
 
-                if (allWords.Contains(LastClickedWord))
+                //If a keyword inside of the proverb is clicked, remove that keyword from the proverb and create a button
+                string[] splits = questionText.text.Split(" ");
+
+                bool isKeyword = false;
+
+                foreach  (string word in allWords)
                 {
-                    removeWord(LastClickedWord);
+                    if (splits[wordIndex].Contains(word))
+                    {
+                        isKeyword = true;
+                        LastClickedWord = word;
+                    }
+                }
+
+                if ((wordIndex > -1) && (isKeyword))
+                {
+                    removeWord(LastClickedWord, wordIndex);
                 }
             }
         }
     }
 
+    //Check if text is able to be put in the sentence
     public bool canInput(string text, string search)
     {
         int pos = text.IndexOf(search);
@@ -163,26 +188,38 @@ public class FillBlanksManager : SingleplayerManager
         return true;
     }
 
+    //Input a word inside of the proverb
     private void inputWord(string word)
     {
+        Debug.Log(answerProverb);
+        
         word = "<u><b>" + word + "</u></b>";
-        answerProverb = ReplaceFirst(answerProverb, "...", word);
+        answerProverb = ReplaceFirst(answerProverb, "<u><alpha=#00>xxxxx</color></u>", word);
+        Debug.Log(answerProverb);
         questionText.text = answerProverb;
     }
 
-    private void removeWord(string word)
+    //Remove a word from the proverb
+    private void removeWord(string word, int wordIndex)
     {
         Button[] buttons = keywordBoard.GetComponentsInChildren<Button>();
         for(int i = 0 ; i < buttons.Length; i++) {
-            if(buttons[i].GetComponentInChildren<TextMeshProUGUI>().text.Equals(word)) {
+            if(buttons[i].GetComponentInChildren<TextMeshProUGUI>().text.Equals(word) && buttons[i].interactable == false) {
                 buttons[i].interactable = true;
+                break;
             }
         }
-        word = "<u><b>" + word + "</u></b>";
-        answerProverb = ReplaceFirst(answerProverb, word, "...");
+        answerProverb = questionText.text;
+        string[] splits = questionText.text.Split(" ");
+
+        splits[wordIndex] = splits[wordIndex].Replace(word, "<u><alpha=#00>xxxxx</color></u>");
+        
+        answerProverb = string.Join(" ", splits);
+
         questionText.text = answerProverb;
     }
 
+    //Function that replaces the first occurance of a string "search" inside of a string "text" with a string "replace"
     public string ReplaceFirst(string text, string search, string replace)
     {
         if (!canInput(answerProverb, search))
@@ -192,9 +229,10 @@ public class FillBlanksManager : SingleplayerManager
         return text.Substring(0, text.IndexOf(search)) + replace + text.Substring(text.IndexOf(search) + search.Length);
     }
 
+    //Detect the press of a button
     public void buttonPressed(int index)
     {
-        if(canInput(answerProverb, "...")) 
+        if(canInput(answerProverb, "<u><alpha=#00>xxxxx</color></u>")) 
         {
             inputWord(keywordBoard.GetComponentsInChildren<Button>()[index].GetComponentInChildren<TextMeshProUGUI>().text);
             keywordBoard.GetComponentsInChildren<Button>()[index].interactable = false;
@@ -205,7 +243,11 @@ public class FillBlanksManager : SingleplayerManager
     public void CheckAnswer()
     {
         string playerProverb = answerProverb.Replace("<u><b>", "").Replace("</u></b>", "");
-        DisplayFeedback(playerProverb.Equals(correctProverb));
+
+        Debug.Log(correctProverb.ToLower().Replace(" ", ""));
+        Debug.Log(playerProverb.ToLower());
+
+        DisplayFeedback(playerProverb.ToLower().Equals(correctProverb.ToLower()));
         image.enabled = true;
         // TODO: Disable the ability to click new answers
         checkButton.SetActive(false);

@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Firebase.Database;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class DictionaryManager : MonoBehaviour
 {
@@ -20,29 +21,12 @@ public class DictionaryManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dictionaryContentHolder;
     [SerializeField] private Button wordButtonPrefab;
 
-    // public DictionaryManager()
-    // {
-    //     allProverbs = new List<ProverbsDictionary>(new []
-    //     {
-    //         new ProverbsDictionary("<b>horse is in house!</b>", "meaning"),
-    //         new ProverbsDictionary("<b>horse was here!</b>", "meaning"),
-    //         new ProverbsDictionary("<b>Don't look a gift horse in his mouth</b>", "meaning"),
-    //         new ProverbsDictionary("slow and steady wins the race", "meaning2"),
-    //         new ProverbsDictionary("To be the black sheep of the family", "if you are different, you are oft not accepted in a group."),
-    //         new ProverbsDictionary("His bark is worst than his bite", "To make a lot of noise without reason apparently."),
-    //         new ProverbsDictionary("When in Rome, do as Romans do", "When visiting a foreign land, follow the customs of those who live in it."),
-    //         new ProverbsDictionary("Don’t judge a book by its cover", "You should not judge the worth or value of something by its outward appearance alone."),
-    //         new ProverbsDictionary("A bird in hand is worth two in the bush", "Things we already have are more concrete than what we hope to get."),
-    //         new ProverbsDictionary("All that glitters is not gold", "said about something that seems to be good on the surface, but might not be when you look at it more closely"),
-    //         new ProverbsDictionary("In the land of the blind, the one-eyed man is king", "Even someone without much talent or ability is considered special by those with no talent or ability at all. ")
-    //     });
-    //     filteredProverbsList = new List<ProverbsDictionary>(allProverbs);
-    //     wordsToFilterOn = new List<string>();
-    // }
+    private static string[] scenes;
     
     // Start is called before the first frame update
     void Start()
     {
+        scenes = SessionManager.scenes;
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         getProverbsToShow();
         StartCoroutine(wait());
@@ -136,5 +120,10 @@ public class DictionaryManager : MonoBehaviour
         }
         UpdateDictionaryContentHolderContents();
     }
-    
+
+    // Switch to the scene corresponding to the sceneIndex
+    public void SwitchScene(int sceneIndex)
+    {
+        SceneManager.LoadScene(scenes[sceneIndex]);
+    }
 }

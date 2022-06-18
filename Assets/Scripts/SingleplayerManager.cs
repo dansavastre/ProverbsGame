@@ -37,6 +37,7 @@ public class SingleplayerManager : MonoBehaviour
 
     // Variables
     protected Question currentQuestion;
+    public static List<Bucket> allProficienciesNoFilter;
     private static LinkedList<Bucket> allProficiencies;
     private static Dictionary<Bucket, int> dictionary;
     private bool answeredCorrect;
@@ -61,6 +62,7 @@ public class SingleplayerManager : MonoBehaviour
 
         // Initialize new variables
         allProficiencies = SessionManager.allProficiencies;
+        allProficienciesNoFilter = SessionManager.allProficienciesNoFilter;
         dictionary = SessionManager.dictionary;
         answeredCorrect = false;
         SessionManager.isOnDemandBeforeAnswer = false;
@@ -168,6 +170,7 @@ public class SingleplayerManager : MonoBehaviour
         long time = (long) DateTime.Now.ToUniversalTime()
         .Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
         currentBucket.timestamp = time;
+
         // Check if we should go up or down a stage
         if (dictionary[currentBucket] == 0 && currentBucket.stage < 7)
         {
@@ -178,6 +181,7 @@ public class SingleplayerManager : MonoBehaviour
             currentBucket.stage = ChangeStage(currentBucket.stage, dictionary[currentBucket]);
             Debug.Log(currentBucket.key + " stage downgraded to " + currentBucket.stage.ToString());
         }
+
         // Add bucket to the proficiency that corresponds to its stage
         string newType = GetTypeOfStage(currentBucket.stage);
         switch (newType)
@@ -220,6 +224,8 @@ public class SingleplayerManager : MonoBehaviour
      */
     public void SetCurrentQuestion(string correctAnswer, List<string> wrongAnswers)
     {
+        Debug.Log(wrongAnswers.Count());
+
         answerButtons = new List<Button>();
         // randomize order of the answers with help of numbers
         int[] numbers = new int[wrongAnswers.Count + 1]; // there are 1 + len(other phrases) answers
@@ -368,10 +374,10 @@ public class SingleplayerManager : MonoBehaviour
         switch (currentBucket.stage)
         {
             case 1:
-                SceneManager.LoadScene("RecognizeImage");
+                SceneManager.LoadScene("MultipleChoice");
                 break;
             case 2:
-                SceneManager.LoadScene("MultipleChoice");
+                SceneManager.LoadScene("RecognizeImage");
                 break;
             case 3:
                 SceneManager.LoadScene("MultipleChoice");
@@ -386,7 +392,8 @@ public class SingleplayerManager : MonoBehaviour
                 SceneManager.LoadScene("FormSentence");
                 break;
             case 7:
-                SceneManager.LoadScene("MultipleChoice");
+                Debug.Log("Stage 7 encountered!");
+                QuitSession();
                 break;
             default:
                 string json = JsonUtility.ToJson(newProficiency);
