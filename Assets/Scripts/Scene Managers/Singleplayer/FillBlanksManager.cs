@@ -65,7 +65,7 @@ public class FillBlanksManager : SingleplayerManager
 
         foreach (string v in keyWordsClone)
         {
-            for (int i = 1; i < Regex.Matches(nextProverb.phrase, v).Count; i++)
+            for (int i = 1; i < Regex.Matches(nextProverb.phrase, v, RegexOptions.IgnoreCase).Count; i++)
             {
                 nextProverb.keywords.Add(v);
             }

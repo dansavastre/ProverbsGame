@@ -121,7 +121,7 @@ public class CoopGame : SingleplayerManager
 
                 foreach (string word in keyWordsClone)
                 {
-                    for (int j = 1; j < Regex.Matches(proverbToAdd.phrase, word).Count; j++)
+                    for (int j = 1; j < Regex.Matches(proverbToAdd.phrase, word, RegexOptions.IgnoreCase).Count; j++)
                     {
                         proverbToAdd.keywords.Add(word);
                         Debug.Log(word);
