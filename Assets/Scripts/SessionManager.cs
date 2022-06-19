@@ -64,11 +64,11 @@ public class SessionManager : MonoBehaviour
     private TimeSpan[] waitingPeriod =
     {
         new TimeSpan(),             // Always
-        new TimeSpan(0, 0, 30),     // After 30 minutes
-        new TimeSpan(0, 1, 0),      // After 1 hour
-        new TimeSpan(0, 2, 0),      // After 2 hours
-        new TimeSpan(0, 3, 0),      // After 4 hours
-        new TimeSpan(0, 4, 0)       // After 8 hours
+        new TimeSpan(0, 30, 0),     // After 30 minutes
+        new TimeSpan(1, 0, 0),      // After 1 hour
+        new TimeSpan(2, 0, 0),      // After 2 hours
+        new TimeSpan(4, 0, 0),      // After 4 hours
+        new TimeSpan(8, 0, 0)       // After 8 hours
     };
 
     /// <summary>
@@ -174,7 +174,7 @@ public class SessionManager : MonoBehaviour
                 newProficiency = JsonUtility.FromJson<Proficiency>(json);
 
                 Debug.Log(json);
-                RemoveTimedProverbs();
+                // RemoveTimedProverbs();
                 InitList();
             }
         });
