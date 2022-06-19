@@ -26,7 +26,7 @@ To install the game on your device, follow these steps:
 7. Once the file has been successfully transfered to the mobile device, open and install it;
 8. After the installation completes, the game should be ready to play. Enjoy!
 
-## usage
+## Usage
 
 ### Updating the database with new proverbs
 
