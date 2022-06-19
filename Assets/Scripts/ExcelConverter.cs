@@ -4,6 +4,7 @@ using Firebase.Storage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using System.Text.RegularExpressions;
 using UnityEditor;
@@ -17,12 +18,21 @@ public class ExcelConverter : MonoBehaviour
     private DatabaseReference dbReference;
 
     [SerializeField]
-    public TextMeshProUGUI resultText;
+    public TextMeshProUGUI instructionText;
+    private string path;
 
-    // void Start()
-    // {
-    //     parseList("We must be careful with horses.,When we receive a gift, we must show happiness, even if it is not to our liking.,We should always show satisfaction with a gift, if it is to our liking.");
-    // }
+    void Start()
+    {
+        path = Application.persistentDataPath + "/proverbs.csv";
+        instructionText.text += path;
+
+        if(File.Exists(path))
+        {
+            byte[] m_bytes = File.ReadAllBytes(path);
+            string s = System.Text.Encoding.UTF8.GetString(m_bytes);
+            Debug.Log(s);
+        }
+    }
 
     public void UploadProverbs()
     {
@@ -36,9 +46,11 @@ public class ExcelConverter : MonoBehaviour
         TextAsset proverbsCSV = Resources.Load<TextAsset>("Proverbs");
         
         // check if the file exists
-        if(proverbsCSV == null)
+        if(File.Exists(path))
         {
-            resultText.text = "The file could not be loaded. Make sure the file name is \"proverbs.csv\" and that the file is in the Resources folder";
+            byte[] m_bytes = File.ReadAllBytes(path);
+            string s = System.Text.Encoding.UTF8.GetString(m_bytes);
+            Debug.Log(s);
         }
         
         string[] data = proverbsCSV.text.Split(new char[] { '\n' });
