@@ -189,7 +189,6 @@ public class SessionManager : MonoBehaviour
         allProficiencies.AddRange(playerProficiency.apprentice);
         allProficiencies.AddRange(playerProficiency.journeyman);
         allProficiencies.AddRange(playerProficiency.expert);
-        allProficiencies.AddRange(playerProficiency.master);
 
         // Add all proficiences to a list which is not to be filtered
         allProficienciesNoFilter = new List<Bucket>();
