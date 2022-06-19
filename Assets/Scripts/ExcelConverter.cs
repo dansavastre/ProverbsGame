@@ -21,6 +21,9 @@ public class ExcelConverter : MonoBehaviour
     public TextMeshProUGUI instructionText;
     private string path;
 
+    /// <summary>
+    /// Executes when an instance of this class is initialized.
+    /// </summary>
     void Start()
     {
         path = Application.persistentDataPath + "/proverbs.csv";
@@ -34,6 +37,9 @@ public class ExcelConverter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Method for uploading the converted proverbs to the database.
+    /// </summary>
     public void UploadProverbs()
     {
         // Get the root reference location of the database
@@ -55,10 +61,12 @@ public class ExcelConverter : MonoBehaviour
         
         string[] data = proverbsCSV.text.Split(new char[] { '\n' });
 
+        // for each data entry in the list
         for(int i = 1; i < data.Length - 1; i++)
         {
             Regex regx = new Regex(',' + "(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
-            string[] row = regx.Split(data[i]);
+            string[] row = regx.Split(data[i]); // split the entry into attributes
+            // parse the attributes from the JSON object
             List<string> keywords = parseList(row[3].Substring(1, row[3].Length - 2));
             List<string> otherKeywords = parseList(row[4].Substring(1, row[4].Length - 2));
             List<string> otherPhrases = parseList(row[2].Substring(1, row[2].Length - 2));
@@ -69,6 +77,8 @@ public class ExcelConverter : MonoBehaviour
             {
                 example = example.Substring(1, example.Length - 2).Replace("\"\"", "\"");
             }
+
+            // create the Proverb object from the parsed attributes
             Proverb proverb = new Proverb(  row[1].Replace("\"", ""), keywords, row[5].Replace("\"", ""), example, 
                                             row[10].Replace("\r", ""), otherPhrases, otherKeywords, otherMeanings, otherExamples, row[9].Replace("\"", ""));
             Debug.Log(JsonUtility.ToJson(proverb));
@@ -79,6 +89,11 @@ public class ExcelConverter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Method for parsing the list of words in the JSON pbject.
+    /// </summary>
+    /// <param name="wordsList">string denoting the JSON object to be parsed</param>
+    /// <returns>a list of strings denoting the parsed words</returns>
     private List<string> parseList(string wordsList)
     {
         List<string> res = new List<string>();

@@ -25,6 +25,9 @@ public class AccountManager : MonoBehaviour
     private Proficiency playerProficiency;
     private string playerKey;
 
+    /// <summary>
+    /// Executes when the game is started.
+    /// </summary>
     private void Start()
     {
         // Get the root reference location of the database
@@ -34,7 +37,9 @@ public class AccountManager : MonoBehaviour
         WoodButton = GameObject.Find("WoodButtonAudio").GetComponent<AudioSource>();
     }
 
-    // Checks if given email is associated to account and logs in if it is
+    /// <summary>
+    /// Checks if given email is associated to account and logs in if it is.
+    /// </summary>
     public void OnClickLogin()
     {
         playerEmail = emailField.text;
@@ -71,7 +76,9 @@ public class AccountManager : MonoBehaviour
         };
     }
 
-    // Checks if given email is associated to account and registers if it is not
+    /// <summary>
+    /// Checks if given email is associated to account and registers if it is not.
+    /// </summary>
     public void OnClickRegister() 
     {
         playerEmail = emailField.text;
@@ -109,7 +116,9 @@ public class AccountManager : MonoBehaviour
         };
     }
 
-    // Assigns each proverb to the apprentice proficiency for a new user
+    /// <summary>
+    /// Assigns each proverb to the apprentice proficiency for a new user.
+    /// </summary>
     private void GetProverbs()
     {
         dbReference.Child("proverbs").GetValueAsync().ContinueWith(task =>
@@ -137,14 +146,19 @@ public class AccountManager : MonoBehaviour
         }});
     }
 
-    // Plays the button clicked sound once
+    /// <summary>
+    /// Plays the button clicked sound once.
+    /// </summary>
     // TODO: Share method
     public void PlonkNoise()
     {
         WoodButton.Play();
     }
 
-    // Switches to another scene
+    /// <summary>
+    /// Switches to another scene.
+    /// </summary>
+    /// <param name="sceneIndex"></param>
     // TODO: Share method
     public void SwitchScene(int sceneIndex)
     {

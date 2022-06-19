@@ -8,10 +8,17 @@ public class MenuManager : MonoBehaviour {
 
     [SerializeField] Menu[] menus;
 
+    /// <summary>
+    /// Executed when an instance of the class is initialized.
+    /// </summary>
     private void Awake() {
         Instance = this;
     }
 
+    /// <summary>
+    /// Method for opening a certain menu.
+    /// </summary>
+    /// <param name="menuName">string denoting the name of the menu to be opened</param>
     public void OpenMenu(string menuName) {
         for (int i = 0; i < menus.Length; ++i) {
             if (menus[i].menuName == menuName)
@@ -21,6 +28,10 @@ public class MenuManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Method for opening a certain menu.
+    /// </summary>
+    /// <param name="menu">the menu object to be opened</param>
     public void OpenMenu(Menu menu) {
         for (int i = 0; i < menus.Length; ++i) {
             if (menus[i].open)
@@ -29,14 +40,24 @@ public class MenuManager : MonoBehaviour {
         menu.Open();
     }
 
+    /// <summary>
+    /// Method for closing a certain menu,
+    /// </summary>
+    /// <param name="menu">the menu object to be closed</param>
     public void CloseMenu(Menu menu) {
         menu.Close();
     }
 
+    /// <summary>
+    /// Method for opening the multi-player FillInBlanks scene.
+    /// </summary>
     public void OpenFIBScene() {
         SceneManager.LoadScene("FillInBlanks");
     }
 
+    /// <summary>
+    /// Method for opening the multi-player MeaningMatching scene.
+    /// </summary>
     public void OpenMMScene() {
         SceneManager.LoadScene("MeaningMatching");
     }

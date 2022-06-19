@@ -19,7 +19,7 @@ using System.Text.RegularExpressions;
 public class CoopGame : SingleplayerManager
 {
 
-    public static Launcher_FIB Instance;
+    public static Launcher_FIB Instance; // instance of the launcher
 
     public PhotonView _photon;
     // UI elements
@@ -44,14 +44,11 @@ public class CoopGame : SingleplayerManager
     private StorageReference storageRef;
     private int playerCount;
 
-    /**
-     * Called before the first frame update
-     * <summary>
-     * - Creates player buttons;
-     * - If masterClient: gets proverbs from the DB, selects {numberOfProverbsPerPlayer} proverbs per player and randomly
-     * distributes them between players.
-     * </summary>
-     */
+    /// <summary>
+    /// Called before the first frame update.
+    /// - Creates player buttons;
+    /// - If masterClient: gets proverbs from the DB, selects {numberOfProverbsPerPlayer} proverbs per player and randomly distributes them between players.
+    /// </summary>
     async void Start()
     {
         // initializations
@@ -188,15 +185,19 @@ public class CoopGame : SingleplayerManager
     }
 
 
+    /// <summary>
+    /// Method for adding a proverb to the game.
+    /// </summary>
+    /// <param name="p">string denoting the JSON object of the proverb to be added</param>
     [PunRPC]
     private void AddProverb(string p)
     {
         proverbs.Add(JsonUtility.FromJson<Proverb>(p));
     }
 
-    /**
-     * <summary>Loads the next available proverb into the scene with blanks or lets the master know this player is finished.</summary>
-     */
+    /// <summary>
+    /// Loads the next available proverb into the scene with blanks or lets the master know this player is finished.
+    /// </summary>
     [PunRPC]
     private void LoadNextProverb()
     {
@@ -250,10 +251,10 @@ public class CoopGame : SingleplayerManager
         });
     }
     
-    /**
-     * Called after every frame load.
-     * <summary>Checks whether words from proverb need to be set back as buttons.</summary>
-     */
+    /// <summary>
+    /// Called after every frame load.
+    /// Checks whether words from proverb need to be set back as buttons.
+    /// </summary>
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -294,19 +295,20 @@ public class CoopGame : SingleplayerManager
         }
     }
     
-    /**
-     * <summary>PunRPC taking care of receiving keywords from other players.</summary>
-     */
+    /// <summary>
+    /// PunRPC taking care of receiving keywords from other players.
+    /// </summary>
+    /// <param name="msg"></param>
     [PunRPC]
     void ReceiveChat(string msg)
     {
         CreateButtonForKeyword(msg);
     }
 
-    /**
-     * <summary>Sends missing keywords from this player's proverb to all players including yourself.</summary>
-     * <param name="myKeywords">List of the keywords from this player's proverb to send to other players.</param>
-     */
+    /// <summary>
+    /// Sends missing keywords from this player's proverb to all players including yourself.
+    /// </summary>
+    /// <param name = "myKeywords" > List of the keywords from this player's proverb to send to other players.</param>
     private void SentMyKeywordsToAllPlayers(List<string> myKeywords)
     {
         Debug.Log("SentMyKeywordsToAllPlayers");
@@ -319,12 +321,12 @@ public class CoopGame : SingleplayerManager
             i++;
         }
     }
-    
-    /**
-     * <summary>Sends missing keywords from this player's proverb to other players.</summary>
-     * <param name="myKeywords">List of the keywords from this player's proverb to send to other players.</param>
-     * <param name="allKeywordsPerPlayer">Dictionary having users as key and keywords as value, indicating what keywords each user will need in the game.</param>
-     */
+
+    /// <summary>
+    /// Sends missing keywords from this player's proverb to other players.
+    /// </summary>
+    /// <param name="myKeywords">List of the keywords from this player's proverb to send to other players.</param>
+    /// <param name="allKeywordsPerPlayer">Dictionary having users as key and keywords as value, indicating what keywords each user will need in the game.</param>
     private void SentMyKeywordsToOtherPlayers(List<string> myKeywords, Dictionary<string, List<string>> allKeywordsPerPlayer)
     {
         Debug.Log("SentMyKeywordsToOtherPlayers");
@@ -344,7 +346,12 @@ public class CoopGame : SingleplayerManager
         }
     }
     
-    //Check if text is able to be put in the sentence
+    /// <summary>
+    /// Check if text is able to be put in the sentence.
+    /// </summary>
+    /// <param name="text">string denoting the sentence</param>
+    /// <param name="search">text that is being checked for adding to the sentence</param>
+    /// <returns>whether or not the text can be addedd to the sentence</returns>
     public bool CanInput(string text, string search)
     {
         int pos = text.IndexOf(search);
@@ -362,7 +369,11 @@ public class CoopGame : SingleplayerManager
     //     questionText.text = answerProverb;
     // }
 
-    //Remove a word from the proverb
+    /// <summary>
+    /// Remove a word from the proverb.
+    /// </summary>
+    /// <param name="word">the word to be removed</param>
+    /// <param name="wordIndex">the index of the word to be removed</param>
     private void RemoveWord(string word, int wordIndex)
     {
         answerProverb = questionText.text;
@@ -378,7 +389,13 @@ public class CoopGame : SingleplayerManager
         questionText.text = answerProverb;
     }
 
-    //Function that replaces the first occurance of a string "search" inside of a string "text" with a string "replace"
+    /// <summary>
+    /// Function that replaces the first occurrence of a string "search" inside of a string "text" with a string "replace".
+    /// </summary>
+    /// <param name="text">text denoting the sentence</param>
+    /// <param name="search">the string whose first occurrence should be replaced</param>
+    /// <param name="replace">the string to replace the first occurrence with</param>
+    /// <returns>the modified sentence</returns>
     public string ReplaceFirst(string text, string search, string replace)
     {
         if (!CanInput(answerProverb, search))
@@ -401,7 +418,9 @@ public class CoopGame : SingleplayerManager
     //     }
     // }
 
-    // Display the feedback after the player answers the question
+    /// <summary>
+    /// Display the feedback after the player answers the question.
+    /// </summary>
     public void CheckAnswer()
     {
         answerProverb = questionText.text;
@@ -421,9 +440,9 @@ public class CoopGame : SingleplayerManager
         // TODO: Disable the ability to click and check new answers
     }
 
-    /**
-     * <summary>Called when next question button is clicked. Loads the next proverb and resets the scene for it.</summary>
-     */
+    /// <summary>
+    /// Called when next question button is clicked. Loads the next proverb and resets the scene for it.
+    /// </summary>
     public void NextQuestionButtonClicked()
     {
         LoadNextProverb();
@@ -432,9 +451,10 @@ public class CoopGame : SingleplayerManager
         nextQuestionButton.SetActive(false);
     }
 
-    /**
-     * <summary>Creates button for a keyword at a nice place in the UI</summary> 
-     */
+    /// <summary>
+    /// Creates button for a keyword at a nice place in the UI.
+    /// </summary>
+    /// <param name="text">string denoting the keyword that the button is created for</param>
     public void CreateButtonForKeyword(string text)
     {
         int index = 0;
@@ -446,9 +466,11 @@ public class CoopGame : SingleplayerManager
         CreateButton(index, text);
     }
 
-    /**
-     * <summary>Create a button at the right position and configures its components.</summary>
-     */
+    /// <summary>
+    /// Create a button at the right position and configures its components.
+    /// </summary>
+    /// <param name="i">index of the button to be created</param>
+    /// <param name="text">string denoting the keyword that the button is created for</param>
     private void CreateButton(int i, string text)
     {
         int boardRightEdge = (int)keywordBoard.GetComponent<RectTransform>().rect.width;
@@ -487,9 +509,9 @@ public class CoopGame : SingleplayerManager
         allWords.Add(text);
     }
 
-    /**
-     * <summary>Function to be called when any player is finished. This function is only called in the Master's CoopGame class.</summary>
-     */
+    /// <summary>
+    /// Function to be called when any player is finished. This function is only called in the Master's CoopGame class.
+    /// </summary>
     [PunRPC]
     private void PlayerDone()
     {
@@ -502,6 +524,11 @@ public class CoopGame : SingleplayerManager
         }
     }
 
+    /// <summary>
+    /// Method for ending the game.
+    /// </summary>
+    /// <param name="message">string denoting the message that is shown to the players when the game ends</param>
+    /// <returns>a command telling the program to wait 3 seconds</returns>
     IEnumerator endGame(string message)
     {
         checkButton.gameObject.SetActive(false);
@@ -512,9 +539,9 @@ public class CoopGame : SingleplayerManager
         SceneManager.LoadScene("FillInBlanks");
     }
 
-    /**
-     * <summary>Joins room where player is already in a level of it.</summary>
-     */
+    /// <summary>
+    /// Joins room where player is already in a level of it.
+    /// </summary>
     [PunRPC]
     private void LoadRoomAgain()
     {
@@ -522,6 +549,9 @@ public class CoopGame : SingleplayerManager
         StartCoroutine(endGame("Good job! You finished all of the proverbs in: " + seconds + " seconds! Moving you to the lobby..."));
     }
 
+    /// <summary>
+    /// Change the state of the pop-up panel.
+    /// </summary>
     public void changePopUpState()
     {
         if (hintButton.GetComponentInChildren<TextMeshProUGUI>().text.Contains("Show"))

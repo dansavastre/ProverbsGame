@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class RecognizeImageManager : SingleplayerManager
 {
+    /// <summary>
+    /// Executes when the game is started.
+    /// </summary>
     protected async override void Start()
     {
         base.Start();
