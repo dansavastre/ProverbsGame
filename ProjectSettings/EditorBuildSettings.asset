@@ -47,4 +47,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Multiplayer/MeaningMatching.unity
     guid: b83125fe8f450c34a9451fe4e0c72415
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer/MeaningMatchingMultiplayer.unity
+    guid: d84310e0e0a60d54f8ce72f2e8466a3f
   m_configObjects: {}
