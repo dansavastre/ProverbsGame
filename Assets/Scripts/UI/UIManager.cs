@@ -14,6 +14,9 @@ public class UIManager : MonoBehaviour
     private ParticleSystem ConfettiPS;
     private TextMeshProUGUI ProficiencyText;
 
+    /// <summary>
+    /// Executed when an instance of this class is initialized.
+    /// </summary>
     void Awake()
     {
         // Makes sure the sound effect is not destroyed when switching scenes
@@ -29,12 +32,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Executes on each frame update.
+    /// </summary>
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && (ProverbLevelUp != null)) disableCongratulations();
     }
 
-    // Shows the proverb level up pop up
+    /// <summary>
+    /// Shows the proverb level up pop up.
+    /// </summary>
+    /// <param name="proficiencyText">string denoting the proficiency that the player leveled the proverb to</param>
     public void enableCongratulations(string proficiencyText)
     {
         ProverbLevelUp.SetActive(true);
@@ -42,7 +51,9 @@ public class UIManager : MonoBehaviour
         ProficiencyText.text = proficiencyText + "!";
     }
 
-    // Hides the proverb level up pop up
+    /// <summary>
+    /// Hides the proverb level up pop up.
+    /// </summary>
     public void disableCongratulations()
     {
         ConfettiPS.Stop();

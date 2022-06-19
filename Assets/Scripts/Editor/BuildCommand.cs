@@ -5,6 +5,7 @@ using System.IO;
 
 static class BuildCommand
 {
+    // various strings for important attributes of the build commands
     private const string KEYSTORE_PASS  = "KEYSTORE_PASS";
     private const string KEY_ALIAS_PASS = "KEY_ALIAS_PASS";
     private const string KEY_ALIAS_NAME = "KEY_ALIAS_NAME";
@@ -16,6 +17,11 @@ static class BuildCommand
     private const string VERSION_NUMBER_VAR = "VERSION_NUMBER_VAR";
     private const string VERSION_iOS = "VERSION_BUILD_VAR";
     
+    /// <summary>
+    /// Method that gets a certain command line argument.
+    /// </summary>
+    /// <param name="name">string denoting the name of the argument</param>
+    /// <returns>null</returns>
     static string GetArgument(string name)
     {
         string[] args = Environment.GetCommandLineArgs();
@@ -29,6 +35,10 @@ static class BuildCommand
         return null;
     }
 
+    /// <summary>
+    /// Method for getting the enabled scenes.
+    /// </summary>
+    /// <returns>a list of strings denoting the names of the enabled scenes</returns>
     static string[] GetEnabledScenes()
     {
         return (
@@ -39,6 +49,10 @@ static class BuildCommand
         ).ToArray();
     }
 
+    /// <summary>
+    /// Method for getting the build target.
+    /// </summary>
+    /// <returns>the build target</returns>
     static BuildTarget GetBuildTarget()
     {
         string buildTargetName = GetArgument("customBuildTarget");
@@ -62,6 +76,11 @@ static class BuildCommand
         return BuildTarget.NoTarget;
     }
 
+    /// <summary>
+    /// Method for getting the build path.
+    /// </summary>
+    /// <returns>string denoting the build path</returns>
+    /// <exception cref="Exception">exception to be thrown if the build path argumment is missing</exception>
     static string GetBuildPath()
     {
         string buildPath = GetArgument("customBuildPath");
@@ -73,6 +92,11 @@ static class BuildCommand
         return buildPath;
     }
 
+    /// <summary>
+    /// Method for getting the name of the build.
+    /// </summary>
+    /// <returns>string denoting the name of the build</returns>
+    /// <exception cref="Exception">exception to be thrown if the build name is missing</exception>
     static string GetBuildName()
     {
         string buildName = GetArgument("customBuildName");
@@ -84,6 +108,13 @@ static class BuildCommand
         return buildName;
     }
 
+    /// <summary>
+    /// Method for getting the fixed build path.
+    /// </summary>
+    /// <param name="buildTarget">the build target</param>
+    /// <param name="buildPath">the build path</param>
+    /// <param name="buildName">the build name</param>
+    /// <returns>string denoting the fixed build path</returns>
     static string GetFixedBuildPath(BuildTarget buildTarget, string buildPath, string buildName)
     {
         if (buildTarget.ToString().ToLower().Contains("windows")) {
@@ -98,6 +129,10 @@ static class BuildCommand
         return buildPath + buildName;
     }
 
+    /// <summary>
+    /// Method for getting the build options.
+    /// </summary>
+    /// <returns>the build options</returns>
     static BuildOptions GetBuildOptions()
     {
         if (TryGetEnv(BUILD_OPTIONS_ENV_VAR, out string envVar)) {
@@ -126,7 +161,13 @@ static class BuildCommand
         return BuildOptions.None;
     }
 
-    // https://stackoverflow.com/questions/1082532/how-to-tryparse-for-enum-value
+    /// <summary>
+    /// https://stackoverflow.com/questions/1082532/how-to-tryparse-for-enum-value
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="strEnumValue"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     static bool TryConvertToEnum<TEnum>(this string strEnumValue, out TEnum value)
     {
         if (!Enum.IsDefined(typeof(TEnum), strEnumValue))
@@ -139,12 +180,23 @@ static class BuildCommand
         return true;
     }
 
+    /// <summary>
+    /// Method for trying to get the environment variable.
+    /// </summary>
+    /// <param name="key">string denoting the key of the environment variable</param>
+    /// <param name="value">string denoting the value of the environment variable</param>
+    /// <returns>whether or not the searched value is null or empty</returns>
     static bool TryGetEnv(string key, out string value)
     {
         value = Environment.GetEnvironmentVariable(key);
         return !string.IsNullOrEmpty(value);
     }
 
+    /// <summary>
+    /// Method for setting the scripting backend from the environment variables.
+    /// </summary>
+    /// <param name="platform">the build target</param>
+    /// <exception cref="Exception">exception to be thrown if the scripting backend could not be found</exception>
     static void SetScriptingBackendFromEnv(BuildTarget platform) {
         var targetGroup = BuildPipeline.GetBuildTargetGroup(platform);
         if (TryGetEnv(SCRIPTING_BACKEND_ENV_VAR, out string scriptingBackend)) {
@@ -161,6 +213,10 @@ static class BuildCommand
         }
     }
 
+    /// <summary>
+    /// Method for performing the build.
+    /// </summary>
+    /// <exception cref="Exception">exception to be thrown if the build failed</exception>
     static void PerformBuild()
     {
         var buildTarget = GetBuildTarget();
@@ -197,6 +253,9 @@ static class BuildCommand
         Console.WriteLine(":: Done with build");
     }
 
+    /// <summary>
+    /// Handles the Android app bundle.
+    /// </summary>
     private static void HandleAndroidAppBundle()
     {
         if (TryGetEnv(ANDROID_APP_BUNDLE, out string value))
@@ -217,6 +276,9 @@ static class BuildCommand
         }
     }
 
+    /// <summary>
+    /// Handles the Android bundle version code.
+    /// </summary>
     private static void HandleAndroidBundleVersionCode()
     {
         if (TryGetEnv(ANDROID_BUNDLE_VERSION_CODE, out string value))
@@ -231,6 +293,11 @@ static class BuildCommand
         }
     }
 
+    /// <summary>
+    /// Method for getting the iOS version.
+    /// </summary>
+    /// <returns>string denoting the iOS version</returns>
+    /// <exception cref="ArgumentNullException">exception to be thrown if the version could not be extracted</exception>
     private static string GetIosVersion()
     {
         if (TryGetEnv(VERSION_iOS, out string value))
@@ -247,6 +314,9 @@ static class BuildCommand
         throw new ArgumentNullException(nameof(value), $":: Error finding {VERSION_iOS} env var");
     }
 
+    /// <summary>
+    /// Handles the Android keystore.
+    /// </summary>
     private static void HandleAndroidKeystore()
     {
 #if UNITY_2019_1_OR_NEWER

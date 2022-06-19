@@ -71,7 +71,9 @@ public class SessionManager : MonoBehaviour
         new TimeSpan(8, 0, 0)       // After 8 hours
     };
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
     void Start() 
     {
         // Get the root reference location of the database
@@ -97,7 +99,9 @@ public class SessionManager : MonoBehaviour
         else GetPlayerKey();
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
     void Update() 
     {
         if (playerProficiency != null) {
@@ -110,7 +114,9 @@ public class SessionManager : MonoBehaviour
         }
     }
 
-    // Displays the number of proverbs in each proficiency bucket
+    /// <summary>
+    /// Displays the number of proverbs in each proficiency bucket.
+    /// </summary>
     private void DisplayProverbCount() 
     {
         ApprenticeCount.text = playerProficiencyNoFilter.apprentice.Count.ToString();
@@ -119,7 +125,9 @@ public class SessionManager : MonoBehaviour
         MasterCount.text = playerProficiencyNoFilter.master.Count.ToString();
     }
 
-    // Fetches the key of the current player
+    /// <summary>
+    /// Fetches the key of the current player.
+    /// </summary>
     public void GetPlayerKey() {
         // Reset the player proficiency
         playerProficiency = null;
@@ -146,7 +154,9 @@ public class SessionManager : MonoBehaviour
         };
     }
 
-    // Fetches the proficiency of a player 
+    /// <summary>
+    /// Fetches the proficiency of a player.
+    /// </summary>
     private void GetPlayerProficiencies() {
         // Goes to the 'proficiencies' database table and searches for the key
         dbReference.Child("proficiencies").Child(playerKey)
@@ -170,6 +180,9 @@ public class SessionManager : MonoBehaviour
         });
     }
 
+    /// <summary>
+    /// Method that creates the list of questions for the current single-player session.
+    /// </summary>
     private void InitList() {
         // Add all proficiencies to one list
         allProficiencies = new LinkedList<Bucket>();
@@ -203,13 +216,12 @@ public class SessionManager : MonoBehaviour
         .Zip(ints, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v));
     }
 
-    /**
-     * Method for resizing a list to the desired size.
-     * 
-     * list - the list to be resized
-     * size - the number of elements that the list should be resized to
-     * c - placeholder element for padding the end of the list
-     */
+    /// <summary>
+    /// Method for resizing a list to the desired size.
+    /// </summary>
+    /// <typeparam name="T">symbol denoting the parameter type of the list of questions (Bucket by default)</typeparam>
+    /// <param name="list">the list to be resized</param>
+    /// <param name="size">the number of elements that the list should be resized to</param>
     private void ResizeList<T>(ref LinkedList<T> list, int size) {
         int curr = list.Count;
         if (size < curr) {
@@ -219,7 +231,11 @@ public class SessionManager : MonoBehaviour
         }
     }
 
-    // Print for debugging
+    /// <summary>
+    /// Print for debugging.
+    /// </summary>
+    /// <param name="list">the list that should be printed</param>
+    /// <returns>a formatted string denoting the list</returns>
     private string LinkedString(LinkedList<Bucket> list) {
         string result = "[";
         foreach (Bucket b in list) {
@@ -228,7 +244,12 @@ public class SessionManager : MonoBehaviour
         return result + "]";
     }
 
-    // Randomly shuffle the items in the given list
+    /// <summary>
+    /// Randomly shuffle the items in the given list.
+    /// </summary>
+    /// <typeparam name="T">symbol denoting the parameter type of the list of questions (Bucket by default)</typeparam>
+    /// <param name="list">the list to be shuffled</param>
+    /// <returns>the shuffled list</returns>
     private LinkedList<T> Shuffle<T>(IList<T> list) {
         int n = list.Count;
         while (n > 1) {
@@ -239,7 +260,9 @@ public class SessionManager : MonoBehaviour
         return new LinkedList<T>(list);
     }
 
-    // Remove proverbs from the session list that have been questioned recently
+    /// <summary>
+    /// Remove proverbs from the session list that have been questioned recently.
+    /// </summary>
     private void RemoveTimedProverbs() {
         playerProficiency.apprentice = LoopProverbs(playerProficiency.apprentice);
         playerProficiency.journeyman = LoopProverbs(playerProficiency.journeyman);
@@ -247,7 +270,11 @@ public class SessionManager : MonoBehaviour
         playerProficiency.master = LoopProverbs(playerProficiency.master);
     }
 
-    // Loops over the given list and adds buckets to the result that have passed the waiting period
+    /// <summary>
+    /// Loops over the given list and adds buckets to the result that have passed the waiting period.
+    /// </summary>
+    /// <param name="list">the list to be looped over</param>
+    /// <returns>the list containing the buckets that have passed the waiting period</returns>
     private List<Bucket> LoopProverbs(List<Bucket> list) {
         List<Bucket> result = new List<Bucket> { };
         foreach (Bucket b in list) {
@@ -263,7 +290,9 @@ public class SessionManager : MonoBehaviour
         return result;
     }
 
-    // Load the first question 
+    /// <summary>
+    /// Load the first question.
+    /// </summary>
     // TODO: fix duplicate code with LoadScene() in SingleplayerManager
     public void NextScene() {
         Bucket bucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;
@@ -271,7 +300,11 @@ public class SessionManager : MonoBehaviour
         else Debug.Log("Bucket is null, no proverbs available.");
     }
 
-    // Gets the name of the next scene depending on the stage
+    /// <summary>
+    /// Gets the name of the next scene depending on the stage.
+    /// </summary>
+    /// <param name="stage">the number of the stage that the proverb is currently in</param>
+    /// <returns>a string denoting the name of the scene that must be loaded next</returns>
     // TODO: Share method with SingleplayerManager
     public string NextSceneName(int stage)
     {
@@ -287,14 +320,19 @@ public class SessionManager : MonoBehaviour
         };
     }
 
-    // Plays the button clicked sound once
+    /// <summary>
+    /// Plays the button clicked sound once.
+    /// </summary>
     // TODO: Share method
     public void PlonkNoise()
     {
         WoodButton.Play();
     }
 
-    // Switch to the scene corresponding to the sceneIndex
+    /// <summary>
+    /// Switch to the scene corresponding to the sceneIndex.
+    /// </summary>
+    /// <param name="sceneIndex">the index of the scene to be switched to</param>
     // TODO: Share method
     public void SwitchScene(int sceneIndex) 
     {

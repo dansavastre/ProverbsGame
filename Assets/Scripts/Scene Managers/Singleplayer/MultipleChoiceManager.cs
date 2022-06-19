@@ -33,6 +33,9 @@ public class MultipleChoiceManager : SingleplayerManager
     public enum Mode { ProverbMeaning, MeaningProverb, ExampleSentence}
     public static Mode gamemode;
 
+    /// <summary>
+    /// Executes when the game is started.
+    /// </summary>
     protected async override void Start()
     {
         base.Start();
@@ -115,7 +118,9 @@ public class MultipleChoiceManager : SingleplayerManager
         questionText.text = currentQuestion.text;
     }
 
-    // Set the multiple choice mode depending on proverb stage
+    /// <summary>
+    /// Set the multiple choice mode depending on proverb stage.
+    /// </summary>
     private void SetMode()
     {
         if (currentBucket.stage == 1) gamemode = Mode.ProverbMeaning;
@@ -133,7 +138,10 @@ public class MultipleChoiceManager : SingleplayerManager
         }
     }
 
-    // Create randomized list of question positions
+    /// <summary>
+    /// Create randomized list of question positions.
+    /// </summary>
+    /// <returns>numbers denoting the randomized positions of the answers in the list</returns>
     private int[] RandomPositions()
     {
         int[] numbers = { -1, -1, -1, -1 };
@@ -146,9 +154,11 @@ public class MultipleChoiceManager : SingleplayerManager
         return numbers;
     }
 
-    // Functionality for clicking the hint image:
-    // - if the hint image is currently hidden, show it;
-    // - it the hint image is currently shown, hide it.
+    /// <summary>
+    /// Functionality for clicking the hint image:
+    /// - if the hint image is currently hidden, show it;
+    /// - it the hint image is currently shown, hide it.
+    /// </summary>
     // TODO: Share method
     public void HintClicked() {
         image.enabled = !image.enabled;

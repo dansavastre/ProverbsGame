@@ -71,8 +71,10 @@ public class SingleplayerManager : MonoBehaviour
     private const int journeymanStage = 5;
     private const int expertStage = 6;
     private const int masterStage = 7;
-    
-    // Start is called before the first frame update
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
     protected virtual void Start()
     {
         // Get information from external sources
@@ -99,6 +101,9 @@ public class SingleplayerManager : MonoBehaviour
         progressBar.SetProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
     }
 
+    /// <summary>
+    /// Method for retrieving an image from the databse. This image is then used in the single-player game modes.
+    /// </summary>
     protected void GetImage()
     {
         // Get a reference to the storage service, using the default Firebase App
@@ -126,7 +131,9 @@ public class SingleplayerManager : MonoBehaviour
         });
     }
 
-    // Get the key for the next proverb in the session in chronological order
+    /// <summary>
+    /// Get the key for the next proverb in the session in chronological order.
+    /// </summary>
     protected void GetNextKey()
     {
         // Select first bucket from shuffled allProficiencies list
@@ -147,7 +154,10 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
 
-    // Display the feedback after the player answers the question
+    /// <summary>
+    /// Display the feedback after the player answers the question, respective of whether or not the answer was correct.
+    /// </summary>
+    /// <param name="correct">whether or not the question has been answered correctly</param>
     protected void DisplayFeedback(bool correct)
     {
         answered = true;
@@ -173,10 +183,13 @@ public class SingleplayerManager : MonoBehaviour
         nextQuestionButton.SetActive(true);
     }
 
-    // Update the player proficiency into a new object
+    /// <summary>
+    /// Update the player proficiency into a new object.
+    /// </summary>
     protected void UpdateProficiency()
     {
         // Bucket currentBucket;
+        // update to a new proficiency depending to the current proficiency
         switch (currentType)
         {
             case "apprentice":
@@ -205,7 +218,9 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
 
-    // Helper function for updating the player proficiency
+    /// <summary>
+    /// Helper function for updating the player proficiency.
+    /// </summary>
     private void SharedUpdate()
     {
         allProficiencies.Remove(currentBucket);
@@ -259,7 +274,12 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
 
-    // Helper function for checking how many stages the proverb should go down
+    /// <summary>
+    /// Helper function for checking how many stages the proverb should go down.
+    /// </summary>
+    /// <param name="stage">the stage number of the current proverb</param>
+    /// <param name="mistakes">the number of mistakes done by the player</param>
+    /// <returns></returns>
     private int ChangeStage(int stage, int mistakes)
     {
         switch (stage)
@@ -274,7 +294,8 @@ public class SingleplayerManager : MonoBehaviour
     }
     
     /**
-     * <summary>currentQuestion attribute gets initialized and written with right values.
+     * <summary>
+     * currentQuestion attribute gets initialized and written with right values.
      * Randomization is used to randomize order of answers. In addition, a flexible number of answer buttons is possible.
      * </summary>
      * <param name="correctAnswer">The correct answer</param>
@@ -331,7 +352,9 @@ public class SingleplayerManager : MonoBehaviour
     }
     
     /**
-     * <summary>Function that creates the buttons containing the possible answers to the multiple choice questions.</summary>
+     * <summary>
+     * Function that creates the buttons containing the possible answers to the multiple choice questions.
+     * </summary>
      * <param name="answerIndex">The answer the button should contain is at answerIndex in currentQuestion.answers.</param>
      */
     private void CreateButton(int answerIndex)
@@ -365,7 +388,10 @@ public class SingleplayerManager : MonoBehaviour
         StartCoroutine(DelayedAnimation(newButton));
     }
     
-    // Display the feedback after the player answers the question
+    /// <summary>
+    /// Display the feedback after the player answers the question
+    /// </summary>
+    /// <param name="index">the index of the answer that was selected by the player</param>
     public void CheckAnswer(int index)
     {
         DisplayFeedback(currentQuestion.answers[index].isCorrect);
@@ -374,14 +400,18 @@ public class SingleplayerManager : MonoBehaviour
         DeactivateAnswerButtons();
     }
     
-    // Deactivate all answer buttons
+    /// <summary>
+    /// Method that deactivates all answer buttons.
+    /// </summary>
     private void DeactivateAnswerButtons()
     {
         answerButtons.ForEach(delegate(Button button) { button.interactable = false; });
     }
     
     /**
-     * <summary>Get the proficiency type of the stage</summary>
+     * <summary>
+     * Get the proficiency type of the stage.
+     * </summary>
      */
     private string GetTypeOfStage(int stage)
     {
@@ -398,7 +428,9 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
 
-    // Quit the session and return to the main menu
+    /// <summary>
+    /// Method for quitting the session and returning to the main menu.
+    /// </summary>
     public void QuitSession()
     {
         Debug.Log("Quitting session.");
@@ -407,6 +439,9 @@ public class SingleplayerManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    /// <summary>
+    /// Method that loads the next question scene.
+    /// </summary>
     public void LoadNextScene()
     {
         if (firstTimeAnswering && answeredCorrect)
@@ -442,14 +477,18 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
 
-    // Load the FunFact scene by pressing the "i" button
+    /// <summary>
+    /// Load the FunFact scene by pressing the "i" button.
+    /// </summary>
     public void LoadFunFactOnDemand()
     {
         if (!answered) SessionManager.isOnDemandBeforeAnswer = true;
         else LoadFunFact();
     }
 
-    // Load the FunFact scene
+    /// <summary>
+    /// Load the FunFact scene.
+    /// </summary>
     public void LoadFunFact() 
     {
         SessionManager.proverb = nextProverb;
@@ -457,7 +496,11 @@ public class SingleplayerManager : MonoBehaviour
         SceneManager.LoadScene("FunFact");
     }
 
-    // Gets the name of the next scene depending on the stage
+    /// <summary>
+    /// Gets the name of the next scene depending on the stage.
+    /// </summary>
+    /// <param name="stage">the number of the stage that the proverb is currently in</param>
+    /// <returns>a string denoting the name of the scene that must be loaded next</returns>
     // TODO: Share method with SessionManager
     public string NextSceneName(int stage)
     {
@@ -473,7 +516,11 @@ public class SingleplayerManager : MonoBehaviour
         };
     }
 
-    // Plays an animation on the given button with a random delay
+    /// <summary>
+    /// Plays an animation on the given button with a random delay.
+    /// </summary>
+    /// <param name="newButton">the button that has been pressed</param>
+    /// <returns>a command telling the program to wait a random amount of time before starting the animation again</returns>
     // TODO: Share method
     private IEnumerator DelayedAnimation(Button newButton)
     {
@@ -484,14 +531,19 @@ public class SingleplayerManager : MonoBehaviour
         newButton.gameObject.SetActive(true);
     }
 
-    // Plays the button clicked sound once
+    /// <summary>
+    /// Plays the button clicked sound once.
+    /// </summary>
     // TODO: Share method
     public void PlonkNoise()
     {
         WoodButton.Play();
     }
 
-    // Switch to the scene corresponding to the sceneIndex
+    /// <summary>
+    /// Switch to the scene corresponding to the sceneIndex.
+    /// </summary>
+    /// <param name="sceneIndex">the index number of the scene to switch to</param>
     // TODO: Share method
     public void SwitchScene(int sceneIndex) 
     {

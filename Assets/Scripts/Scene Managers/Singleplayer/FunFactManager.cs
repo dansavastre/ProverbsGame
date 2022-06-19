@@ -22,6 +22,9 @@ public class FunFactManager : SingleplayerManager
     // The maximum number of bytes that will be retrieved
     private long maxAllowedSize = 1 * 1024 * 1024;
 
+    /// <summary>
+    /// Executes when the game is started.
+    /// </summary>
     public void Start()
     {
         Debug.Log("is on demand: " + SessionManager.isOnDemandBeforeAnswer);
@@ -41,7 +44,9 @@ public class FunFactManager : SingleplayerManager
         DisplayFunFact();
     }
 
-    // Sets the corresponding UI elements and enables scroll bar if necessary
+    /// <summary>
+    /// Sets the corresponding UI elements and enables scroll bar if necessary.
+    /// </summary>
     private void DisplayFunFact() 
     {
         string funFact = nextProverb.funFact;
