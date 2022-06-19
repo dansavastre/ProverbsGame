@@ -6,18 +6,45 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Database Interaction.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/FirstScreen.unity
+    guid: 3d5b46d1167a17940b2b1de6a46c0816
   - enabled: 1
-    path: Assets/Scenes/Menu.unity
+    path: Assets/Scenes/MainMenu.unity
     guid: 63ddc795d44241743bfb0580af442bed
+  - enabled: 1
+    path: Assets/Scenes/Other/Login.unity
+    guid: 33dd05e7c72d3a24c95264806623df47
+  - enabled: 1
+    path: Assets/Scenes/Other/Register.unity
+    guid: 5499b88afb62a4341a8ca8ef182a4f7a
+  - enabled: 1
+    path: Assets/Scenes/Other/Dictionary.unity
+    guid: 85288a60c4ac6744e8bd3e37f3e7e14d
+  - enabled: 1
+    path: Assets/Scenes/Other/InfoScreen.unity
+    guid: 6ca38ba3f4d35bb4c860e99abef68eb4
+  - enabled: 1
+    path: Assets/Scenes/Other/ProfilePage.unity
+    guid: 480f430189714ff489a8ba1d360d100b
   - enabled: 1
     path: Assets/Scenes/Singleplayer/MultipleChoice.unity
     guid: 86dc8b8eee83f0d47b913e7effb9ce78
   - enabled: 1
+    path: Assets/Scenes/Singleplayer/RecognizeImage.unity
+    guid: 62d4742ce6119384983b68a286b11043
+  - enabled: 1
     path: Assets/Scenes/Singleplayer/FillBlanks.unity
     guid: 3ceac13bc2428734d9011e5c46da099f
   - enabled: 1
-    path: Assets/Scenes/Singleplayer/RecognizeImage.unity
-    guid: 62d4742ce6119384983b68a286b11043
+    path: Assets/Scenes/Singleplayer/FormSentence.unity
+    guid: 4174db22e8f08eb42950f6889ac2391d
+  - enabled: 1
+    path: Assets/Scenes/Singleplayer/FunFact.unity
+    guid: bad80b0f2fcd46847bed07f763e65974
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer/FillInBlanks.unity
+    guid: 482efb976eea5754ea09e2faafb7d234
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer/FillBlankMultiplayer.unity
+    guid: ea6aebfe120847041be3abb12b11d2d8
   m_configObjects: {}
