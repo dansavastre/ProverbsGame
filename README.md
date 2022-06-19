@@ -26,6 +26,25 @@ To install the game on your device, follow these steps:
 7. Once the file has been successfully transfered to the mobile device, open and install it;
 8. After the installation completes, the game should be ready to play. Enjoy!
 
+## usage
+
+### Updating the database with new proverbs
+
+The first step is creating the Excel file following the template of the excel file in Assets > Resources > Proverbs.xls. This file must then be converted into a .csv file and to do so in Excel go to File > Export > Change File Type > From the options choose CSV and then Save As to save the .csv file.
+
+After this has been done, run the ProverbsUpdater.exe and the application should display where the .csv file should be before uploading the database. Once the .csv file is in the correct location by clicking the upload button the database will update.
+
+The database can be accessed through the browser at: https://console.firebase.google.com/u/0/project/sp-proverb-game/database/sp-proverb-game-default-rtdb/data and in the proverbs subtree all the new proverbs have replaced the old ones.
+
+The pictures have to be uploaded here: https://console.firebase.google.com/u/0/project/sp-proverb-game/storage/sp-proverb-game.appspot.com/files in the proverbs folder.
+
+### Building the application
+In order to build the application in Unity go to File > Build Settings. A new window will open. Make sure all 14 scenes are in the Scenes in Build tab and the first one should be called "Scenes/FirstScreen"(scene number 0). Below that there is a menu on the left where the build platform must be selected. After selecting the platform to build on click the "Switch platform" button if not already on that platform. Then by clicking "Build" the application will be built.
+
+For building the ProverbsUpdater in Build Settings select windows as the platform and switch to it. Then in the "Scenes in Build" menu select only the "Scenes/ExcelConverter" scene and build the application.
+
+More advanced build settings can be found in Build Settings > Player Settings.
+
 ## Support
 If you need support with installing/using the application, don't hesitate to contact the development team or the course staff.
 
