@@ -57,7 +57,7 @@ public class Launcher_MM : MonoBehaviourPunCallbacks {
     public override void OnJoinedLobby() {
         MenuManager.Instance.OpenMenu("Meaning Matching"); // open the title menu on joining lobby
         Debug.Log("Joined Lobby.");
-        PhotonNetwork.NickName = "Player " + AccountManager.playerName;
+        PhotonNetwork.NickName = AccountManager.playerName;
     }
 
     public void CreateRoom() {
@@ -110,8 +110,8 @@ public class Launcher_MM : MonoBehaviourPunCallbacks {
     }
 
     public void StartGame() {
-        PhotonNetwork.LoadLevel(1); // TODO: change the level to the actual fill in the blanks multiplayer game mode
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        // PhotonNetwork.LoadLevel(1); // TODO: change the level to the actual fill in the blanks multiplayer game mode
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 1)
         {
             PhotonNetwork.LoadLevel("MeaningMatchingMultiplayer");
         }
