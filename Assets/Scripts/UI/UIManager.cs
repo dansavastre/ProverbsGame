@@ -22,10 +22,14 @@ public class UIManager : MonoBehaviour
         // Initializes the proverb level up variables
         if (ProverbLevelUp != null) 
         {
+            Debug.Log("Enabling proverb level up.");
             ProverbLevelUp.SetActive(true);
             ConfettiPS = GameObject.Find("Confetti").GetComponent<ParticleSystem>();
+            Debug.Log("Confetti found.");
             ProficiencyText = GameObject.Find("Proficiency").GetComponent<TextMeshProUGUI>();
+            Debug.Log("Proficiency found.");
             disableCongratulations();
+            Debug.Log("Disabling proverb level up.");
         }
     }
 
@@ -37,6 +41,7 @@ public class UIManager : MonoBehaviour
     // Shows the proverb level up pop up
     public void enableCongratulations(string proficiencyText)
     {
+        Debug.Log("PARTYYYYYY");
         ProverbLevelUp.SetActive(true);
         ConfettiPS.Play();
         ProficiencyText.text = proficiencyText + "!";

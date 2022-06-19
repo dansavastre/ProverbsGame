@@ -810,6 +810,7 @@ MonoBehaviour:
   continueOverlay: {fileID: 271041817}
   otherOptionBoard: {fileID: 0}
   answerButtonPrefab: {fileID: 0}
+  UIManager: {fileID: 560862405}
   fileContents: 
   maxAllowedSize: 1048576
   fillInTheBlanksAnswerButtonPrefab: {fileID: 1929956151825164805, guid: af2be71e72734ce4cb057bb4fb9f0526, type: 3}
