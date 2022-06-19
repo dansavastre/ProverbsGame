@@ -23,7 +23,12 @@ public class AccountManager : MonoBehaviour
     void Start()
     {
         FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(true);
+        
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        dbReference.Child("players").Reference.KeepSynced(true);
+        dbReference.Child("proficiencies").Reference.KeepSynced(true);
+        dbReference.Child("proverbs").Reference.KeepSynced(true);
     }
 
     public void OnClickLogin()
