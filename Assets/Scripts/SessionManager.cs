@@ -174,7 +174,7 @@ public class SessionManager : MonoBehaviour
                 newProficiency = JsonUtility.FromJson<Proficiency>(json);
 
                 Debug.Log(json);
-                //RemoveTimedProverbs();
+                // RemoveTimedProverbs();
                 InitList();
             }
         });
