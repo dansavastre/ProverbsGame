@@ -955,7 +955,7 @@ MonoBehaviour:
   checkButton: {fileID: 1424475036}
   nextQuestionButton: {fileID: 2112776575}
   funFactButtonPrefab: {fileID: 0}
-  answerButtonPrefab: {fileID: 3265820505575547767, guid: f9a2da42e09b114439c8d12d86fedcd8, type: 3}
+  answerButtonPrefab: {fileID: 3265820505575547767, guid: 60d35be9f13aa4d44b77dff349836a76, type: 3}
   answerBoard: {fileID: 207808619}
   answerButtons: []
   image: {fileID: 0}
@@ -963,7 +963,7 @@ MonoBehaviour:
   progressBar: {fileID: 0}
   _photon: {fileID: 1151029734}
   keywordBoard: {fileID: 207808619}
-  dragDropButtonPrefab: {fileID: 3265820505575547767, guid: f9a2da42e09b114439c8d12d86fedcd8, type: 3}
+  dragDropButtonPrefab: {fileID: 3265820505575547767, guid: 60d35be9f13aa4d44b77dff349836a76, type: 3}
   canvas: {fileID: 1151029731}
   otherPlayerNames:
   - {fileID: 1231113676}

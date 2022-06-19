@@ -12,8 +12,8 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 {
     public Canvas canvas;
 
-    private RectTransform rectTransform;
-    private CanvasGroup canvasGroup;
+    protected RectTransform rectTransform;
+    protected CanvasGroup canvasGroup;
     public Vector3 startingPosition;
 
     [SerializeField] public TextMeshProUGUI proverbText;
