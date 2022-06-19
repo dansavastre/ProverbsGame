@@ -199,6 +199,7 @@ public class SessionManager : MonoBehaviour
 
         // Initiate ProgressBar
         correctAnswers = 0;
+        maxValue = Math.Min(maxValue, allProficiencies.Count);
 
         Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
         Debug.Log("List size pre-shuffle:" + allProficiencies.Count);
@@ -223,6 +224,7 @@ public class SessionManager : MonoBehaviour
     /// <param name="size">the number of elements that the list should be resized to</param>
     private void ResizeList<T>(ref LinkedList<T> list, int size) {
         int curr = list.Count;
+        maxValue = Math.Min(maxValue, size);
         if (size < curr) {
             T[] arr = list.ToArray();
             Array.Resize(ref arr, size);
