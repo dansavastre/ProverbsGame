@@ -23,7 +23,9 @@ public class FormSentenceManager : SingleplayerManager
     private List<string> allWords;
     private string LastClickedWord;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
     protected async override void Start()
     {
         base.Start();
@@ -82,6 +84,9 @@ public class FormSentenceManager : SingleplayerManager
         answerText.text = correctProverb;
     }
 
+    /// <summary>
+    /// Executes on each frame update.
+    /// </summary>
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -114,7 +119,9 @@ public class FormSentenceManager : SingleplayerManager
         }
     }
 
-    // Create a button for each word option
+    /// <summary>
+    /// Create a button for each word option.
+    /// </summary>
     // TODO: Share method with FillBlanksManager
     private void CreateButtons()
     {
@@ -156,7 +163,12 @@ public class FormSentenceManager : SingleplayerManager
         }
     }
 
-    // Check if text is able to be put in the sentence
+    /// <summary>
+    /// Check if text is able to be put in the sentence.
+    /// </summary>
+    /// <param name="text">string denoting the sentence</param>
+    /// <param name="search">string denoting the text to be put into the sentence</param>
+    /// <returns>whether or not the word can be added to the sentence</returns>
     // TODO: Share method with FillBlanksManager
     public bool canInput(string text, string search)
     {
@@ -168,7 +180,10 @@ public class FormSentenceManager : SingleplayerManager
         return true;
     }
 
-    // Input a word inside of the proverb
+    /// <summary>
+    /// Input a word inside of the proverb.
+    /// </summary>
+    /// <param name="word">the word to be added to the proverb</param>
     private void inputWord(string word)
     {
         answerProverb = answerProverb + " " + word;
@@ -178,7 +193,11 @@ public class FormSentenceManager : SingleplayerManager
         questionText.text = answerProverb;
     }
 
-    // Remove a word from the proverb
+    /// <summary>
+    /// Remove a word from the proverb.
+    /// </summary>
+    /// <param name="word">the word to be removed</param>
+    /// <param name="wordIndex">the index of the word to be removed</param>
     private void removeWord(string word, int wordIndex)
     {
         Button[] buttons = answerBoard.GetComponentsInChildren<Button>();
@@ -202,7 +221,13 @@ public class FormSentenceManager : SingleplayerManager
         questionText.text = answerProverb;
     }
 
-    // Function that replaces the first occurance of a string "search" inside of a string "text" with a string "replace"
+    /// <summary>
+    /// Function that replaces the first occurrence of a string "search" inside of a string "text" with a string "replace".
+    /// </summary>
+    /// <param name="text">text denoting the sentence</param>
+    /// <param name="search">the string whose first occurrence should be replaced</param>
+    /// <param name="replace">the string to replace the first occurrence with</param>
+    /// <returns>the modified sentence</returns>
     // TODO: Share method with FillBlanksManager
     public string ReplaceFirst(string text, string search, string replace)
     {
@@ -213,14 +238,19 @@ public class FormSentenceManager : SingleplayerManager
         return text.Substring(0, text.IndexOf(search)) + replace + text.Substring(text.IndexOf(search) + search.Length);
     }
 
-    // Detect the press of a button
+    /// <summary>
+    /// Detect the press of a button.
+    /// </summary>
+    /// <param name="index">the index of the button that is checked for presses</param>
     public void buttonPressed(int index)
     {
           inputWord(answerBoard.GetComponentsInChildren<Button>()[index].GetComponentInChildren<TextMeshProUGUI>().text);
           answerBoard.GetComponentsInChildren<Button>()[index].interactable = false;
     }
 
-    // Display the feedback after the player answers the question
+    /// <summary>
+    /// Display the feedback after the player answers the question.
+    /// </summary>
     public void CheckAnswer()
     {
         // Do string manipulation to verify that the sentences are the same or not
@@ -235,7 +265,11 @@ public class FormSentenceManager : SingleplayerManager
         checkButton.enabled = false;
     }
 
-    // Plays an animation on the given button with a random delay
+    /// <summary>
+    /// Plays an animation on the given button with a random delay.
+    /// </summary>
+    /// <param name="newButton">the button that has been pressed</param>
+    /// <returns>a command telling the program to wait a random amount of time</returns>
     // TODO: Share method
     private IEnumerator DelayedAnimation(Button newButton)
     {

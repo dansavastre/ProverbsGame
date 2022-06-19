@@ -10,6 +10,9 @@ public class Proficiency
     public List<Bucket> expert;
     public List<Bucket> master;
     
+    /// <summary>
+    /// Constructor for the Proficiency class.
+    /// </summary>
     public Proficiency()
     {
         this.apprentice = new List<Bucket>{};

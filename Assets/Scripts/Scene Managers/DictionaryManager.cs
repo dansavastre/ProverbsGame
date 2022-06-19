@@ -27,7 +27,10 @@ public class DictionaryManager : MonoBehaviour
     private List<ProverbsDictionary> filteredProverbsList;
     private HashSet<string> wordsToFilterOn;
     private DatabaseReference dbReference;
-    
+
+    /// <summary>
+    /// Executed when the game is started.
+    /// </summary>
     private void Start()
     {
         // Get the root reference location of the database
@@ -40,14 +43,19 @@ public class DictionaryManager : MonoBehaviour
         StartCoroutine(Wait());
     }
 
-    // Wait a second before updating the contents
+    /// <summary>
+    /// Method for making the program wait a second.
+    /// </summary>
+    /// <returns>a command telling the program to wait for one second</returns>
     private IEnumerator Wait()
     {
         yield return new WaitForSeconds(1);
         UpdateDictionaryContentHolderContents();
     }
 
-    // Get the list of proverbs from that database that are stage 2 or higher
+    /// <summary>
+    /// Retrieve the proverbs to be shown in the dictionary from the database.
+    /// </summary>
     private void getProverbsToShow()
     {
         // Add everything from journeyman and up
@@ -80,7 +88,9 @@ public class DictionaryManager : MonoBehaviour
         });
     }
 
-    // Make the proverbs human-readable and load them into the scroll area
+    /// <summary>
+    /// Update the contents of the dictionary according to the list of filtered proverbs.
+    /// </summary>
     private void UpdateDictionaryContentHolderContents()
     {
         filteredProverbsList = filteredProverbsList.OrderBy(p => p.proverb).ToList();
@@ -94,10 +104,13 @@ public class DictionaryManager : MonoBehaviour
         }
     }
 
-    // Remove a filter from the list of filtered words
+    /// <summary>
+    /// Method that is called whenever a word button is pressed.
+    /// </summary>
+    /// <param name="wordOfButton">string denotingg the word that is on the button</param>
     private void WordButtonPressed(string wordOfButton)
     {
-        wordsToFilterOn.Remove(wordOfButton);
+        wordsToFilterOn.Remove(wordOfButton); // remove the word from the list
 
         // Remove all the GameObjects that shows the filtered word (removes duplicates as well)
         foreach (var tmp in filterHolderPanel.GetComponentsInChildren<TextMeshProUGUI>())
@@ -116,7 +129,9 @@ public class DictionaryManager : MonoBehaviour
         UpdateDictionaryContentHolderContents();
     }
 
-    // Add a filter from the list of filtered words
+    /// <summary>
+    /// Method that is called once a filter has been set to the search.
+    /// </summary>
     public void FilterAdded()
     {
         string filter = filterText.text.Replace("\u200B", "");
@@ -139,14 +154,19 @@ public class DictionaryManager : MonoBehaviour
         UpdateDictionaryContentHolderContents();
     }
 
-    // Plays the button clicked sound once
+    /// <summary>
+    /// Plays the button clicked sound once
+    /// </summary>
     // TODO: Share method
     public void PlonkNoise()
     {
         WoodButton.Play();
     }
 
-    // Switches to another scene
+    /// <summary>
+    /// Switches to another scene
+    /// </summary>
+    /// <param name="sceneIndex"></param>
     // TODO: Share method
     public void SwitchScene(int sceneIndex)
     {

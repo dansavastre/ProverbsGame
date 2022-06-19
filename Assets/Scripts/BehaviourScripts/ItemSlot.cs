@@ -12,6 +12,11 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 {
 
     public PhotonView _photon;
+
+    /// <summary>
+    /// Executed when the user drops the element.
+    /// </summary>
+    /// <param name="eventData">a pointer to the event data of the drag-drop action</param>
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag == null) return;
@@ -27,6 +32,11 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         SendChat(draggedButtonText, buttonText);
     }
     
+    /// <summary>
+    /// Method for sending a message to a certain player via the chat.
+    /// </summary>
+    /// <param name="msg">string denoting the message to be sent</param>
+    /// <param name="player">string denoting the username of the player that the message should be sent to</param>
     public void SendChat(string msg, string player)
     {
         _photon.RPC("ReceiveChat", PhotonNetwork.PlayerList.First(p => p.NickName.Equals(player)), msg);

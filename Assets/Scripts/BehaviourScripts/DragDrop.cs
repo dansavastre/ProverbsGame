@@ -18,14 +18,25 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     [SerializeField] public TextMeshProUGUI proverbText;
 
+    /// <summary>
+    /// Executed when an instance of this class is initialized.
+    /// </summary>
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
+    /// <summary>
+    /// Executed when the user clicks.
+    /// </summary>
+    /// <param name="eventData">a pointer to the event data of the click action</param>
     public void OnPointerDown(PointerEventData eventData) { }
 
+    /// <summary>
+    /// Executed when the user releases the click.
+    /// </summary>
+    /// <param name="eventData">a pointer to the event data of the click action</param>
     public void OnPointerUp(PointerEventData eventData)
     {
         // Snap button back to starting position if not placed on a player
@@ -47,6 +58,10 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
     }
     
+    /// <summary>
+    /// Method for raycasting the mouse position.
+    /// </summary>
+    /// <returns>a raycast result denoting the mouse position</returns>
     public List<RaycastResult> RaycastMouse(){
          
         PointerEventData pointerData = new PointerEventData (EventSystem.current)
@@ -62,17 +77,29 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         return results;
     }
 
+    /// <summary>
+    /// Executed whenever the user starts a drag action.
+    /// </summary>
+    /// <param name="eventData">a pointer to the event data of the drag action</param>
     public void OnBeginDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0.7f;
     }
-    
+
+    /// <summary>
+    /// Executes on each frame the user is performing a drag action.
+    /// </summary>
+    /// <param name="eventData">a pointer to the event data of the drag action</param>
     public void OnDrag(PointerEventData eventData)
     {
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
+    /// <summary>
+    /// Executed whenever the user ends a drag action.
+    /// </summary>
+    /// <param name="eventData">a pointer to the event data of the drag action</param>
     public void OnEndDrag(PointerEventData eventData)
     {
         eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition =

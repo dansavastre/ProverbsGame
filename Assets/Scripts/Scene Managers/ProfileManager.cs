@@ -15,7 +15,9 @@ public class ProfileManager : MonoBehaviour
     // Audio source for button sound
     private static AudioSource WoodButton;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
     void Start()
     {
         // Get the GameObject that contains the audio source for button sound
@@ -26,14 +28,19 @@ public class ProfileManager : MonoBehaviour
         email.text = AccountManager.playerEmail;
     }
 
-    // Plays the button clicked sound once
+    /// <summary>
+    /// Plays the button clicked sound once
+    /// </summary>
     // TODO: Share method
     public void PlonkNoise()
     {
         WoodButton.Play();
     }
 
-    // Switches to another scene
+    /// <summary>
+    /// Switches to another scene.
+    /// </summary>
+    /// <param name="sceneIndex">the index of the scene to be switched to</param>
     // TODO: Share method
     public void SwitchScene(int sceneIndex)
     {

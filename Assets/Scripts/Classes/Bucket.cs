@@ -9,6 +9,12 @@ public class Bucket
     public int stage;
     public long timestamp;
 
+    /// <summary>
+    /// Constructor for the Bucket class.
+    /// </summary>
+    /// <param name="key">string denoting the key of the bucket</param>
+    /// <param name="stage">index of the stage that the bucket is currently in</param>
+    /// <param name="timestamp">timestamp of the last time the bucket was accessed</param>
     public Bucket(string key, int stage, long timestamp)
     {
         this.key = key;
@@ -16,7 +22,11 @@ public class Bucket
         this.timestamp = timestamp;
     }
 
-    // Checks the equality of the Bucket object with another object
+    /// <summary>
+    /// Checks the equality of the Bucket object with another object.
+    /// </summary>
+    /// <param name="obj">the object that this Bucket is compared to</param>
+    /// <returns>whether or not the 2 objects are equal</returns>
     public override bool Equals(object obj)
     {
         var bucket = obj as Bucket;
@@ -29,7 +39,10 @@ public class Bucket
         return this.key.Equals(bucket.key);
     }
 
-    // Generates hashcode for a Bucket object
+    /// <summary>
+    /// Generates hash code for a Bucket object.
+    /// </summary>
+    /// <returns>integer denoting the hash code for the Bucket object</returns>
     public override int GetHashCode()
     {
         return this.key.GetHashCode();
