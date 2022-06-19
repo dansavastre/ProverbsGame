@@ -273,13 +273,9 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
     
-    /**
-     * <summary>currentQuestion attribute gets initialized and written with right values.
-     * Randomization is used to randomize order of answers. In addition, a flexible number of answer buttons is possible.
-     * </summary>
-     * <param name="correctAnswer">The correct answer</param>
-     * <param name="wrongAnswers">The wrong answers</param>
-     */
+    // CurrentQuestion gets initialized and written with right values
+    // Randomization is used to randomize order of answers
+    // In addition, a flexible number of answer buttons is possible
     public void SetCurrentQuestion(string correctAnswer, List<string> wrongAnswers)
     {
         Debug.Log(wrongAnswers.Count());
@@ -313,8 +309,10 @@ public class SingleplayerManager : MonoBehaviour
 
         Answer[] answers = {answer0, answer1, answer2, answer3};
 
-        answers[numbers[0]].isCorrect = true;   // number[0] gives the index of correct answer in the "answers" array
-        answers[numbers[0]].text = correctAnswer; // meaning is the correct answer
+        // Variable number[0] gives the index of correct answer in the "answers" array
+        answers[numbers[0]].isCorrect = true;
+        // Meaning is the correct answer
+        answers[numbers[0]].text = correctAnswer; 
         for (int i = 1; i < numbers.Length; i++)
         {
             answers[numbers[i]].text = wrongAnswers[i-1];
@@ -330,10 +328,7 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
     
-    /**
-     * <summary>Function that creates the buttons containing the possible answers to the multiple choice questions.</summary>
-     * <param name="answerIndex">The answer the button should contain is at answerIndex in currentQuestion.answers.</param>
-     */
+    // Function that creates the buttons containing the possible answers to the multiple choice questions
     private void CreateButton(int answerIndex)
     {
         // Get board and button dimensions
@@ -380,9 +375,7 @@ public class SingleplayerManager : MonoBehaviour
         answerButtons.ForEach(delegate(Button button) { button.interactable = false; });
     }
     
-    /**
-     * <summary>Get the proficiency type of the stage</summary>
-     */
+    // Get the proficiency type of the stage
     private string GetTypeOfStage(int stage)
     {
         switch (stage)
@@ -407,6 +400,7 @@ public class SingleplayerManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    // Load the next scene, check if it should be a fun fact or not
     public void LoadNextScene()
     {
         if (firstTimeAnswering && answeredCorrect)

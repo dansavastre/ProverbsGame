@@ -9,8 +9,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 
-// TODO: Add more comments to this file
-
 public class DictionaryManager : MonoBehaviour
 {
     // UI elements
@@ -42,14 +40,17 @@ public class DictionaryManager : MonoBehaviour
         StartCoroutine(Wait());
     }
 
+    // Wait a second before updating the contents
     private IEnumerator Wait()
     {
         yield return new WaitForSeconds(1);
         UpdateDictionaryContentHolderContents();
     }
 
+    // Get the list of proverbs from that database that are stage 2 or higher
     private void getProverbsToShow()
     {
+        // Add everything from journeyman and up
         List<Bucket> buckets = SessionManager.playerProficiency.apprentice.FindAll(b => b.stage >= 2);
         buckets.AddRange(SessionManager.playerProficiency.journeyman);
         buckets.AddRange(SessionManager.playerProficiency.expert);
@@ -57,6 +58,7 @@ public class DictionaryManager : MonoBehaviour
         
         List<string> keysToGetProverbsFor = buckets.Select(b => b.key).ToList();
         
+        // Only add stage 2 and 3 from apprentice
         dbReference.Child("proverbs").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -78,6 +80,7 @@ public class DictionaryManager : MonoBehaviour
         });
     }
 
+    // Make the proverbs human-readable and load them into the scroll area
     private void UpdateDictionaryContentHolderContents()
     {
         filteredProverbsList = filteredProverbsList.OrderBy(p => p.proverb).ToList();
@@ -91,10 +94,12 @@ public class DictionaryManager : MonoBehaviour
         }
     }
 
+    // Remove a filter from the list of filtered words
     private void WordButtonPressed(string wordOfButton)
     {
         wordsToFilterOn.Remove(wordOfButton);
 
+        // Remove all the GameObjects that shows the filtered word (removes duplicates as well)
         foreach (var tmp in filterHolderPanel.GetComponentsInChildren<TextMeshProUGUI>())
         {
             if (tmp.text == wordOfButton)
@@ -102,6 +107,7 @@ public class DictionaryManager : MonoBehaviour
                 Destroy(tmp.transform.parent.GameObject());
             }
         }
+        // Add proverbs back that were initially excluded
         filteredProverbsList = new List<ProverbsDictionary>(allProverbs);
         foreach (var wordToFilterOn in wordsToFilterOn)
         {
@@ -110,6 +116,7 @@ public class DictionaryManager : MonoBehaviour
         UpdateDictionaryContentHolderContents();
     }
 
+    // Add a filter from the list of filtered words
     public void FilterAdded()
     {
         string filter = filterText.text.Replace("\u200B", "");

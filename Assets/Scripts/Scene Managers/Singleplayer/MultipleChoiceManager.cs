@@ -104,6 +104,7 @@ public class MultipleChoiceManager : SingleplayerManager
                 });
             }
             
+            // Set the current question with phrase and other phrases
             SetCurrentQuestion(nextProverb.phrase, otherPhrases);
 
             taskText.text = "Select the proverb";

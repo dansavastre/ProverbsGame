@@ -30,7 +30,7 @@ public class RecognizeImageManager : SingleplayerManager
         });
 
         GetImage();
-        
+        // Set the current question with phrase and other phrases
         SetCurrentQuestion(nextProverb.phrase, nextProverb.otherPhrases);
     }
 }
