@@ -182,6 +182,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HintButton
       objectReference: {fileID: 0}
+    - target: {fileID: 7117318998358302610, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7621868297547622750, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -949,20 +953,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7835fa244a6f10f4cb06e036dce4535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continueOverlay: {fileID: 0}
-  answerText: {fileID: 0}
+  progressBar: {fileID: 0}
   questionText: {fileID: 310002088}
-  resultText: {fileID: 105648760}
-  checkButton: {fileID: 1424475037}
-  nextQuestionButton: {fileID: 2112776575}
-  funFactButtonPrefab: {fileID: 0}
-  answerButtonPrefab: {fileID: 3265820505575547767, guid: f9a2da42e09b114439c8d12d86fedcd8, type: 3}
+  image: {fileID: 0}
   answerBoard: {fileID: 207808619}
   answerButtons: []
-  image: {fileID: 0}
+  resultText: {fileID: 105648760}
+  answerText: {fileID: 0}
+  checkButton: {fileID: 1424475037}
+  nextQuestionButton: {fileID: 2112776575}
+  continueOverlay: {fileID: 0}
   otherOptionBoard: {fileID: 0}
-  UIManager: {fileID: 0}
-  progressBar: {fileID: 0}
+  answerButtonPrefab: {fileID: 3265820505575547767, guid: f9a2da42e09b114439c8d12d86fedcd8, type: 3}
+  fileContents: 
+  maxAllowedSize: 1048576
   _photon: {fileID: 1151029734}
   keywordBoard: {fileID: 207808619}
   dragDropButtonPrefab: {fileID: 3265820505575547767, guid: f9a2da42e09b114439c8d12d86fedcd8, type: 3}
