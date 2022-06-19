@@ -37,6 +37,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     void Update()
     {
+        // If clicked on the screen and the proverb level up is displayed, disable it
         if (Input.GetMouseButtonDown(0) && (ProverbLevelUp != null)) disableCongratulations();
     }
 

@@ -34,6 +34,9 @@ public class SingleplayerManager : MonoBehaviour
     // UI prefabs
     [SerializeField] protected Button answerButtonPrefab;       // Prefab for the answer buttons
 
+    // UI Manager
+    [SerializeField] private UIManager UIManager;
+
     // Stores the reference location of the database
     public static DatabaseReference dbReference;
 
@@ -62,9 +65,6 @@ public class SingleplayerManager : MonoBehaviour
     private bool answeredCorrect;
     private bool answered;
     private bool firstTimeAnswering;
-
-    // UI Manager
-    private UIManager UIManager;
 
     // Stages corresponding to the proficiency levels
     private const int apprenticeStage = 3;
@@ -97,7 +97,6 @@ public class SingleplayerManager : MonoBehaviour
         nextQuestionButton.SetActive(false);
 
         // Update Progress bar
-        Debug.Log("ProgressBar: " + SessionManager.correctAnswers + " / " + SessionManager.maxValue);
         progressBar.SetProgress((float)SessionManager.correctAnswers / (float)SessionManager.maxValue);
     }
 
@@ -149,8 +148,6 @@ public class SingleplayerManager : MonoBehaviour
         {
             currentType = GetTypeOfStage(currentBucket.stage);
             firstTimeAnswering = currentBucket.timestamp == 0 ? true : false;
-            Debug.Log("Timestamp: " + currentBucket.timestamp);
-            Debug.Log("First time answering: " + firstTimeAnswering);
         }
     }
 
@@ -173,7 +170,6 @@ public class SingleplayerManager : MonoBehaviour
         {
             resultText.text = "Incorrect!";
             dictionary[currentBucket]++;
-            Debug.Log("Mistakes: " + dictionary[currentBucket].ToString());
             allProficiencies.Remove(currentBucket);
             // Wrongly answered questions are repeated after other questions are shown
             if (allProficiencies.Count >= 3) allProficiencies.AddAfter(allProficiencies.First.Next.Next, currentBucket);
@@ -236,15 +232,19 @@ public class SingleplayerManager : MonoBehaviour
             Debug.Log(currentBucket.key + " stage upgraded to " + currentBucket.stage.ToString());
             if (UIManager != null) 
             {
+                Debug.Log("UI Manager is there!");
                 switch (currentBucket.stage)
                 {
                     case 4:
+                        Debug.Log("Enabling congratulations!");
                         UIManager.enableCongratulations(GetTypeOfStage(4));
                         break;
                     case 6: 
+                        Debug.Log("Enabling congratulations!");
                         UIManager.enableCongratulations(GetTypeOfStage(6));
                         break;
                     case 7: 
+                        Debug.Log("Enabling congratulations!");
                         UIManager.enableCongratulations(GetTypeOfStage(7));
                         break;
                 }
@@ -293,6 +293,9 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
     
+    // CurrentQuestion gets initialized and written with right values
+    // Randomization is used to randomize order of answers
+    // In addition, a flexible number of answer buttons is possible
     /**
      * <summary>
      * currentQuestion attribute gets initialized and written with right values.
@@ -334,8 +337,10 @@ public class SingleplayerManager : MonoBehaviour
 
         Answer[] answers = {answer0, answer1, answer2, answer3};
 
-        answers[numbers[0]].isCorrect = true;   // number[0] gives the index of correct answer in the "answers" array
-        answers[numbers[0]].text = correctAnswer; // meaning is the correct answer
+        // Variable number[0] gives the index of correct answer in the "answers" array
+        answers[numbers[0]].isCorrect = true;
+        // Meaning is the correct answer
+        answers[numbers[0]].text = correctAnswer; 
         for (int i = 1; i < numbers.Length; i++)
         {
             answers[numbers[i]].text = wrongAnswers[i-1];
@@ -446,7 +451,6 @@ public class SingleplayerManager : MonoBehaviour
     {
         if (firstTimeAnswering && answeredCorrect)
         {
-            Debug.Log("First time answered correct!");
             firstTimeAnswering = false;
             LoadFunFact();
         }
@@ -526,7 +530,6 @@ public class SingleplayerManager : MonoBehaviour
     {
         SRandom rnd = new SRandom();
         float randomWait = (float)rnd.Next(1, 7)/20;
-        Debug.Log(randomWait);
         yield return new WaitForSeconds(randomWait);
         newButton.gameObject.SetActive(true);
     }

@@ -831,6 +831,7 @@ MonoBehaviour:
   continueOverlay: {fileID: 211817046}
   otherOptionBoard: {fileID: 21300000, guid: 4718b3b74e48df94cb3b1d3847df6749, type: 3}
   answerButtonPrefab: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
+  UIManager: {fileID: 1185331187}
   fileContents: 
   maxAllowedSize: 1048576
   taskText: {fileID: 1149138168}

@@ -9,8 +9,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 
-// TODO: Add more comments to this file
-
 public class DictionaryManager : MonoBehaviour
 {
     // UI elements
@@ -60,6 +58,7 @@ public class DictionaryManager : MonoBehaviour
     /// </summary>
     private void getProverbsToShow()
     {
+        // Add everything from journeyman and up
         List<Bucket> buckets = SessionManager.playerProficiency.apprentice.FindAll(b => b.stage >= 2);
         buckets.AddRange(SessionManager.playerProficiency.journeyman);
         buckets.AddRange(SessionManager.playerProficiency.expert);
@@ -67,6 +66,7 @@ public class DictionaryManager : MonoBehaviour
         
         List<string> keysToGetProverbsFor = buckets.Select(b => b.key).ToList();
         
+        // Only add stage 2 and 3 from apprentice
         dbReference.Child("proverbs").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -112,6 +112,7 @@ public class DictionaryManager : MonoBehaviour
     {
         wordsToFilterOn.Remove(wordOfButton); // remove the word from the list
 
+        // Remove all the GameObjects that shows the filtered word (removes duplicates as well)
         foreach (var tmp in filterHolderPanel.GetComponentsInChildren<TextMeshProUGUI>())
         {
             if (tmp.text == wordOfButton)
@@ -119,6 +120,7 @@ public class DictionaryManager : MonoBehaviour
                 Destroy(tmp.transform.parent.GameObject());
             }
         }
+        // Add proverbs back that were initially excluded
         filteredProverbsList = new List<ProverbsDictionary>(allProverbs);
         foreach (var wordToFilterOn in wordsToFilterOn)
         {
