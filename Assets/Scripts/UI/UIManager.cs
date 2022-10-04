@@ -19,9 +19,6 @@ public class UIManager : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        // Makes sure the sound effect is not destroyed when switching scenes
-        if (WoodButton != null) DontDestroyOnLoad(WoodButton);
-
         // Initializes the proverb level up variables
         if (ProverbLevelUp != null) 
         {
