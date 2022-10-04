@@ -535,6 +535,15 @@ public class SingleplayerManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Functionality for clicking the hint image:
+    /// - if the hint image is currently hidden, show it;
+    /// - it the hint image is currently shown, hide it.
+    /// </summary>
+    public void HintClicked() {
+        image.enabled = !image.enabled;
+    }
+
+    /// <summary>
     /// Plays the button clicked sound once.
     /// </summary>
     // TODO: Share method

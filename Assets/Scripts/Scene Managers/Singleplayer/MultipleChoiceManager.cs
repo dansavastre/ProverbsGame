@@ -142,7 +142,7 @@ public class MultipleChoiceManager : SingleplayerManager
     /// <summary>
     /// Create randomized list of question positions.
     /// </summary>
-    /// <returns>numbers denoting the randomized positions of the answers in the list</returns>
+    /// <returns> Numbers denoting the randomized positions of the answers in the list</returns>
     private int[] RandomPositions()
     {
         int[] numbers = { -1, -1, -1, -1 };
@@ -153,15 +153,5 @@ public class MultipleChoiceManager : SingleplayerManager
             else numbers[i] = random;
         }
         return numbers;
-    }
-
-    /// <summary>
-    /// Functionality for clicking the hint image:
-    /// - if the hint image is currently hidden, show it;
-    /// - it the hint image is currently shown, hide it.
-    /// </summary>
-    // TODO: Share method
-    public void HintClicked() {
-        image.enabled = !image.enabled;
     }
 }
