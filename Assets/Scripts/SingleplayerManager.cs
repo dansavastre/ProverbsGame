@@ -524,14 +524,22 @@ public class SingleplayerManager : MonoBehaviour
     /// Plays an animation on the given button with a random delay.
     /// </summary>
     /// <param name="newButton">the button that has been pressed</param>
-    /// <returns>a command telling the program to wait a random amount of time before starting the animation again</returns>
-    // TODO: Share method
-    private IEnumerator DelayedAnimation(Button newButton)
+    /// <returns>a command telling the program to wait a random amount of time</returns>
+    public IEnumerator DelayedAnimation(Button newButton)
     {
         SRandom rnd = new SRandom();
-        float randomWait = (float)rnd.Next(1, 7)/20;
+        float randomWait = (float)rnd.Next(1, 9)/20;
         yield return new WaitForSeconds(randomWait);
         newButton.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// Functionality for clicking the hint image:
+    /// - if the hint image is currently hidden, show it;
+    /// - it the hint image is currently shown, hide it.
+    /// </summary>
+    public void HintClicked() {
+        image.enabled = !image.enabled;
     }
 
     /// <summary>
