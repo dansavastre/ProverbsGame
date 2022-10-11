@@ -5,7 +5,6 @@ using TMPro;
 using Firebase;
 using Firebase.Database;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class AccountManager : MonoBehaviour
 {
@@ -72,7 +71,7 @@ public class AccountManager : MonoBehaviour
                     playerName = childSnapshot.Child("playerName").Value.ToString();
                 }
                 // Load next scene after succesful login
-                SwitchScene(3);
+                UIManager.SwitchScene(3);
             }
             else
             {
@@ -118,7 +117,7 @@ public class AccountManager : MonoBehaviour
                 // Fetches all proverbs in database and puts them in the new users' proficiency
                 GetProverbs();
                 // Load next scene after succesful registration
-                SwitchScene(3);
+                UIManager.SwitchScene(3);
             }
         };
     }
@@ -151,15 +150,5 @@ public class AccountManager : MonoBehaviour
                 }
                 dbReference.Child("proficiencies").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(playerProficiency));
         }});
-    }
-
-    /// <summary>
-    /// Switches to another scene.
-    /// </summary>
-    /// <param name="sceneIndex"></param>
-    // TODO: Share method
-    public void SwitchScene(int sceneIndex)
-    {
-        SceneManager.LoadScene(SessionManager.scenes[sceneIndex]);
     }
 }

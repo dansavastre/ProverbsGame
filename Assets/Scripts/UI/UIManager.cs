@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,6 +14,18 @@ public class UIManager : MonoBehaviour
     // Proverb level up variables
     private ParticleSystem ConfettiPS;
     private TextMeshProUGUI ProficiencyText;
+
+    public static string[] scenes =
+    {
+        "FirstScreen",          // 0 First screen on app launch
+        "Register",             // 1 Screen to register
+        "Login",                // 2 Screen to login
+        "MainMenu",             // 3 Singleplayer menu
+        "FillInBlanks",         // 4 Multiplayer menu
+        "InfoScreen",           // 5 Information page
+        "ProfilePage",          // 6 Profile page
+        "Dictionary"            // 7 Proverb dictionary
+    };
 
     /// <summary>
     /// Executed when an instance of this class is initialized.
@@ -67,5 +80,14 @@ public class UIManager : MonoBehaviour
     public void PlonkNoise()
     {
         WoodButton.Play();
+    }
+
+    /// <summary>
+    /// Switches to another scene
+    /// </summary>
+    /// <param name="sceneIndex"></param>
+    public static void SwitchScene(int sceneIndex)
+    {
+        SceneManager.LoadScene(scenes[sceneIndex]);
     }
 }

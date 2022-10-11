@@ -48,7 +48,7 @@ public class SingleplayerManager : MonoBehaviour
     public long maxAllowedSize = 1 * 1024 * 1024;
 
     // Audio source for button sound
-    public static AudioSource WoodButton;
+    // public static AudioSource WoodButton;
 
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
@@ -83,7 +83,7 @@ public class SingleplayerManager : MonoBehaviour
         newProficiency = SessionManager.newProficiency;
 
         // Get the GameObject that contains the audio source for button sound
-        WoodButton = AccountManager.WoodButton;
+        // WoodButton = AccountManager.WoodButton;
 
         // Instantiate variables
         allProficiencies = SessionManager.allProficiencies;
@@ -540,15 +540,6 @@ public class SingleplayerManager : MonoBehaviour
     /// </summary>
     public void HintClicked() {
         image.enabled = !image.enabled;
-    }
-
-    /// <summary>
-    /// Plays the button clicked sound once.
-    /// </summary>
-    // TODO: Share method
-    public void PlonkNoise()
-    {
-        WoodButton.Play();
     }
 
     /// <summary>

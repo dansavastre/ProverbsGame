@@ -30,9 +30,6 @@ public class SessionManager : MonoBehaviour
     public static string playerName;
     public static string playerKey;
 
-    // Audio source for button sound
-    public static AudioSource WoodButton;
-
     // Progress bar
     public static int correctAnswers;
 
@@ -92,7 +89,6 @@ public class SessionManager : MonoBehaviour
         // Instantiate variables
         random = new Random();
         isOnDemandBeforeAnswer = false;
-        WoodButton = AccountManager.WoodButton;
 
         // Only continue if player email is given
         if (playerEmail == null) SwitchScene(0);
@@ -322,20 +318,10 @@ public class SessionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Plays the button clicked sound once.
-    /// </summary>
-    // TODO: Share method
-    public void PlonkNoise()
-    {
-        WoodButton.Play();
-    }
-
-    /// <summary>
     /// Switch to the scene corresponding to the sceneIndex.
     /// </summary>
     /// <param name="sceneIndex">the index of the scene to be switched to</param>
-    // TODO: Share method
-    public void SwitchScene(int sceneIndex) 
+    public static void SwitchScene(int sceneIndex) 
     {
         SceneManager.LoadScene(scenes[sceneIndex]);
     }
