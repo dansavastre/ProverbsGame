@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     // UI elements
-    [SerializeField] public AudioSource WoodButton;
+    [SerializeField] private AudioSource WoodButton;
     [SerializeField] private GameObject ProverbLevelUp;
 
     // Proverb level up variables
@@ -27,6 +27,9 @@ public class UIManager : MonoBehaviour
             ProficiencyText = GameObject.Find("Proficiency").GetComponent<TextMeshProUGUI>();
             disableCongratulations();
         }
+
+        // Find the GameObject that contains the audio source for button sound
+        WoodButton = GameObject.Find("WoodButtonAudio").GetComponent<AudioSource>();
     }
 
     /// <summary>
@@ -56,5 +59,13 @@ public class UIManager : MonoBehaviour
     {
         ConfettiPS.Stop();
         ProverbLevelUp.SetActive(false);
+    }
+
+    /// <summary>
+    /// Plays the button clicked sound once.
+    /// </summary>
+    public void PlonkNoise()
+    {
+        WoodButton.Play();
     }
 }

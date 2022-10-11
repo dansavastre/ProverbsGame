@@ -13,7 +13,10 @@ public class AccountManager : MonoBehaviour
     [SerializeField] private TMP_InputField emailField;
     [SerializeField] private TMP_InputField usernameField;
 
-    // Audio source for button sound
+    [SerializeField] private TextMeshProUGUI username;
+    [SerializeField] private TextMeshProUGUI email;
+
+    // To be removed
     public static AudioSource WoodButton;
 
     // Stores the reference location of the database
@@ -33,7 +36,11 @@ public class AccountManager : MonoBehaviour
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
 
-        // Find the GameObject that contains the audio source for button sound
+        // Instantiate the text fields with player info
+        if (username != null) username.text = AccountManager.playerName;
+        if (email != null) email.text = AccountManager.playerEmail;
+
+        // To be removed
         WoodButton = GameObject.Find("WoodButtonAudio").GetComponent<AudioSource>();
     }
 
@@ -144,15 +151,6 @@ public class AccountManager : MonoBehaviour
                 }
                 dbReference.Child("proficiencies").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(playerProficiency));
         }});
-    }
-
-    /// <summary>
-    /// Plays the button clicked sound once.
-    /// </summary>
-    // TODO: Share method
-    public void PlonkNoise()
-    {
-        WoodButton.Play();
     }
 
     /// <summary>

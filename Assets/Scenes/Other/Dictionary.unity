@@ -457,6 +457,7 @@ GameObject:
   - component: {fileID: 504989957}
   - component: {fileID: 504989956}
   - component: {fileID: 504989960}
+  - component: {fileID: 504989961}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -566,6 +567,20 @@ MonoBehaviour:
   filterHolderPanel: {fileID: 4745527}
   dictionaryContentHolder: {fileID: 851859001}
   wordButtonPrefab: {fileID: 5176199197588525093, guid: 5de84d10f98bd2e46b0394739b05af7c, type: 3}
+--- !u!114 &504989961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504989955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3a9a37168cea004595f4efcb8a56b5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WoodButton: {fileID: 0}
+  ProverbLevelUp: {fileID: 0}
 --- !u!1 &632370699
 GameObject:
   m_ObjectHideFlags: 0
@@ -771,6 +786,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 504989961}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: PlonkNoise
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &793847934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -845,7 +872,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -466.49966, y: 650}
+  m_AnchoredPosition: {x: -466.49966, y: 858.6155}
   m_SizeDelta: {x: 912.176, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &851859000
@@ -1042,7 +1069,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2118548687}
   m_HandleRect: {fileID: 2118548686}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1441,7 +1468,7 @@ PrefabInstance:
     - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 504989960}
+      objectReference: {fileID: 504989961}
     - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SwitchScene
@@ -1456,7 +1483,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2047210214245799098, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: DictionaryManager, Assembly-CSharp
+      value: UIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3659744418583650412, guid: fc568d2507c08d948aafcfad2f3482fc, type: 3}
       propertyPath: m_Sprite
