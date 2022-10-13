@@ -23,9 +23,6 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     [SerializeField] GameObject playerListItemPrefab_FIB;
     [SerializeField] GameObject startGameButton_FIB;
 
-    // Audio source for button sound
-    public static AudioSource WoodButton;
-
     /// <summary>
     /// Disconnects the player and sends them to the multiplayer menu scene.
     /// </summary>
@@ -46,7 +43,6 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     /// </summary>
     void Start()
     {
-        WoodButton = AccountManager.WoodButton;
         Debug.Log("Connecting to Master.");
         if (PhotonNetwork.IsConnected)
         {
@@ -209,12 +205,5 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     /// <param name="newPlayer">the Player object to be added to the layout of the menu</param>
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
         Instantiate(playerListItemPrefab_FIB, playerListContent_FIB).GetComponent<PlayerListItem>().SetUp(newPlayer);
-    }
-
-    // Plays the button clicked sound once
-    // TODO: Share method
-    public void PlonkNoise()
-    {
-        WoodButton.Play();
     }
 }

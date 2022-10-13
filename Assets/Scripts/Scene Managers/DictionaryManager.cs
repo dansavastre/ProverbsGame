@@ -6,7 +6,6 @@ using TMPro;
 using Firebase.Database;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 
 public class DictionaryManager : MonoBehaviour
@@ -146,15 +145,5 @@ public class DictionaryManager : MonoBehaviour
         }
         filterText.text = "";
         UpdateDictionaryContentHolderContents();
-    }
-
-    /// <summary>
-    /// Switches to another scene
-    /// </summary>
-    /// <param name="sceneIndex"></param>
-    // TODO: Share method
-    public void SwitchScene(int sceneIndex)
-    {
-        SceneManager.LoadScene(SessionManager.scenes[sceneIndex]);
     }
 }

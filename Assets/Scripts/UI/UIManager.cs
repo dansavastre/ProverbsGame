@@ -27,6 +27,29 @@ public class UIManager : MonoBehaviour
         "Dictionary"            // 7 Proverb dictionary
     };
 
+    public static string[] modes =
+    {
+        "FunFact",              // 0 Fun fact page
+        "MultipleChoice",       // 1 Multiple choice
+        "RecognizeImage",       // 2 Recognize image
+        "FillBlanks",           // 3 Fill in the blanks
+        "FormSentence"          // 4 Form a sentence
+    };
+
+    /// <summary>
+    /// Gets the name of the next scene depending on the stage.
+    /// </summary>
+    /// <param name="stage">the number of the stage that the proverb is currently in</param>
+    /// <returns>a string denoting the name of the scene that must be loaded next</returns>
+    public static int NextSceneName(int stage)
+    {
+        if (stage == 1 || stage == 3 || stage == 5) return 1;
+        else if (stage == 2) return 2;
+        else if (stage == 4) return 3;
+        else if (stage == 6) return 4;
+        return -1;
+    }
+
     /// <summary>
     /// Executed when an instance of this class is initialized.
     /// </summary>
@@ -83,11 +106,20 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Switches to another scene
+    /// Switches to another scene.
     /// </summary>
     /// <param name="sceneIndex"></param>
     public static void SwitchScene(int sceneIndex)
     {
         SceneManager.LoadScene(scenes[sceneIndex]);
+    }
+
+    /// <summary>
+    /// Switches to another scene in the singleplayer modes.
+    /// </summary>
+    /// <param name="sceneIndex"></param>
+    public static void SwitchMode(int sceneIndex)
+    {
+        SceneManager.LoadScene(modes[sceneIndex]);
     }
 }

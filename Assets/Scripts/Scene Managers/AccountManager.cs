@@ -16,7 +16,7 @@ public class AccountManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI email;
 
     // To be removed
-    public static AudioSource WoodButton;
+    // public static AudioSource WoodButton;
 
     // Stores the reference location of the database
     private DatabaseReference dbReference;
@@ -40,7 +40,7 @@ public class AccountManager : MonoBehaviour
         if (email != null) email.text = AccountManager.playerEmail;
 
         // To be removed
-        WoodButton = GameObject.Find("WoodButtonAudio").GetComponent<AudioSource>();
+        // WoodButton = GameObject.Find("WoodButtonAudio").GetComponent<AudioSource>();
     }
 
     /// <summary>
