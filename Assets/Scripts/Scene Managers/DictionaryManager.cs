@@ -6,7 +6,6 @@ using TMPro;
 using Firebase.Database;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 
 public class DictionaryManager : MonoBehaviour
@@ -18,9 +17,6 @@ public class DictionaryManager : MonoBehaviour
 
     // UI prefabs
     [SerializeField] private Button wordButtonPrefab;
-
-    // Audio source for button sound
-    public static AudioSource WoodButton;
     
     // Proverb information
     private List<ProverbsDictionary> allProverbs;
@@ -35,9 +31,6 @@ public class DictionaryManager : MonoBehaviour
     {
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-
-        // Get the GameObject that contains the audio source for button sound
-        WoodButton = AccountManager.WoodButton;
 
         getProverbsToShow();
         StartCoroutine(Wait());
@@ -152,24 +145,5 @@ public class DictionaryManager : MonoBehaviour
         }
         filterText.text = "";
         UpdateDictionaryContentHolderContents();
-    }
-
-    /// <summary>
-    /// Plays the button clicked sound once
-    /// </summary>
-    // TODO: Share method
-    public void PlonkNoise()
-    {
-        WoodButton.Play();
-    }
-
-    /// <summary>
-    /// Switches to another scene
-    /// </summary>
-    /// <param name="sceneIndex"></param>
-    // TODO: Share method
-    public void SwitchScene(int sceneIndex)
-    {
-        SceneManager.LoadScene(SessionManager.scenes[sceneIndex]);
     }
 }

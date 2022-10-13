@@ -30,9 +30,6 @@ public class CoopGame : SingleplayerManager
     [SerializeField] private GameObject popupPanel;
     [SerializeField] private GameObject hintButton;
 
-    // Audio source for button sound
-    public static AudioSource WoodButton;
-
     // Variables
     private DateTime now;
     private int playersDone = 0;
@@ -54,8 +51,6 @@ public class CoopGame : SingleplayerManager
     /// </summary>
     async void Start()
     {
-        WoodButton = AccountManager.WoodButton;
-
         // initializations
         now = DateTime.UtcNow;
         buttonIndices = new List<string>();
@@ -568,12 +563,5 @@ public class CoopGame : SingleplayerManager
             hintButton.GetComponentInChildren<TextMeshProUGUI>().text = "Show Picture";
         }
         popupPanel.SetActive(!popupPanel.activeSelf);
-    }
-
-    // Plays the button clicked sound once
-    // TODO: Share method
-    public void PlonkNoise()
-    {
-        WoodButton.Play();
     }
 }

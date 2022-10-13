@@ -7,7 +7,6 @@ using Firebase;
 using Firebase.Database;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using Random = System.Random;
 
@@ -30,9 +29,6 @@ public class SessionManager : MonoBehaviour
     public static string playerName;
     public static string playerKey;
 
-    // Audio source for button sound
-    public static AudioSource WoodButton;
-
     // Progress bar
     public static int correctAnswers;
 
@@ -48,18 +44,6 @@ public class SessionManager : MonoBehaviour
     public static bool isOnDemandBeforeAnswer;
 
     private Random random;
-
-    public static string[] scenes =
-    {
-        "FirstScreen",          // 0 First screen on app launch
-        "Register",             // 1 Screen to register
-        "Login",                // 2 Screen to login
-        "MainMenu",             // 3 Singleplayer menu
-        "FillInBlanks",         // 4 Multiplayer menu
-        "InfoScreen",           // 5 Information page
-        "ProfilePage",          // 6 Profile page
-        "Dictionary"            // 7 Proverb dictionary
-    };
 
     private TimeSpan[] waitingPeriod =
     {
@@ -92,10 +76,9 @@ public class SessionManager : MonoBehaviour
         // Instantiate variables
         random = new Random();
         isOnDemandBeforeAnswer = false;
-        WoodButton = AccountManager.WoodButton;
 
         // Only continue if player email is given
-        if (playerEmail == null) SwitchScene(0);
+        if (playerEmail == null) UIManager.SwitchScene(0);
         else GetPlayerKey();
     }
 
@@ -114,6 +97,7 @@ public class SessionManager : MonoBehaviour
         }
     }
 
+    // TODO: Move to UIManager
     /// <summary>
     /// Displays the number of proverbs in each proficiency bucket.
     /// </summary>
@@ -291,52 +275,14 @@ public class SessionManager : MonoBehaviour
         return result;
     }
 
+    // TODO: Move to UIManager (?)
     /// <summary>
     /// Load the first question.
     /// </summary>
     // TODO: fix duplicate code with LoadScene() in SingleplayerManager
     public void NextScene() {
         Bucket bucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;
-        if (bucket != null) SceneManager.LoadScene(NextSceneName(bucket.stage));
+        if (bucket != null) UIManager.SwitchMode(UIManager.NextSceneName(bucket.stage));
         else Debug.Log("Bucket is null, no proverbs available.");
-    }
-
-    /// <summary>
-    /// Gets the name of the next scene depending on the stage.
-    /// </summary>
-    /// <param name="stage">the number of the stage that the proverb is currently in</param>
-    /// <returns>a string denoting the name of the scene that must be loaded next</returns>
-    // TODO: Share method with SingleplayerManager
-    public string NextSceneName(int stage)
-    {
-        return stage switch
-        {
-            1 => "MultipleChoice",
-            3 => "MultipleChoice",
-            5 => "MultipleChoice",
-            2 => "RecognizeImage",
-            4 => "FillBlanks",
-            6 => "FormSentence",
-            _ => ""
-        };
-    }
-
-    /// <summary>
-    /// Plays the button clicked sound once.
-    /// </summary>
-    // TODO: Share method
-    public void PlonkNoise()
-    {
-        WoodButton.Play();
-    }
-
-    /// <summary>
-    /// Switch to the scene corresponding to the sceneIndex.
-    /// </summary>
-    /// <param name="sceneIndex">the index of the scene to be switched to</param>
-    // TODO: Share method
-    public void SwitchScene(int sceneIndex) 
-    {
-        SceneManager.LoadScene(scenes[sceneIndex]);
     }
 }

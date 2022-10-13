@@ -9,7 +9,6 @@ using Firebase.Storage;
 using Firebase.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 using SRandom = System.Random;
@@ -47,9 +46,6 @@ public class SingleplayerManager : MonoBehaviour
     // The maximum number of bytes that will be retrieved
     public long maxAllowedSize = 1 * 1024 * 1024;
 
-    // Audio source for button sound
-    public static AudioSource WoodButton;
-
     // Stores information fetched from the database
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
@@ -81,9 +77,6 @@ public class SingleplayerManager : MonoBehaviour
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         playerProficiency = SessionManager.playerProficiency;
         newProficiency = SessionManager.newProficiency;
-
-        // Get the GameObject that contains the audio source for button sound
-        WoodButton = AccountManager.WoodButton;
 
         // Instantiate variables
         allProficiencies = SessionManager.allProficiencies;
@@ -151,6 +144,7 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
 
+    // TODO: Move to UIManager (?)
     /// <summary>
     /// Display the feedback after the player answers the question, respective of whether or not the answer was correct.
     /// </summary>
@@ -356,6 +350,7 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
     
+    // TODO: Move to UIManager
     /**
      * <summary>
      * Function that creates the buttons containing the possible answers to the multiple choice questions.
@@ -441,9 +436,10 @@ public class SingleplayerManager : MonoBehaviour
         Debug.Log("Quitting session.");
         string json = JsonUtility.ToJson(newProficiency);
         dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-        SceneManager.LoadScene("MainMenu");
+        UIManager.SwitchScene(3);
     }
 
+    // TODO: Move to UIManager (?)
     /// <summary>
     /// Method that loads the next question scene.
     /// </summary>
@@ -457,6 +453,7 @@ public class SingleplayerManager : MonoBehaviour
         else LoadQuestion();
     }
 
+    // TODO: Move to UIManager (?)
     // Load the next question
     public void LoadQuestion() 
     {
@@ -467,17 +464,17 @@ public class SingleplayerManager : MonoBehaviour
             Debug.Log("Saving progress.");
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-            SceneManager.LoadScene("MainMenu");
+            UIManager.SwitchScene(3);
             return;
         }
 
-        string nextScene = NextSceneName(currentBucket.stage);
-        if (nextScene != "") SceneManager.LoadScene(nextScene);
+        int nextScene = UIManager.NextSceneName(currentBucket.stage);
+        if (nextScene != -1) UIManager.SwitchMode(nextScene);
         else 
         {
             string json = JsonUtility.ToJson(newProficiency);
             dbReference.Child("proficiencies").Child(SessionManager.playerKey).SetRawJsonValueAsync(json);
-            SceneManager.LoadScene("MainMenu");
+            UIManager.SwitchScene(3);
         }
     }
 
@@ -497,29 +494,10 @@ public class SingleplayerManager : MonoBehaviour
     {
         SessionManager.proverb = nextProverb;
         SessionManager.proficiency = newProficiency;
-        SceneManager.LoadScene("FunFact");
+        UIManager.SwitchMode(0);
     }
 
-    /// <summary>
-    /// Gets the name of the next scene depending on the stage.
-    /// </summary>
-    /// <param name="stage">the number of the stage that the proverb is currently in</param>
-    /// <returns>a string denoting the name of the scene that must be loaded next</returns>
-    // TODO: Share method with SessionManager
-    public string NextSceneName(int stage)
-    {
-        return stage switch
-        {
-            1 => "MultipleChoice",
-            3 => "MultipleChoice",
-            5 => "MultipleChoice",
-            2 => "RecognizeImage",
-            4 => "FillBlanks",
-            6 => "FormSentence",
-            _ => ""
-        };
-    }
-
+    // TODO: Move to UIManager
     /// <summary>
     /// Plays an animation on the given button with a random delay.
     /// </summary>
@@ -540,24 +518,5 @@ public class SingleplayerManager : MonoBehaviour
     /// </summary>
     public void HintClicked() {
         image.enabled = !image.enabled;
-    }
-
-    /// <summary>
-    /// Plays the button clicked sound once.
-    /// </summary>
-    // TODO: Share method
-    public void PlonkNoise()
-    {
-        WoodButton.Play();
-    }
-
-    /// <summary>
-    /// Switch to the scene corresponding to the sceneIndex.
-    /// </summary>
-    /// <param name="sceneIndex">the index number of the scene to switch to</param>
-    // TODO: Share method
-    public void SwitchScene(int sceneIndex) 
-    {
-        SceneManager.LoadScene(SessionManager.scenes[sceneIndex]);
     }
 }

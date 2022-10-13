@@ -5,7 +5,6 @@ using TMPro;
 using Firebase;
 using Firebase.Database;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class AccountManager : MonoBehaviour
 {
@@ -13,8 +12,8 @@ public class AccountManager : MonoBehaviour
     [SerializeField] private TMP_InputField emailField;
     [SerializeField] private TMP_InputField usernameField;
 
-    // Audio source for button sound
-    public static AudioSource WoodButton;
+    [SerializeField] private TextMeshProUGUI username;
+    [SerializeField] private TextMeshProUGUI email;
 
     // Stores the reference location of the database
     private DatabaseReference dbReference;
@@ -33,8 +32,9 @@ public class AccountManager : MonoBehaviour
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
 
-        // Find the GameObject that contains the audio source for button sound
-        WoodButton = GameObject.Find("WoodButtonAudio").GetComponent<AudioSource>();
+        // Instantiate the text fields with player info
+        if (username != null) username.text = AccountManager.playerName;
+        if (email != null) email.text = AccountManager.playerEmail;
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public class AccountManager : MonoBehaviour
                     playerName = childSnapshot.Child("playerName").Value.ToString();
                 }
                 // Load next scene after succesful login
-                SwitchScene(3);
+                UIManager.SwitchScene(3);
             }
             else
             {
@@ -111,7 +111,7 @@ public class AccountManager : MonoBehaviour
                 // Fetches all proverbs in database and puts them in the new users' proficiency
                 GetProverbs();
                 // Load next scene after succesful registration
-                SwitchScene(3);
+                UIManager.SwitchScene(3);
             }
         };
     }
@@ -144,24 +144,5 @@ public class AccountManager : MonoBehaviour
                 }
                 dbReference.Child("proficiencies").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(playerProficiency));
         }});
-    }
-
-    /// <summary>
-    /// Plays the button clicked sound once.
-    /// </summary>
-    // TODO: Share method
-    public void PlonkNoise()
-    {
-        WoodButton.Play();
-    }
-
-    /// <summary>
-    /// Switches to another scene.
-    /// </summary>
-    /// <param name="sceneIndex"></param>
-    // TODO: Share method
-    public void SwitchScene(int sceneIndex)
-    {
-        SceneManager.LoadScene(SessionManager.scenes[sceneIndex]);
     }
 }
