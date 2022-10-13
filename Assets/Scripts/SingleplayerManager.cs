@@ -144,6 +144,7 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
 
+    // TODO: Move to UIManager (?)
     /// <summary>
     /// Display the feedback after the player answers the question, respective of whether or not the answer was correct.
     /// </summary>
@@ -349,6 +350,7 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
     
+    // TODO: Move to UIManager
     /**
      * <summary>
      * Function that creates the buttons containing the possible answers to the multiple choice questions.
@@ -437,6 +439,7 @@ public class SingleplayerManager : MonoBehaviour
         UIManager.SwitchScene(3);
     }
 
+    // TODO: Move to UIManager (?)
     /// <summary>
     /// Method that loads the next question scene.
     /// </summary>
@@ -450,6 +453,7 @@ public class SingleplayerManager : MonoBehaviour
         else LoadQuestion();
     }
 
+    // TODO: Move to UIManager (?)
     // Load the next question
     public void LoadQuestion() 
     {
@@ -493,6 +497,7 @@ public class SingleplayerManager : MonoBehaviour
         UIManager.SwitchMode(0);
     }
 
+    // TODO: Move to UIManager
     /// <summary>
     /// Plays an animation on the given button with a random delay.
     /// </summary>

@@ -15,9 +15,6 @@ public class AccountManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI username;
     [SerializeField] private TextMeshProUGUI email;
 
-    // To be removed
-    // public static AudioSource WoodButton;
-
     // Stores the reference location of the database
     private DatabaseReference dbReference;
 
@@ -38,9 +35,6 @@ public class AccountManager : MonoBehaviour
         // Instantiate the text fields with player info
         if (username != null) username.text = AccountManager.playerName;
         if (email != null) email.text = AccountManager.playerEmail;
-
-        // To be removed
-        // WoodButton = GameObject.Find("WoodButtonAudio").GetComponent<AudioSource>();
     }
 
     /// <summary>

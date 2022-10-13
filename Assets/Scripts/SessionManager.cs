@@ -97,6 +97,7 @@ public class SessionManager : MonoBehaviour
         }
     }
 
+    // TODO: Move to UIManager
     /// <summary>
     /// Displays the number of proverbs in each proficiency bucket.
     /// </summary>
@@ -274,6 +275,7 @@ public class SessionManager : MonoBehaviour
         return result;
     }
 
+    // TODO: Move to UIManager (?)
     /// <summary>
     /// Load the first question.
     /// </summary>
