@@ -10,54 +10,49 @@ using Unity.VisualScripting;
 
 public class DictionaryManager : MonoBehaviour
 {
-    // UI elements
+    private static DatabaseReference dbReference = AccountManager.dbReference;
+
+    private List<ProverbsDictionary> allProverbs;
+    private List<ProverbsDictionary> filteredProverbsList;
+    private HashSet<string> wordsToFilterOn;
+
     [SerializeField] private TextMeshProUGUI filterText;
     [SerializeField] private Transform filterHolderPanel;
     [SerializeField] private TextMeshProUGUI dictionaryContentHolder;
 
-    // UI prefabs
     [SerializeField] private Button wordButtonPrefab;
-    
-    // Proverb information
-    private List<ProverbsDictionary> allProverbs;
-    private List<ProverbsDictionary> filteredProverbsList;
-    private HashSet<string> wordsToFilterOn;
-    private DatabaseReference dbReference;
 
     /// <summary>
     /// Executed when the game is started.
     /// </summary>
     private void Start()
     {
-        // Get the root reference location of the database
-        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-
-        getProverbsToShow();
+        ShowProverbs();
         StartCoroutine(Wait());
     }
 
     /// <summary>
     /// Method for making the program wait a second.
     /// </summary>
-    /// <returns>a command telling the program to wait for one second</returns>
+    /// <returns>A command telling the program to wait for one second.</returns>
+    // TODO: Why does the dictionary not work if we wait a second, can this be fixed?
     private IEnumerator Wait()
     {
         yield return new WaitForSeconds(1);
-        UpdateDictionaryContentHolderContents();
+        UpdateDictionaryContents();
     }
 
     /// <summary>
     /// Retrieve the proverbs to be shown in the dictionary from the database.
     /// </summary>
-    private void getProverbsToShow()
+    private void ShowProverbs()
     {
         // Add everything from journeyman and up
         List<Bucket> buckets = SessionManager.playerProficiency.apprentice.FindAll(b => b.stage >= 2);
         buckets.AddRange(SessionManager.playerProficiency.journeyman);
         buckets.AddRange(SessionManager.playerProficiency.expert);
         buckets.AddRange(SessionManager.playerProficiency.master);
-        
-        List<string> keysToGetProverbsFor = buckets.Select(b => b.key).ToList();
+        List<string> proverbKeys = buckets.Select(b => b.key).ToList();
         
         // Only add stage 2 and 3 from apprentice
         dbReference.Child("proverbs").GetValueAsync().ContinueWith(task =>
@@ -70,13 +65,13 @@ public class DictionaryManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 // Take a snapshot of the database entry
-                List<DataSnapshot> proverbs = task.Result.Children.Where(d => keysToGetProverbsFor.Contains(d.Key)).ToList();
+                List<DataSnapshot> proverbs = task.Result.Children.Where(d => proverbKeys.Contains(d.Key)).ToList();
                 List<Proverb> proverbsFromDB = proverbs.Select(s => JsonUtility.FromJson<Proverb>(s.GetRawJsonValue())).ToList();
                 allProverbs = proverbsFromDB.Select(p => new ProverbsDictionary(
                     "<b>" + p.phrase + "</b>", p.meaning)).ToList();
                 filteredProverbsList = new List<ProverbsDictionary>(allProverbs);
                 wordsToFilterOn = new HashSet<string>();
-                UpdateDictionaryContentHolderContents();
+                UpdateDictionaryContents();
             }
         });
     }
@@ -84,7 +79,7 @@ public class DictionaryManager : MonoBehaviour
     /// <summary>
     /// Update the contents of the dictionary according to the list of filtered proverbs.
     /// </summary>
-    private void UpdateDictionaryContentHolderContents()
+    private void UpdateDictionaryContents()
     {
         filteredProverbsList = filteredProverbsList.OrderBy(p => p.proverb).ToList();
         dictionaryContentHolder.text = "";
@@ -119,7 +114,7 @@ public class DictionaryManager : MonoBehaviour
         {
             filteredProverbsList = filteredProverbsList.Where(s => s.proverb.ToLower().Contains(wordToFilterOn)).ToList();
         }
-        UpdateDictionaryContentHolderContents();
+        UpdateDictionaryContents();
     }
 
     /// <summary>
@@ -144,6 +139,6 @@ public class DictionaryManager : MonoBehaviour
             wordButton.onClick.AddListener(() => WordButtonPressed(wordToFilterOn));
         }
         filterText.text = "";
-        UpdateDictionaryContentHolderContents();
+        UpdateDictionaryContents();
     }
 }

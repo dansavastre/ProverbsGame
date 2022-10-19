@@ -8,21 +8,17 @@ using UnityEngine;
 
 public class AccountManager : MonoBehaviour
 {
-    // UI elements
-    [SerializeField] private TMP_InputField emailField;
-    [SerializeField] private TMP_InputField usernameField;
-
-    [SerializeField] private TextMeshProUGUI username;
-    [SerializeField] private TextMeshProUGUI email;
-
-    // Stores the reference location of the database
-    private DatabaseReference dbReference;
-
-    // Player information
+    public static DatabaseReference dbReference;
     public static string playerEmail;
     public static string playerName;
+
     private Proficiency playerProficiency;
     private string playerKey;
+
+    [SerializeField] private TMP_InputField emailField;
+    [SerializeField] private TMP_InputField usernameField;
+    [SerializeField] private TextMeshProUGUI username;
+    [SerializeField] private TextMeshProUGUI email;
 
     /// <summary>
     /// Executes when the game is started.
@@ -99,16 +95,14 @@ public class AccountManager : MonoBehaviour
             // TODO: Stop this if statement from running when the email is not actually in use
             if (args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
-                // TODO: Put warning on screen that email is in use
+                // TODO: Put warning on screen that email is in use and clear input field
                 Debug.Log("Register: Email already in use.");
-                // playerEmail = null;
             }
             else
             {
-                // Add the new user to the database
+                // Add the new user to the database and initiates their proficiencies
                 playerKey = dbReference.Child("players").Push().Key;
                 dbReference.Child("players").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(new Player(playerName, playerEmail)));
-                // Fetches all proverbs in database and puts them in the new users' proficiency
                 GetProverbs();
                 // Load next scene after succesful registration
                 UIManager.SwitchScene(3);
@@ -134,12 +128,10 @@ public class AccountManager : MonoBehaviour
                 DataSnapshot snapshot = task.Result;
                 // Get all the proverbs to be added to the apprentice bucket
                 string json = snapshot.GetRawJsonValue();
-                Debug.Log(json);
                 playerProficiency = new Proficiency();
 
                 foreach(DataSnapshot s in snapshot.Children)
                 {
-                    // Debug.Log(s.Key);
                     playerProficiency.apprentice.Add(new Bucket(s.Key, 1, 0));
                 }
                 dbReference.Child("proficiencies").Child(playerKey).SetRawJsonValueAsync(JsonUtility.ToJson(playerProficiency));
