@@ -7,14 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-    // UI elements
-    [SerializeField] private AudioSource WoodButton;
-    [SerializeField] private GameObject ProverbLevelUp;
-
-    // Proverb level up variables
-    private ParticleSystem ConfettiPS;
-    private TextMeshProUGUI ProficiencyText;
-
     public static string[] scenes =
     {
         "FirstScreen",          // 0 First screen on app launch
@@ -26,7 +18,6 @@ public class UIManager : MonoBehaviour
         "ProfilePage",          // 6 Profile page
         "Dictionary"            // 7 Proverb dictionary
     };
-
     public static string[] modes =
     {
         "FunFact",              // 0 Fun fact page
@@ -35,12 +26,18 @@ public class UIManager : MonoBehaviour
         "FillBlanks",           // 3 Fill in the blanks
         "FormSentence"          // 4 Form a sentence
     };
+    
+    private ParticleSystem ConfettiPS;
+    private TextMeshProUGUI ProficiencyText;
+
+    [SerializeField] private AudioSource WoodButton;
+    [SerializeField] private GameObject ProverbLevelUp;
 
     /// <summary>
     /// Gets the name of the next scene depending on the stage.
     /// </summary>
-    /// <param name="stage">the number of the stage that the proverb is currently in</param>
-    /// <returns>a string denoting the name of the scene that must be loaded next</returns>
+    /// <param name="stage">The number of the stage that the proverb is currently in.</param>
+    /// <returns>A string denoting the name of the scene that must be loaded next.</returns>
     public static int NextSceneName(int stage)
     {
         if (stage == 1 || stage == 3 || stage == 5) return 1;
@@ -80,7 +77,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Shows the proverb level up pop up.
     /// </summary>
-    /// <param name="proficiencyText">string denoting the proficiency that the player leveled the proverb to</param>
+    /// <param name="proficiencyText">String denoting the proficiency that the player leveled the proverb to.</param>
     public void enableCongratulations(string proficiencyText)
     {
         ProverbLevelUp.SetActive(true);
@@ -108,7 +105,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Switches to another scene.
     /// </summary>
-    /// <param name="sceneIndex"></param>
+    /// <param name="sceneIndex">The index of the scene to switch to.</param>
     public static void SwitchScene(int sceneIndex)
     {
         SceneManager.LoadScene(scenes[sceneIndex]);
@@ -117,9 +114,9 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Switches to another scene in the singleplayer modes.
     /// </summary>
-    /// <param name="sceneIndex"></param>
-    public static void SwitchMode(int sceneIndex)
+    /// <param name="modeIndex">The index of the mode to switch to.</param>
+    public static void SwitchMode(int modeIndex)
     {
-        SceneManager.LoadScene(modes[sceneIndex]);
+        SceneManager.LoadScene(modes[modeIndex]);
     }
 }

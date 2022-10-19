@@ -238,10 +238,10 @@ public class SessionManager : MonoBehaviour
         return result;
     }
 
-    // TODO: Move to UIManager (?)
     /// <summary>
     /// Load the first question.
     /// </summary>
+    // TODO: Move to UIManager (?)
     // TODO: fix duplicate code with LoadScene() in SingleplayerManager
     public void NextScene() {
         Bucket bucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;
