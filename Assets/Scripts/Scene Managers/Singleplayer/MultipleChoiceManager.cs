@@ -30,7 +30,7 @@ public class MultipleChoiceManager : SingleplayerManager
     [SerializeField] private Sprite otherNextButton;
 
     // Variables for storing the type of multiple choice question
-    public enum Mode { ProverbMeaning, MeaningProverb, ExampleSentence}
+    public enum Mode { ProverbMeaning, MeaningProverb, ExampleSentence }
     public static Mode gamemode;
 
     /// <summary>
