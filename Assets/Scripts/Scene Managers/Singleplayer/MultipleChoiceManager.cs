@@ -13,7 +13,9 @@ using Random = UnityEngine.Random;
 
 public class MultipleChoiceManager : SingleplayerManager
 {
-    // UI elements
+    public static Mode gamemode;
+    public enum Mode { ProverbMeaning, MeaningProverb, ExampleSentence }
+
     [SerializeField] private TextMeshProUGUI taskText;
     [SerializeField] private GameObject homeButton;
     [SerializeField] private GameObject barBackground;
@@ -22,16 +24,11 @@ public class MultipleChoiceManager : SingleplayerManager
     [SerializeField] private GameObject funFactButton;
     [SerializeField] private GameObject nextButton;
 
-    // Sprites for UI elements
     [SerializeField] private Sprite otherHomeButton;
     [SerializeField] private Sprite otherBarBackground;
     [SerializeField] private Sprite otherImageBoard;
     [SerializeField] private Sprite otherFunFactButton;
     [SerializeField] private Sprite otherNextButton;
-
-    // Variables for storing the type of multiple choice question
-    public enum Mode { ProverbMeaning, MeaningProverb, ExampleSentence }
-    public static Mode gamemode;
 
     /// <summary>
     /// Executes when the game is started.
