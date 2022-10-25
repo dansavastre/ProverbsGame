@@ -1,25 +1,18 @@
-using Firebase;
-using Firebase.Database;
-using Firebase.Storage;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 using System.Text.RegularExpressions;
+using TMPro;
+using Firebase.Database;
+using UnityEngine;
 using UnityEditor;
 using UnityEngine.Networking;
-using TMPro;
 
 public class ExcelConverter : MonoBehaviour
 {
-
-    // Stores the reference location of the database
     private DatabaseReference dbReference;
-
-    [SerializeField]
-    public TextMeshProUGUI instructionText;
     private string path;
+
+    [SerializeField] public TextMeshProUGUI instructionText;
 
     /// <summary>
     /// Executes when an instance of this class is initialized.
@@ -29,7 +22,7 @@ public class ExcelConverter : MonoBehaviour
         path = Application.persistentDataPath + "/proverbs.csv";
         instructionText.text += path;
 
-        if(File.Exists(path))
+        if (File.Exists(path))
         {
             byte[] m_bytes = File.ReadAllBytes(path);
             string s = System.Text.Encoding.UTF8.GetString(m_bytes);
@@ -52,7 +45,7 @@ public class ExcelConverter : MonoBehaviour
         TextAsset proverbsCSV = Resources.Load<TextAsset>("Proverbs");
         
         // check if the file exists
-        if(File.Exists(path))
+        if (File.Exists(path))
         {
             byte[] m_bytes = File.ReadAllBytes(path);
             string s = System.Text.Encoding.UTF8.GetString(m_bytes);
@@ -61,12 +54,11 @@ public class ExcelConverter : MonoBehaviour
         
         string[] data = proverbsCSV.text.Split(new char[] { '\n' });
 
-        // for each data entry in the list
-        for(int i = 1; i < data.Length - 1; i++)
+        for (int i = 1; i < data.Length - 1; i++)
         {
             Regex regx = new Regex(',' + "(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
             string[] row = regx.Split(data[i]); // split the entry into attributes
-            // parse the attributes from the JSON object
+            // Parse the attributes from the JSON object
             List<string> keywords = parseList(row[3].Substring(1, row[3].Length - 2));
             List<string> otherKeywords = parseList(row[4].Substring(1, row[4].Length - 2));
             List<string> otherPhrases = parseList(row[2].Substring(1, row[2].Length - 2));
@@ -78,7 +70,7 @@ public class ExcelConverter : MonoBehaviour
                 example = example.Substring(1, example.Length - 2).Replace("\"\"", "\"");
             }
 
-            // create the Proverb object from the parsed attributes
+            // Create the Proverb object from the parsed attributes
             Proverb proverb = new Proverb(  row[1].Replace("\"", ""), keywords, row[5].Replace("\"", ""), example, 
                                             row[10].Replace("\r", ""), otherPhrases, otherKeywords, otherMeanings, otherExamples, row[9].Replace("\"", ""));
             Debug.Log(JsonUtility.ToJson(proverb));
@@ -92,14 +84,14 @@ public class ExcelConverter : MonoBehaviour
     /// <summary>
     /// Method for parsing the list of words in the JSON pbject.
     /// </summary>
-    /// <param name="wordsList">string denoting the JSON object to be parsed</param>
-    /// <returns>a list of strings denoting the parsed words</returns>
+    /// <param name="wordsList">String denoting the JSON object to be parsed.</param>
+    /// <returns>A list of strings denoting the parsed words.</returns>
     private List<string> parseList(string wordsList)
     {
         List<string> res = new List<string>();
-
         Regex regx = new Regex(@",(?=\S)");
         string[] words = regx.Split(wordsList);
+
         foreach(var word in words)
         {
             res.Add(word.Replace("\"\"", "\""));

@@ -7,13 +7,14 @@ using TMPro;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
-public class Launcher_FIB : MonoBehaviourPunCallbacks {
-    public static Launcher_FIB Instance; // instance of the launcher
+public class Launcher_FIB : MonoBehaviourPunCallbacks 
+{
+    // Instance of the launcher
+    public static Launcher_FIB Instance; 
 
     public PhotonView _photon;
     private List<RoomInfo> allRooms = new List<RoomInfo>();
 
-    // placeholders for information necessary for the multi-player layout
     [SerializeField] TMP_InputField roomNameInputField_FIB;
     [SerializeField] TMP_Text errorText_FIB;
     [SerializeField] TMP_Text roomNameText_FIB;
@@ -26,7 +27,8 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     /// <summary>
     /// Disconnects the player and sends them to the multiplayer menu scene.
     /// </summary>
-    public void OpenMultiplayerTitleMenuScene() {
+    public void OpenMultiplayerTitleMenuScene() 
+    {
         SceneManager.LoadScene("MainMenu");
         PhotonNetwork.Disconnect();
     }
@@ -34,7 +36,8 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     /// <summary>
     /// Executed when an instance of this class is initialized.
     /// </summary>
-    void Awake() {
+    void Awake() 
+    {
         Instance = this;
     }
 
@@ -44,31 +47,31 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     void Start()
     {
         Debug.Log("Connecting to Master.");
-        if (PhotonNetwork.IsConnected)
-        {
-            OnJoinedRoom();
-        }
-        else
-        {
-            PhotonNetwork.ConnectUsingSettings();
-        }
+        if (PhotonNetwork.IsConnected) OnJoinedRoom();
+        else PhotonNetwork.ConnectUsingSettings();
     }
 
     /// <summary>
     /// Executed when the player connects to the server.
     /// </summary>
-    public override void OnConnectedToMaster() {
+    public override void OnConnectedToMaster() 
+    {
         Debug.Log("Connected to Master.");
-        PhotonNetwork.JoinLobby(); // you need to be in a Lobby to join a Room
 
-        PhotonNetwork.AutomaticallySyncScene = true; // automatically load the scene for all clients
+        // You need to be in a Lobby to join a Room
+        PhotonNetwork.JoinLobby();
+
+        // Automatically load the scene for all clients
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     /// <summary>
     /// Executed when the player joins a lobby.
     /// </summary>
-    public override void OnJoinedLobby() {
-        MenuManager.Instance.OpenMenu("Fill In The Gaps"); // open the title menu on joining lobby
+    public override void OnJoinedLobby() 
+    {
+        // Open the title menu on joining lobby
+        MenuManager.Instance.OpenMenu("Fill In The Gaps");
         Debug.Log("Joined Lobby.");
         PhotonNetwork.NickName = AccountManager.playerName;
     }
@@ -76,9 +79,9 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     /// <summary>
     /// Method for creating a multi-player room.
     /// </summary>
-    public void CreateRoom() {
-        if (string.IsNullOrEmpty(roomNameInputField_FIB.text))
-            return;
+    public void CreateRoom() 
+    {
+        if (string.IsNullOrEmpty(roomNameInputField_FIB.text)) return;
 
         PhotonNetwork.CreateRoom(roomNameInputField_FIB.text);
         MenuManager.Instance.OpenMenu("Loading");
@@ -96,52 +99,58 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     /// <summary>
     /// Executed when the player joins a room.
     /// </summary>
-    public override void OnJoinedRoom() {
+    public override void OnJoinedRoom() 
+    {
         MenuManager.Instance.OpenMenu("Room");
         roomNameText_FIB.text = PhotonNetwork.CurrentRoom.Name;
 
         // Remove all the players in the previous room to start with a clean slate
         foreach (Transform child in playerListContent_FIB)
+        {
             Destroy(child.gameObject);
+        }
 
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 4)
         {
             PhotonNetwork.CurrentRoom.IsVisible = false;
         }
-        else
-        {
-            PhotonNetwork.CurrentRoom.IsVisible = true;
-        }
+        else PhotonNetwork.CurrentRoom.IsVisible = true;
 
         Photon.Realtime.Player[] players = PhotonNetwork.PlayerList;
         for (int i = 0; i < players.Count(); ++i)
+        {
             Instantiate(playerListItemPrefab_FIB, playerListContent_FIB).GetComponent<PlayerListItem>().SetUp(players[i]);
+        }
 
-        startGameButton_FIB.SetActive(PhotonNetwork.IsMasterClient); // only the host of the game can start the game
+        // Only the host of the game can start the game
+        startGameButton_FIB.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     /// <summary>
     /// Method that makes sure a new host is chosen for the game if the initial host leaves.
     /// </summary>
-    /// <param name="newMasterClient">the new host for the game</param>
-    public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient) {
+    /// <param name="newMasterClient">The new host for the game.</param>
+    public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
+    {
         startGameButton_FIB.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     /// <summary>
     /// Method that notifies the player when creating a room fails.
     /// </summary>
-    /// <param name="returnCode">the return code of the error shown to the player</param>
-    /// <param name="message">the message accompanying the error</param>
-    public override void OnCreateRoomFailed(short returnCode, string message) {
+    /// <param name="returnCode">The return code of the error shown to the player.</param>
+    /// <param name="message">The message accompanying the error.</param>
+    public override void OnCreateRoomFailed(short returnCode, string message) 
+    {
         errorText_FIB.text = "Room Creation Failed: " + message;
         MenuManager.Instance.OpenMenu("Error");
     }
 
     /// <summary>
-    /// Starts the game.
+    /// Start the game.
     /// </summary>
-    public void StartGame() {
+    public void StartGame() 
+    {
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
             PhotonNetwork.LoadLevel("FillBlankMultiplayer");
@@ -151,7 +160,8 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     /// <summary>
     /// Method for leaving a room and sending the player back to the multi-player menu.
     /// </summary>
-    public void LeaveRoom() {
+    public void LeaveRoom() 
+    {
         PhotonNetwork.LeaveRoom();
         MenuManager.Instance.OpenMenu("Loading");
     }
@@ -159,8 +169,9 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     /// <summary>
     /// Method for joining a certain room.
     /// </summary>
-    /// <param name="info">the information of the room to be joined</param>
-    public void JoinRoom(RoomInfo info) {
+    /// <param name="info">The information of the room to be joined.</param>
+    public void JoinRoom(RoomInfo info) 
+    {
         PhotonNetwork.JoinRoom(info.Name);
         MenuManager.Instance.OpenMenu("Loading");
     }
@@ -168,33 +179,32 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     /// <summary>
     /// Executes when the player leaves the lobby.
     /// </summary>
-    public override void OnLeftLobby() {
+    public override void OnLeftLobby() 
+    {
         MenuManager.Instance.OpenMenu("Fill In The Gaps");
     }
 
     /// <summary>
     /// Executes when the list of rooms available to the player changes.
     /// </summary>
-    /// <param name="roomList">the list of information on the different rooms that are currently available</param>
-    public override void OnRoomListUpdate(List<RoomInfo> roomList) {
+    /// <param name="roomList">The list of information on the different rooms that are currently available.</param>
+    public override void OnRoomListUpdate(List<RoomInfo> roomList) 
+    {
         foreach (var roomInfo in roomList)
         {
-            if (roomInfo.RemovedFromList)
-            {
-                allRooms.Remove(roomInfo);
-            }
-            else
-            {
-                allRooms.Add(roomInfo);
-            }
+            if (roomInfo.RemovedFromList) allRooms.Remove(roomInfo);
+            else allRooms.Add(roomInfo);
         }
 
         allRooms = allRooms.ToHashSet().ToList();
         
         foreach (Transform transform in roomListContent_FIB)
+        {
             Destroy(transform.gameObject);
+        }
         
-        foreach (RoomInfo roomInfo in allRooms) {
+        foreach (RoomInfo roomInfo in allRooms) 
+        {
             Instantiate(roomListItemPrefab_FIB, roomListContent_FIB).GetComponent<RoomListItem>().SetUp(roomInfo);
         }
     }
@@ -202,8 +212,9 @@ public class Launcher_FIB : MonoBehaviourPunCallbacks {
     /// <summary>
     /// Executes when the player enters a room.
     /// </summary>
-    /// <param name="newPlayer">the Player object to be added to the layout of the menu</param>
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
+    /// <param name="newPlayer">The Player object to be added to the layout of the menu.</param>
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) 
+    {
         Instantiate(playerListItemPrefab_FIB, playerListContent_FIB).GetComponent<PlayerListItem>().SetUp(newPlayer);
     }
 }
