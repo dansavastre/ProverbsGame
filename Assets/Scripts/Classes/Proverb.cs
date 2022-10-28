@@ -17,16 +17,16 @@ public class Proverb
     /// <summary>
     /// Constructor for the Proverb class.
     /// </summary>
-    /// <param name="phrase">string denoting the actual proverb</param>
-    /// <param name="keywords">list of keywords extracted from the proverb</param>
-    /// <param name="meaning">string denoting the meaning of the </param>
-    /// <param name="example">string denoting an example using the proverb</param>
-    /// <param name="image">string denoting the path of the image accompanying the proverb</param>
-    /// <param name="otherPhrases">list of other possible phrases (all wrong)</param>
-    /// <param name="otherKeywords">list of other possible keywords (all wrong)</param>
-    /// <param name="otherMeanings">list of other possible meanings (all wrong)</param>
-    /// <param name="otherExamples">list of other possible examples (all wrong)</param>
-    /// <param name="funFact">string denoting a fun fact aboutt the proverb</param>
+    /// <param name="phrase">String denoting the actual proverb.</param>
+    /// <param name="keywords">List of keywords extracted from the proverb.</param>
+    /// <param name="meaning">String denoting the meaning of the proverb.</param>
+    /// <param name="example">String denoting an example using the proverb.</param>
+    /// <param name="image">String denoting the path of the image accompanying the proverb.</param>
+    /// <param name="otherPhrases">List of other possible phrases (all wrong).</param>
+    /// <param name="otherKeywords">List of other possible keywords (all wrong).</param>
+    /// <param name="otherMeanings">List of other possible meanings (all wrong).</param>
+    /// <param name="otherExamples">List of other possible examples (all wrong).</param>
+    /// <param name="funFact">String denoting a fun fact aboutt the proverb.</param>
     public Proverb(string phrase, List<string> keywords, string meaning, string example, string image, 
     List<string> otherPhrases, List<string> otherKeywords, List<string> otherMeanings, List<string> otherExamples, string funFact) 
     {
