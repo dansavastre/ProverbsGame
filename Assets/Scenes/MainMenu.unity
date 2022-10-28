@@ -1185,10 +1185,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfcf21ae4de800c468b8b76993e9fa83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ApprenticeCount: {fileID: 1721339352}
-  JourneymanCount: {fileID: 769628746}
-  ExpertCount: {fileID: 1226699118}
-  MasterCount: {fileID: 270686720}
+  apprenticeCount: {fileID: 1721339352}
+  journeymanCount: {fileID: 769628746}
+  expertCount: {fileID: 1226699118}
+  masterCount: {fileID: 270686720}
 --- !u!1 &769628743
 GameObject:
   m_ObjectHideFlags: 0

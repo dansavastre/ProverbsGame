@@ -6,8 +6,8 @@ struct ProverbsDictionary
     /// <summary>
     /// Constructor for the ProverbsDictionary struct.
     /// </summary>
-    /// <param name="proverb">the phrase of the proverb</param>
-    /// <param name="meaning">the correct meaning of the proverb</param>
+    /// <param name="proverb">The phrase of the proverb.</param>
+    /// <param name="meaning">The correct meaning of the proverb.</param>
     public ProverbsDictionary(string proverb, string meaning)
     {
         this.proverb = proverb;

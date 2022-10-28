@@ -12,30 +12,15 @@ using Random = System.Random;
 
 public class SessionManager : MonoBehaviour 
 {
-    // UI elements
-    [SerializeField] private TextMeshProUGUI ApprenticeCount;
-    [SerializeField] private TextMeshProUGUI JourneymanCount;
-    [SerializeField] private TextMeshProUGUI ExpertCount;
-    [SerializeField] private TextMeshProUGUI MasterCount;
-
-    // Stores the reference location of the database
-    public static DatabaseReference dbReference;
-
-    // Stores the current and next player proficiency
     public static Proficiency playerProficiency;
     public static Proficiency playerProficiencyNoFilter;
     public static Proficiency newProficiency;
     public static string playerEmail;
     public static string playerName;
     public static string playerKey;
-
-    // Progress bar
     public static int correctAnswers;
-
-    // The number of questions that should be allowed in a single session
     public static int maxValue = 10;
 
-    // Variables
     public static LinkedList<Bucket> allProficiencies;
     public static List<Bucket> allProficienciesNoFilter;
     public static Dictionary<Bucket, int> dictionary;
@@ -43,8 +28,9 @@ public class SessionManager : MonoBehaviour
     public static Proficiency proficiency;
     public static bool isOnDemandBeforeAnswer;
 
-    private Random random;
+    private static DatabaseReference dbReference = AccountManager.dbReference;
 
+    private Random random;
     private TimeSpan[] waitingPeriod =
     {
         new TimeSpan(),             // Always
@@ -55,14 +41,16 @@ public class SessionManager : MonoBehaviour
         new TimeSpan(8, 0, 0)       // After 8 hours
     };
 
+    [SerializeField] private TextMeshProUGUI apprenticeCount;
+    [SerializeField] private TextMeshProUGUI journeymanCount;
+    [SerializeField] private TextMeshProUGUI expertCount;
+    [SerializeField] private TextMeshProUGUI masterCount;
+
     /// <summary>
     /// Start is called before the first frame update.
     /// </summary>
     void Start() 
     {
-        // Get the root reference location of the database
-        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-
         // Reset the player proficiency
         playerProficiency = null;
         playerProficiencyNoFilter = null;
@@ -88,25 +76,23 @@ public class SessionManager : MonoBehaviour
     void Update() 
     {
         if (playerProficiency != null) {
-            // Display amount of proverbs in each proficiency
             DisplayProverbCount();
-            ApprenticeCount.ForceMeshUpdate(true);
-            JourneymanCount.ForceMeshUpdate(true);
-            ExpertCount.ForceMeshUpdate(true);
-            MasterCount.ForceMeshUpdate(true);
+            apprenticeCount.ForceMeshUpdate(true);
+            journeymanCount.ForceMeshUpdate(true);
+            expertCount.ForceMeshUpdate(true);
+            masterCount.ForceMeshUpdate(true);
         }
     }
 
-    // TODO: Move to UIManager
     /// <summary>
     /// Displays the number of proverbs in each proficiency bucket.
     /// </summary>
     private void DisplayProverbCount() 
     {
-        ApprenticeCount.text = playerProficiencyNoFilter.apprentice.Count.ToString();
-        JourneymanCount.text = playerProficiencyNoFilter.journeyman.Count.ToString();
-        ExpertCount.text = playerProficiencyNoFilter.expert.Count.ToString();
-        MasterCount.text = playerProficiencyNoFilter.master.Count.ToString();
+        apprenticeCount.text = playerProficiencyNoFilter.apprentice.Count.ToString();
+        journeymanCount.text = playerProficiencyNoFilter.journeyman.Count.ToString();
+        expertCount.text = playerProficiencyNoFilter.expert.Count.ToString();
+        masterCount.text = playerProficiencyNoFilter.master.Count.ToString();
     }
 
     /// <summary>
@@ -130,7 +116,6 @@ public class SessionManager : MonoBehaviour
                 foreach (var childSnapshot in args.Snapshot.Children) {
                     // Get the key of the current database entry
                     playerKey = childSnapshot.Key;
-                    Debug.Log(childSnapshot.Key);
                     // Use this key to fetch the corresponding player proficiency
                     GetPlayerProficiencies();
                 }
@@ -156,8 +141,7 @@ public class SessionManager : MonoBehaviour
                 playerProficiency = JsonUtility.FromJson<Proficiency>(json);
                 playerProficiencyNoFilter = JsonUtility.FromJson<Proficiency>(json);
                 newProficiency = JsonUtility.FromJson<Proficiency>(json);
-
-                Debug.Log(json);
+                // TODO: Either remove or fix this functionality
                 // RemoveTimedProverbs();
                 InitList();
             }
@@ -165,7 +149,7 @@ public class SessionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Method that creates the list of questions for the current single-player session.
+    /// Method that creates the list of questions for the current singleplayer session.
     /// </summary>
     private void InitList() {
         // Add all proficiencies to one list
@@ -185,14 +169,8 @@ public class SessionManager : MonoBehaviour
         correctAnswers = 0;
         maxValue = Math.Min(maxValue, allProficiencies.Count);
 
-        Debug.Log("Pre-shuffle: " + LinkedString(allProficiencies));
-        Debug.Log("List size pre-shuffle:" + allProficiencies.Count);
-
         allProficiencies = Shuffle(allProficiencies.ToList());
         ResizeList<Bucket>(ref allProficiencies, maxValue); // Resize the list
-
-        Debug.Log("Post-shuffle: " + LinkedString(allProficiencies));
-        Debug.Log("List size post-shuffle:" + allProficiencies.Count);
 
         // Create a dictionary to keep track of wrong answers
         List<int> ints = new List<int>(new int[allProficiencies.Count]);
@@ -203,9 +181,9 @@ public class SessionManager : MonoBehaviour
     /// <summary>
     /// Method for resizing a list to the desired size.
     /// </summary>
-    /// <typeparam name="T">symbol denoting the parameter type of the list of questions (Bucket by default)</typeparam>
-    /// <param name="list">the list to be resized</param>
-    /// <param name="size">the number of elements that the list should be resized to</param>
+    /// <typeparam name="T">Symbol denoting the parameter type of the list of questions (Bucket by default).</typeparam>
+    /// <param name="list">The list to be resized.</param>
+    /// <param name="size">The number of elements that the list should be resized to.</param>
     private void ResizeList<T>(ref LinkedList<T> list, int size) {
         int curr = list.Count;
         maxValue = Math.Min(maxValue, size);
@@ -217,23 +195,10 @@ public class SessionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Print for debugging.
-    /// </summary>
-    /// <param name="list">the list that should be printed</param>
-    /// <returns>a formatted string denoting the list</returns>
-    private string LinkedString(LinkedList<Bucket> list) {
-        string result = "[";
-        foreach (Bucket b in list) {
-            result += "{Key: " + b.key + ", Stage: " + b.stage + "}, ";
-        }
-        return result + "]";
-    }
-
-    /// <summary>
     /// Randomly shuffle the items in the given list.
     /// </summary>
-    /// <typeparam name="T">symbol denoting the parameter type of the list of questions (Bucket by default)</typeparam>
-    /// <param name="list">the list to be shuffled</param>
+    /// <typeparam name="T">Symbol denoting the parameter type of the list of questions (Bucket by default).</typeparam>
+    /// <param name="list">The list to be shuffled.</param>
     /// <returns>the shuffled list</returns>
     private LinkedList<T> Shuffle<T>(IList<T> list) {
         int n = list.Count;
@@ -258,27 +223,25 @@ public class SessionManager : MonoBehaviour
     /// <summary>
     /// Loops over the given list and adds buckets to the result that have passed the waiting period.
     /// </summary>
-    /// <param name="list">the list to be looped over</param>
-    /// <returns>the list containing the buckets that have passed the waiting period</returns>
+    /// <param name="list">The list to be looped over.</param>
+    /// <returns>The list containing the buckets that have passed the waiting period.</returns>
     private List<Bucket> LoopProverbs(List<Bucket> list) {
         List<Bucket> result = new List<Bucket> { };
         foreach (Bucket b in list) {
             DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             date = date.AddMilliseconds(b.timestamp);
             TimeSpan interval = DateTime.Now - date;
-            Debug.Log("Timestamp: " + b.timestamp + ", Date: " + date.ToString());
             if (interval.CompareTo(waitingPeriod[b.stage - 1]) >= 0) {
                 result.Add(b);
-                Debug.Log("Added: " + b.key);
             }
         }
         return result;
     }
 
-    // TODO: Move to UIManager (?)
     /// <summary>
     /// Load the first question.
     /// </summary>
+    // TODO: Move to UIManager (?)
     // TODO: fix duplicate code with LoadScene() in SingleplayerManager
     public void NextScene() {
         Bucket bucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;

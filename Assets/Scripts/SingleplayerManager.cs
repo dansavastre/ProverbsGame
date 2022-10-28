@@ -15,58 +15,45 @@ using SRandom = System.Random;
 
 public class SingleplayerManager : MonoBehaviour
 {
-    // UI elements
-    [SerializeField] public ProgressBar progressBar;            // Bar at top of screen to track progress
-    [SerializeField] protected TextMeshProUGUI questionText;    // Displays proverb/meaning/example
-    [SerializeField] protected RawImage image;                  // Stores the image for each scene
-    [SerializeField] protected RectTransform answerBoard;       // Area that answer buttons are put into
-    [SerializeField] protected List<Button> answerButtons;      // Answer buttons for each question
-    [SerializeField] protected TextMeshProUGUI resultText;      // Displays whether answered (in)correctly
-    [SerializeField] protected TextMeshProUGUI answerText;      // Displays correct answer
-    [SerializeField] protected Button checkButton;              // Used in FillBlanks and FormSentence
-    [SerializeField] protected GameObject nextQuestionButton;   // Button that goes to next question
-    [SerializeField] protected GameObject continueOverlay;      // Popup that shows feedback and button
-
-    // Sprites for MultipleChoice UI elements
-    [SerializeField] protected Sprite otherOptionBoard;         // Alternative theme for option board
-
-    // UI prefabs
-    [SerializeField] protected Button answerButtonPrefab;       // Prefab for the answer buttons
-
-    // UI Manager
-    [SerializeField] private UIManager UIManager;
-
-    // Stores the reference location of the database
-    public static DatabaseReference dbReference;
-
-    // Stores information fetched from the database
-    public StorageReference storageRef;
-    public byte[] fileContents;
-
-    // The maximum number of bytes that will be retrieved
-    public long maxAllowedSize = 1 * 1024 * 1024;
-
-    // Stores information fetched from the database
+    public static DatabaseReference dbReference = AccountManager.dbReference;
     public static Proficiency playerProficiency;
     public static Proficiency newProficiency;
+    public static List<Bucket> allProficienciesNoFilter;
+
+    private static LinkedList<Bucket> allProficiencies;
+    private static Dictionary<Bucket, int> dictionary;
+
+    public StorageReference storageRef;
+    public byte[] fileContents;
+    public long maxAllowedSize = 1 * 1024 * 1024;
+
     protected Proverb nextProverb;
     protected Bucket currentBucket;
     protected Question currentQuestion;
     protected string currentType;
 
-    // Variables
-    private static LinkedList<Bucket> allProficiencies;
-    public static List<Bucket> allProficienciesNoFilter;
-    private static Dictionary<Bucket, int> dictionary;
     private bool answeredCorrect;
     private bool answered;
     private bool firstTimeAnswering;
-
-    // Stages corresponding to the proficiency levels
     private const int apprenticeStage = 3;
     private const int journeymanStage = 5;
     private const int expertStage = 6;
     private const int masterStage = 7;
+
+    [SerializeField] public ProgressBar progressBar;
+    [SerializeField] protected TextMeshProUGUI questionText;
+    [SerializeField] protected RawImage image;
+    [SerializeField] protected RectTransform answerBoard;
+    [SerializeField] protected List<Button> answerButtons;
+    [SerializeField] protected TextMeshProUGUI resultText;
+    [SerializeField] protected TextMeshProUGUI answerText;
+    [SerializeField] protected Button checkButton;
+    [SerializeField] protected GameObject nextQuestionButton;
+    [SerializeField] protected GameObject continueOverlay;
+    [SerializeField] protected Sprite otherOptionBoard;
+    [SerializeField] private UIManager UIManager;
+
+    [SerializeField] protected Button answerButtonPrefab;
 
     /// <summary>
     /// Start is called before the first frame update.
@@ -94,17 +81,14 @@ public class SingleplayerManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Method for retrieving an image from the databse. This image is then used in the single-player game modes.
+    /// Method for retrieving an image from the database. This image is then used in the singleplayer game modes.
     /// </summary>
     protected void GetImage()
     {
         // Get a reference to the storage service, using the default Firebase App
         storageRef = FirebaseStorage.DefaultInstance.GetReferenceFromUrl("gs://sp-proverb-game.appspot.com");
-
-        // Get the root reference location of the image storage
         StorageReference imageRef = storageRef.Child("proverbs/" + nextProverb.image);
 
-        // TODO: Share this method, has no await
         // Load the proverb image from the storage
         imageRef.GetBytesAsync(maxAllowedSize).ContinueWithOnMainThread(task =>
         {
@@ -131,12 +115,7 @@ public class SingleplayerManager : MonoBehaviour
         // Select first bucket from shuffled allProficiencies list
         currentBucket = allProficiencies.Count > 0 ? allProficiencies.First.Value : null;
         // The session is complete if there are no proverbs left
-        if (currentBucket == null) 
-        {
-            Debug.Log("Session complete.");
-            currentType = "none";
-        }
-        // Otherwise we fetch the next type
+        if (currentBucket == null) currentType = "none";
         else 
         {
             currentType = GetTypeOfStage(currentBucket.stage);
@@ -144,11 +123,11 @@ public class SingleplayerManager : MonoBehaviour
         }
     }
 
-    // TODO: Move to UIManager (?)
     /// <summary>
-    /// Display the feedback after the player answers the question, respective of whether or not the answer was correct.
+    /// Display feedback after the player answers the question, respective of whether or not the answer was correct.
     /// </summary>
-    /// <param name="correct">whether or not the question has been answered correctly</param>
+    /// <param name="correct">Whether or not the question has been answered correctly.</param>
+    // TODO: Move to UIManager (?)
     protected void DisplayFeedback(bool correct)
     {
         answered = true;
@@ -178,34 +157,30 @@ public class SingleplayerManager : MonoBehaviour
     /// </summary>
     protected void UpdateProficiency()
     {
-        // Bucket currentBucket;
-        // update to a new proficiency depending to the current proficiency
+        // Update to a new proficiency depending to the current proficiency
         switch (currentType)
         {
             case "apprentice":
                 playerProficiency.apprentice.Remove(currentBucket);
                 newProficiency.apprentice.Remove(currentBucket);
-                SharedUpdate();
                 break;
             case "journeyman":
                 playerProficiency.journeyman.Remove(currentBucket);
                 newProficiency.journeyman.Remove(currentBucket);
-                SharedUpdate();
                 break;
             case "expert":
                 playerProficiency.expert.Remove(currentBucket);
                 newProficiency.expert.Remove(currentBucket);
-                SharedUpdate();
                 break;
             case "master":
                 playerProficiency.master.Remove(currentBucket);
                 newProficiency.master.Remove(currentBucket);
-                SharedUpdate();
                 break;
             default:
                 Debug.Log("Invalid type.");
-                break;
+                return;
         }
+        SharedUpdate();
     }
 
     /// <summary>
@@ -214,6 +189,7 @@ public class SingleplayerManager : MonoBehaviour
     private void SharedUpdate()
     {
         allProficiencies.Remove(currentBucket);
+
         // Update the timestamp of the bucket to now
         long time = (long) DateTime.Now.ToUniversalTime()
         .Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -223,30 +199,17 @@ public class SingleplayerManager : MonoBehaviour
         if (dictionary[currentBucket] == 0 && currentBucket.stage < 7)
         {
             currentBucket.stage++;
-            Debug.Log(currentBucket.key + " stage upgraded to " + currentBucket.stage.ToString());
             if (UIManager != null) 
             {
-                Debug.Log("UI Manager is there!");
-                switch (currentBucket.stage)
+                if (currentBucket.stage == 4 || currentBucket.stage == 6 || currentBucket.stage == 7)
                 {
-                    case 4:
-                        Debug.Log("Enabling congratulations!");
-                        UIManager.enableCongratulations(GetTypeOfStage(4));
-                        break;
-                    case 6: 
-                        Debug.Log("Enabling congratulations!");
-                        UIManager.enableCongratulations(GetTypeOfStage(6));
-                        break;
-                    case 7: 
-                        Debug.Log("Enabling congratulations!");
-                        UIManager.enableCongratulations(GetTypeOfStage(7));
-                        break;
+                    UIManager.enableCongratulations(GetTypeOfStage(currentBucket.stage));
                 }
             }
-        } else if (dictionary[currentBucket] > 0 && currentBucket.stage > 1)
+        } 
+        else if (dictionary[currentBucket] > 0 && currentBucket.stage > 1)
         {
             currentBucket.stage = ChangeStage(currentBucket.stage, dictionary[currentBucket]);
-            Debug.Log(currentBucket.key + " stage downgraded to " + currentBucket.stage.ToString());
         }
 
         // Add bucket to the proficiency that corresponds to its stage
@@ -271,9 +234,9 @@ public class SingleplayerManager : MonoBehaviour
     /// <summary>
     /// Helper function for checking how many stages the proverb should go down.
     /// </summary>
-    /// <param name="stage">the stage number of the current proverb</param>
-    /// <param name="mistakes">the number of mistakes done by the player</param>
-    /// <returns></returns>
+    /// <param name="stage">The stage number of the current proverb.</param>
+    /// <param name="mistakes">The number of mistakes done by the player.</param>
+    /// <returns>The new stage of the proverb.</returns>
     private int ChangeStage(int stage, int mistakes)
     {
         switch (stage)
@@ -284,79 +247,63 @@ public class SingleplayerManager : MonoBehaviour
                 return Math.Max(apprenticeStage + 1, stage - mistakes);
             case >= masterStage:
                 return Math.Max(journeymanStage + 1, stage - mistakes);
+            default:
+                return -1;
         }
     }
     
-    // CurrentQuestion gets initialized and written with right values
-    // Randomization is used to randomize order of answers
-    // In addition, a flexible number of answer buttons is possible
-    /**
-     * <summary>
-     * currentQuestion attribute gets initialized and written with right values.
-     * Randomization is used to randomize order of answers. In addition, a flexible number of answer buttons is possible.
-     * </summary>
-     * <param name="correctAnswer">The correct answer</param>
-     * <param name="wrongAnswers">The wrong answers</param>
-     */
+    /// <summary>
+    /// The currentQuestion attribute gets initialized and written with right values. 
+    /// Randomization is used to randomize the order of the answers.
+    /// In addition, a flexible number of answer buttons is possible.
+    /// </summary>
+    /// <param name="correctAnswer">The correct answer.</param>
+    /// <param name="wrongAnswers">The wrong answers.</param>
     public void SetCurrentQuestion(string correctAnswer, List<string> wrongAnswers)
     {
-        Debug.Log(wrongAnswers.Count());
-
         answerButtons = new List<Button>();
+
         // randomize order of the answers with help of numbers
         int[] numbers = new int[wrongAnswers.Count + 1]; // there are 1 + len(other phrases) answers
-        for (var i = 0; i < numbers.Length; i++)
-        {
-            numbers[i] = -1;
-        }
+        for (var i = 0; i < numbers.Length; i++) numbers[i] = -1;
         for (int i = 0; i < numbers.Length; i++)
         {
             int random = Random.Range(0, numbers.Length);
             if (numbers.Contains(random)) i--;
             else numbers[i] = random;
         }
+
         // Create question and answer objects from proverb
         currentQuestion = new Question();
         Answer answer0 = new Answer();
         answer0.isCorrect = false;
-
         Answer answer1 = new Answer();
         answer1.isCorrect = false;
-
         Answer answer2 = new Answer();
         answer2.isCorrect = false;
-
         Answer answer3 = new Answer();
         answer3.isCorrect = false;
-
         Answer[] answers = {answer0, answer1, answer2, answer3};
 
         // Variable number[0] gives the index of correct answer in the "answers" array
         answers[numbers[0]].isCorrect = true;
+
         // Meaning is the correct answer
         answers[numbers[0]].text = correctAnswer; 
-        for (int i = 1; i < numbers.Length; i++)
-        {
-            answers[numbers[i]].text = wrongAnswers[i-1];
-        }
+        for (int i = 1; i < numbers.Length; i++) answers[numbers[i]].text = wrongAnswers[i-1];
 
         answerText.text = correctAnswer;
         currentQuestion.answers = answers;
 
         // Set the question and create the answer buttons
-        for (int i = 0; i < numbers.Length; i++)
-        {
-            CreateButton(i);
-        }
+        for (int i = 0; i < numbers.Length; i++) CreateButton(i);
     }
     
+    /// <summary>
+    /// Function that creates the buttons containing the possible answers to the multiple choice questions.
+    /// </summary>
+    /// <param name="answerIndex">The answer the button should contain is at this index in the answers of currentQuestion.</param>
     // TODO: Move to UIManager
-    /**
-     * <summary>
-     * Function that creates the buttons containing the possible answers to the multiple choice questions.
-     * </summary>
-     * <param name="answerIndex">The answer the button should contain is at answerIndex in currentQuestion.answers.</param>
-     */
     private void CreateButton(int answerIndex)
     {
         // Get board and button dimensions
@@ -389,9 +336,9 @@ public class SingleplayerManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Display the feedback after the player answers the question
+    /// Display the feedback after the player answers the question.
     /// </summary>
-    /// <param name="index">the index of the answer that was selected by the player</param>
+    /// <param name="index">The index of the answer that was selected by the player.</param>
     public void CheckAnswer(int index)
     {
         DisplayFeedback(currentQuestion.answers[index].isCorrect);
@@ -408,11 +355,9 @@ public class SingleplayerManager : MonoBehaviour
         answerButtons.ForEach(delegate(Button button) { button.interactable = false; });
     }
     
-    /**
-     * <summary>
-     * Get the proficiency type of the stage.
-     * </summary>
-     */
+    /// <summary>
+    /// Get the proficiency type of the stage.
+    /// </summary>
     private string GetTypeOfStage(int stage)
     {
         switch (stage)
@@ -439,10 +384,10 @@ public class SingleplayerManager : MonoBehaviour
         UIManager.SwitchScene(3);
     }
 
-    // TODO: Move to UIManager (?)
     /// <summary>
     /// Method that loads the next question scene.
     /// </summary>
+    // TODO: Move to UIManager (?)
     public void LoadNextScene()
     {
         if (firstTimeAnswering && answeredCorrect)
@@ -453,8 +398,10 @@ public class SingleplayerManager : MonoBehaviour
         else LoadQuestion();
     }
 
+    /// <summary>
+    /// Load the next question.
+    /// </summary>
     // TODO: Move to UIManager (?)
-    // Load the next question
     public void LoadQuestion() 
     {
         Debug.Log("Load next question.");
@@ -497,12 +444,12 @@ public class SingleplayerManager : MonoBehaviour
         UIManager.SwitchMode(0);
     }
 
-    // TODO: Move to UIManager
     /// <summary>
     /// Plays an animation on the given button with a random delay.
     /// </summary>
-    /// <param name="newButton">the button that has been pressed</param>
-    /// <returns>a command telling the program to wait a random amount of time</returns>
+    /// <param name="newButton">The button that has been pressed.</param>
+    /// <returns>A command telling the program to wait a random amount of time.</returns>
+    // TODO: Move to UIManager
     public IEnumerator DelayedAnimation(Button newButton)
     {
         SRandom rnd = new SRandom();
@@ -512,10 +459,9 @@ public class SingleplayerManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Functionality for clicking the hint image:
-    /// - if the hint image is currently hidden, show it;
-    /// - it the hint image is currently shown, hide it.
+    /// Shows and hides the hint image upon clicking it.
     /// </summary>
+    // TODO: Move to UIManager
     public void HintClicked() {
         image.enabled = !image.enabled;
     }

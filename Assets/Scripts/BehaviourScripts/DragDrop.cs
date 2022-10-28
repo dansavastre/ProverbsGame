@@ -1,20 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-using System.Text.RegularExpressions;
-
 public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public Canvas canvas;
-
+    public Vector3 startingPosition;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
-    public Vector3 startingPosition;
 
     [SerializeField] public TextMeshProUGUI proverbText;
 
@@ -30,13 +28,13 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     /// <summary>
     /// Executed when the user clicks.
     /// </summary>
-    /// <param name="eventData">a pointer to the event data of the click action</param>
+    /// <param name="eventData">A pointer to the event data of the click action.</param>
     public void OnPointerDown(PointerEventData eventData) { }
 
     /// <summary>
     /// Executed when the user releases the click.
     /// </summary>
-    /// <param name="eventData">a pointer to the event data of the click action</param>
+    /// <param name="eventData">A pointer to the event data of the click action.</param>
     public void OnPointerUp(PointerEventData eventData)
     {
         // Snap button back to starting position if not placed on a player
@@ -45,17 +43,11 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             foreach (var r in result)
             {
-                if (r.gameObject.GetComponentInChildren<TextMeshProUGUI>().text.Contains("Player"))
-                {
-                    return;
-                }
+                if (r.gameObject.GetComponentInChildren<TextMeshProUGUI>().text.Contains("Player")) return;
                 GetComponent<RectTransform>().anchoredPosition = startingPosition;
             }
         }
-        else
-        {
-            GetComponent<RectTransform>().anchoredPosition = startingPosition;
-        }
+        else GetComponent<RectTransform>().anchoredPosition = startingPosition;
     }
     
     /// <summary>
@@ -80,7 +72,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     /// <summary>
     /// Executed whenever the user starts a drag action.
     /// </summary>
-    /// <param name="eventData">a pointer to the event data of the drag action</param>
+    /// <param name="eventData">A pointer to the event data of the drag action.</param>
     public void OnBeginDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = false;
@@ -90,7 +82,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     /// <summary>
     /// Executes on each frame the user is performing a drag action.
     /// </summary>
-    /// <param name="eventData">a pointer to the event data of the drag action</param>
+    /// <param name="eventData">A pointer to the event data of the drag action.</param>
     public void OnDrag(PointerEventData eventData)
     {
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
@@ -99,7 +91,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     /// <summary>
     /// Executed whenever the user ends a drag action.
     /// </summary>
-    /// <param name="eventData">a pointer to the event data of the drag action</param>
+    /// <param name="eventData">A pointer to the event data of the drag action.</param>
     public void OnEndDrag(PointerEventData eventData)
     {
         eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition =
