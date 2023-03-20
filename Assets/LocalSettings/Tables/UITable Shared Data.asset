@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UITable Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: UITable
+  m_TableCollectionNameGuidString: 2c46778d5d212d04d9b6eeca85d96a7e
+  m_Entries:
+  - m_Id: 122999263232
+    m_Key: catchphrase
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1862100307968
+    m_Key: createAccount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879380840448
+    m_Key: signIn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2442617147392
+    m_Key: availableSessions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2459323060224
+    m_Key: dictionary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2566277812224
+    m_Key: singleplayer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2582144864256
+    m_Key: multiplayer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2807408349184
+    m_Key: apprentice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2810801541120
+    m_Key: journeyman
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2811380355072
+    m_Key: expert
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2814597386240
+    m_Key: master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27224934961152
+    m_Key: proverbDictionary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27426219610112
+    m_Key: enterFilter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28581502898176
+    m_Key: howToPlay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29338771902464
+    m_Key: developmentTeam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34115517927424
+    m_Key: howToPlayContent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34120953745408
+    m_Key: developmentTeamContent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38846923526144
+    m_Key: email
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38981522935808
+    m_Key: enterEmail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39807851155456
+    m_Key: username
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39843733426176
+    m_Key: enterUsername
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40427794452480
+    m_Key: logOut
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40744242106368
+    m_Key: name
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 3359004044341018648
+  references:
+    version: 2
+    RefIds:
+    - rid: 3359004044341018648
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1679144946861

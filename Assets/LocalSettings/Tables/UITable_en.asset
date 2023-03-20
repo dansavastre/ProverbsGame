@@ -1,0 +1,210 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UITable_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 2c46778d5d212d04d9b6eeca85d96a7e, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 122999263232
+    m_Localized: Catchphrase
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1862100307968
+    m_Localized: Create Account
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1879380840448
+    m_Localized: Sign In
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2459323060224
+    m_Localized: Dictionary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2442617147392
+    m_Localized: Available Sessions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2566277812224
+    m_Localized: Singleplayer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2582144864256
+    m_Localized: Multiplayer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2807408349184
+    m_Localized: Apprentice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2810801541120
+    m_Localized: Journeyman
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2811380355072
+    m_Localized: Expert
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2814597386240
+    m_Localized: Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27224934961152
+    m_Localized: Proverb Dictionary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27426219610112
+    m_Localized: Enter a filter...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28581502898176
+    m_Localized: How to Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29338771902464
+    m_Localized: The Development Team
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34115517927424
+    m_Localized: 'Welcome to Proverbs Game!
+
+
+      This game will help you learn
+      proverbs in an engaging and entertaining manner.
+
+
+      It features two game
+      modes for you to choose from:
+
+      - a single-player game mode, where you
+      will learn how to use proverbs through different question types;
+
+      - and
+      a cooperative multi-player game mode, which allows for endless entertainment.
+
+
+      The
+      bucket system:
+
+      Each of the available proverbs is categorized in one
+      of four possible "buckets" (proficiency categories) depending on how well you
+      know them. The buckets are listed in increasing order of proficiency:
+
+      1.
+      Apprentice
+
+      2. Journeyman
+
+      3. Expert
+
+      4. Master
+
+      In
+      the beginning, all proverbs are put in the journeyman bucket. While playing
+      the single-player game mode, answering a question correctly will move the respective
+      proverb in a higher bucket, while answering a question incorrectly will move
+      it in a lower bucket.
+
+
+      The single-player game mode:
+
+      This game
+      mode is played in sessions of ten questions each. Each question can be of a
+      certain type, ranging from recognizing proverbs that are depicted in images,
+      to filling in keywords in incomplete proverbs, to forming proverbs yourself
+      from a given array of keywords. The questions that you will receive about a
+      certain proverb will conform to the proficiency that you currently have with
+      that proverb.
+
+      To answer a question, you have to tap on the answer that
+      you want to give.
+
+      If you struggle with a certain question, or if you
+      are simply unsure of what to answer, you can always use the hint box, which
+      you can identify as a large box in the center of the screen featuring a question
+      mark.
+
+      You can end the session early, without answering every question
+      in it, and the game will automatically save the answers that you gave.
+
+
+      The
+      multi-player game mode:
+
+      This game mode is played in groups of two to
+      four players. Each player is given two proverbs with missing keywords, as well
+      as an array of possible keywords. The purpose of the game is to communicate
+      with your teammates and exchange keywords with them such that everyone completes
+      their given proverbs.
+
+      To give a keyword to a teammate, simply drag the
+      keyword you wish to exchange and drop it onto the box containing the teammate''s
+      name at the top of the screen.
+
+      After you completed a proverb, click
+      ''Check'' to verify whether your answer is the correct one, before clicking
+      on the ''Next Question'' button.
+
+      The game automatically ends when all
+      players have completed their keywords.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34120953745408
+    m_Localized: 'Hi, there!
+
+
+      Thank you for showing interest in finding out
+      who the creators of this game are.
+
+
+      We are a small development team
+      consisting of 2nd year students from the Delft University of Technology in
+      the Netherlands. The team developed this game as part of the Software Project
+      course at the end of the academic year.
+
+
+      We took great pleasure in creating
+      this game for you to enjoy! If you would like to give us feedback, or if you
+      want to help us improve the game, don''t hesitate to contact us!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38846923526144
+    m_Localized: Email
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38981522935808
+    m_Localized: Enter your e-mail address...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39807851155456
+    m_Localized: Username
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39843733426176
+    m_Localized: Enter your username...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40427794452480
+    m_Localized: Log Out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40744242106368
+    m_Localized: Name
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

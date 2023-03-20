@@ -47,4 +47,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Multiplayer/FillBlankMultiplayer.unity
     guid: ea6aebfe120847041be3abb12b11d2d8
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: cc86e8021b3bcef44b4f320777a822e4, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 82f502e9eb09d1f45bfe385ed6bbb752, type: 2}
