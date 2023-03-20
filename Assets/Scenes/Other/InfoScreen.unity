@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 137572325}
   - component: {fileID: 137572324}
   - component: {fileID: 137572323}
+  - component: {fileID: 137572326}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -159,7 +160,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -466.49976, y: 661.9995}
+  m_AnchoredPosition: {x: -466.49976, y: 662.8535}
   m_SizeDelta: {x: 912.176, y: 1446.34}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &137572323
@@ -288,6 +289,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 137572321}
   m_CullTransparentMesh: 1
+--- !u!114 &137572326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137572321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+    m_TableEntryReference:
+      m_KeyId: 34120953745408
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 137572324}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1001 &214248673
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -446,6 +487,14 @@ PrefabInstance:
     - target: {fileID: 3485775704610008390, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
       propertyPath: m_text
       value: The Development Team
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 29338771902464
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
@@ -683,8 +732,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1042997110}
   m_HandleRect: {fileID: 1042997109}
   m_Direction: 2
-  m_Value: 1.0000039
-  m_Size: 0.91541404
+  m_Value: 1.0000061
+  m_Size: 0.9165752
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -863,6 +912,14 @@ PrefabInstance:
       propertyPath: m_text
       value: How to Play
       objectReference: {fileID: 0}
+    - target: {fileID: 5096980131598739019, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 28581502898176
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096980131598739019, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
 --- !u!224 &904587787 stripped
@@ -882,6 +939,7 @@ GameObject:
   - component: {fileID: 945004094}
   - component: {fileID: 945004093}
   - component: {fileID: 945004092}
+  - component: {fileID: 945004095}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -906,7 +964,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -466.49976, y: 661.9997}
+  m_AnchoredPosition: {x: -466.49976, y: 662.8541}
   m_SizeDelta: {x: 912.176, y: 5999.96}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &945004092
@@ -950,77 +1008,75 @@ MonoBehaviour:
     in an engaging and entertaining manner.
 
 
-    It features 2 game modes for you
-    to choose from:
+    It features two game modes for
+    you to choose from:
 
-    - a single-player game mode, where you will learn how to
-    use proverbs through different question types;
+    - a single-player game mode, where you will learn how
+    to use proverbs through different question types;
 
-    - a cooperative multi-player
+    - and a cooperative multi-player
     game mode, which allows for endless entertainment.
 
 
     The bucket system:
 
     Each
-    of the available proverbs is categorized in one of 4 possible "buckets" (proficiency
-    categories) depending on how well you know them. The buckets are named in increasing
-    order of their respective proficiency as follows:
+    of the available proverbs is categorized in one of four possible "buckets" (proficiency
+    categories) depending on how well you know them. The buckets are listed in increasing
+    order of proficiency:
 
     1. Apprentice
 
-    2.
-    Journeyman
+    2. Journeyman
 
     3. Expert
 
-    4. Master
+    4.
+    Master
 
-    In the beginning, all proverbs
-    are put in the journeyman bucket. While playing the single-player game mode,
-    answering a question correctly will move the respective proverb in a higher bucket,
-    while answering a question incorrectly will move it in a lower bucket.
-
-
-    The
-    single-player game mode:
-
-    This game mode is played in sessions of 10 questions
-    each. Each question can be of a certain type, ranging from recognizing proverbs
-    that are depicted in images, to filling in keywords in incomplete proverbs, to
-    forming proverbs yourself from a given array of keywords. The questions that
-    you will receive about a certain proverb will conform to the proficiency that
-    you currently have with that proverb.
-
-    To answer a question, you have to
-    tap on the answer that you want to give.
-
-    If you struggle with a certain
-    question, or if you are simply unsure of what to answer, you can always use the
-    hint box, which you can identify as a large box in the center of the screen featuring
-    a question mark.
-
-    You can end the session early, without answering every
-    question in it, and the game will automatically save the answers that you gave.
+    In the beginning, all proverbs are put in the journeyman bucket.
+    While playing the single-player game mode, answering a question correctly will
+    move the respective proverb in a higher bucket, while answering a question incorrectly
+    will move it in a lower bucket.
 
 
-    The
-    multi-player game mode:
+    The single-player game mode:
 
-    This game mode is played in groups of 2-4 players.
-
-    Each
-    player is given 2 proverb with missing keywords, as well as an array of possible
-    keywords. The purpose of the game is to communicate with your teammates and exchange
-    keywords with them such that everyone completes their given proverbs.
+    This
+    game mode is played in sessions of ten questions each. Each question can be of
+    a certain type, ranging from recognizing proverbs that are depicted in images,
+    to filling in keywords in incomplete proverbs, to forming proverbs yourself from
+    a given array of keywords. The questions that you will receive about a certain
+    proverb will conform to the proficiency that you currently have with that proverb.
 
     To
-    give a keyword to a teammate, simply drag the keyword you wish to exchange and
-    drop it onto the box containing the teammate''s name at the top of the screen.
+    answer a question, you have to tap on the answer that you want to give.
+
+    If
+    you struggle with a certain question, or if you are simply unsure of what to
+    answer, you can always use the hint box, which you can identify as a large box
+    in the center of the screen featuring a question mark.
+
+    You can end the session
+    early, without answering every question in it, and the game will automatically
+    save the answers that you gave.
+
+
+    The multi-player game mode:
+
+    This game
+    mode is played in groups of two to four players. Each player is given two proverbs
+    with missing keywords, as well as an array of possible keywords. The purpose
+    of the game is to communicate with your teammates and exchange keywords with
+    them such that everyone completes their given proverbs.
+
+    To give a keyword
+    to a teammate, simply drag the keyword you wish to exchange and drop it onto
+    the box containing the teammate''s name at the top of the screen.
 
     After
-    you completed a proverb, click "CHECK" to verify whether your answer is the correct
-    one, before clicking on the "NEXT QUESTION" button.
+    you completed a proverb, click ''Check'' to verify whether your answer is the
+    correct one, before clicking on the ''Next Question'' button.
 
     The game automatically
     ends when all players have completed their keywords.'
@@ -1100,6 +1156,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945004090}
   m_CullTransparentMesh: 1
+--- !u!114 &945004095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945004090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+    m_TableEntryReference:
+      m_KeyId: 34115517927424
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 945004093}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1001 &1004765390
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1258,6 +1354,14 @@ PrefabInstance:
     - target: {fileID: 3485775704610008390, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
       propertyPath: m_text
       value: How to Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 28581502898176
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
@@ -1441,7 +1545,7 @@ RectTransform:
   m_Father: {fileID: 868836059}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.084585965}
+  m_AnchorMin: {x: 0, y: 0.08342481}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -1779,6 +1883,14 @@ PrefabInstance:
       propertyPath: m_text
       value: The Development Team
       objectReference: {fileID: 0}
+    - target: {fileID: 5096980131598739019, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 29338771902464
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096980131598739019, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
 --- !u!224 &1207040616 stripped
@@ -2028,7 +2140,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1954548799}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.22066812
+  m_Size: 0.22095014
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2673,7 +2785,7 @@ RectTransform:
   m_Father: {fileID: 425006610}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.77933186}
+  m_AnchorMin: {x: 0, y: 0.7790499}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}

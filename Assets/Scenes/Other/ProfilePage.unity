@@ -274,6 +274,14 @@ PrefabInstance:
       propertyPath: m_text
       value: Log Out
       objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 40427794452480
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
 --- !u!224 &107760210 stripped
@@ -392,7 +400,16 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 5096980131598739019, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 40744242106368
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096980131598739019, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5096980131598739019, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
 --- !u!114 &121847879 stripped
 MonoBehaviour:
@@ -984,11 +1001,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1254984191223871655, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
       propertyPath: m_text
-      value: email@gmail.com
+      value: e-mail@gmail.com
       objectReference: {fileID: 0}
     - target: {fileID: 1254984191223871655, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
       propertyPath: m_fontSize
-      value: 18
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 1254984191223871655, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
       propertyPath: m_fontSizeMax
@@ -1002,7 +1019,8 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5096980131598739019, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
 --- !u!114 &1818337220 stripped
 MonoBehaviour:

@@ -442,6 +442,14 @@ PrefabInstance:
       propertyPath: m_text
       value: Proverb Dictionary
       objectReference: {fileID: 0}
+    - target: {fileID: 5096980131598739019, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 27224934961152
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096980131598739019, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b80dc41f9ef057c42b2ad8f3b4e6afd8, type: 3}
 --- !u!1 &504989955
@@ -690,6 +698,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 632370699}
   m_CullTransparentMesh: 1
+--- !u!1 &768809052 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5154018915344571927, guid: 7dd23968cf57c5a4eae55bdda44822ea, type: 3}
+  m_PrefabInstance: {fileID: 1513105225}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &768809053 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5154018915344571920, guid: 7dd23968cf57c5a4eae55bdda44822ea, type: 3}
+  m_PrefabInstance: {fileID: 1513105225}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768809052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &768809054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768809052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+    m_TableEntryReference:
+      m_KeyId: 27426219610112
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 768809053}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &793847931
 GameObject:
   m_ObjectHideFlags: 0
@@ -872,7 +936,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -466.49966, y: 859}
+  m_AnchoredPosition: {x: -466.49966, y: 650.8541}
   m_SizeDelta: {x: 912.176, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &851859000
@@ -1069,8 +1133,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2118548687}
   m_HandleRect: {fileID: 2118548686}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.9999936
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
