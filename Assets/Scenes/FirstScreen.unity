@@ -502,6 +502,7 @@ GameObject:
   - component: {fileID: 1455918121}
   - component: {fileID: 1455918123}
   - component: {fileID: 1455918122}
+  - component: {fileID: 1455918124}
   m_Layer: 5
   m_Name: Catchphrase
   m_TagString: Untagged
@@ -626,6 +627,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1455918120}
   m_CullTransparentMesh: 1
+--- !u!114 &1455918124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455918120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+    m_TableEntryReference:
+      m_KeyId: 122999263232
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1455918122}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1001 &1798004852
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -784,6 +825,14 @@ PrefabInstance:
     - target: {fileID: 3485775704610008390, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
       propertyPath: m_text
       value: Sign In
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 1879380840448
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
@@ -1082,6 +1131,14 @@ PrefabInstance:
     - target: {fileID: 3485775704610008390, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
       propertyPath: m_text
       value: Create Account
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 1862100307968
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
