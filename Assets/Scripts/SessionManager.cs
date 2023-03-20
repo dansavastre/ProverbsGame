@@ -103,6 +103,7 @@ public class SessionManager : MonoBehaviour
         playerProficiency = null;
         newProficiency = null;
         // Goes to the 'players' database table and searches for the user
+        print(dbReference);
         dbReference.Child("players").OrderByChild("email").EqualTo(playerEmail)
         .ValueChanged += (object sender, ValueChangedEventArgs args) => {
             if (args.DatabaseError != null) {

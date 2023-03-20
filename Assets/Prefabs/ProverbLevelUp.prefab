@@ -292,6 +292,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelUp
       objectReference: {fileID: 0}
+    - target: {fileID: 1415715952430688698, guid: 0d3ca1e4480db33418008f41d155d407, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 767591535857664
+      objectReference: {fileID: 0}
+    - target: {fileID: 1415715952430688698, guid: 0d3ca1e4480db33418008f41d155d407, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d3ca1e4480db33418008f41d155d407, type: 3}
 --- !u!224 &8234543625663998699 stripped
@@ -709,6 +717,14 @@ PrefabInstance:
     - target: {fileID: 174475485265146943, guid: 0d3ca1e4480db33418008f41d155d407, type: 3}
       propertyPath: m_Name
       value: Congratulations
+      objectReference: {fileID: 0}
+    - target: {fileID: 1415715952430688698, guid: 0d3ca1e4480db33418008f41d155d407, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 766836041043968
+      objectReference: {fileID: 0}
+    - target: {fileID: 1415715952430688698, guid: 0d3ca1e4480db33418008f41d155d407, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d3ca1e4480db33418008f41d155d407, type: 3}

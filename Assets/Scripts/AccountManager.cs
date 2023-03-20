@@ -25,6 +25,8 @@ public class AccountManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        print("AccountManager started.");
+
         // Get the root reference location of the database
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
 

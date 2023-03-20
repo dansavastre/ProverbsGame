@@ -221,6 +221,14 @@ MonoBehaviour:
     m_Localized: Select the Proverb
     m_Metadata:
       m_Items: []
+  - m_Id: 766836041043968
+    m_Localized: Congratulations!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 767591535857664
+    m_Localized: Proverb Leveled up to
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

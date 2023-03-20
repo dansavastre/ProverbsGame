@@ -764,6 +764,14 @@ PrefabInstance:
       propertyPath: m_text
       value: Continue
       objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 759271299207168
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
 --- !u!224 &2987937045021704806 stripped
