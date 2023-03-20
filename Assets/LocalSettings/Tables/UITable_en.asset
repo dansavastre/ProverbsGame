@@ -202,7 +202,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 40744242106368
-    m_Localized: Name
+    m_Localized: Fill in the Blanks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 758898899537920
+    m_Localized: Construct the Proverb
+    m_Metadata:
+      m_Items: []
+  - m_Id: 759137786122240
+    m_Localized: Did you Know?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 759271299207168
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 759379092819968
+    m_Localized: Select the Proverb
     m_Metadata:
       m_Items: []
   references:

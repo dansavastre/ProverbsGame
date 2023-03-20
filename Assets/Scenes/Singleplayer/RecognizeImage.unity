@@ -130,6 +130,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1034219350}
     m_Modifications:
+    - target: {fileID: 1144201848949168267, guid: 16cc268b21569b943bb5de5346d12cc5, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 759379092819968
+      objectReference: {fileID: 0}
+    - target: {fileID: 1144201848949168267, guid: 16cc268b21569b943bb5de5346d12cc5, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+      objectReference: {fileID: 0}
     - target: {fileID: 2041265494775554854, guid: 16cc268b21569b943bb5de5346d12cc5, type: 3}
       propertyPath: m_text
       value: Select the Proverb
@@ -914,6 +922,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a929f3204a8cc549bb69e5323125fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fileContents: 
+  maxAllowedSize: 1048576
   progressBar: {fileID: 2059056546}
   questionText: {fileID: 0}
   image: {fileID: 655825394}
@@ -925,10 +935,8 @@ MonoBehaviour:
   nextQuestionButton: {fileID: 2034936909}
   continueOverlay: {fileID: 1841059282}
   otherOptionBoard: {fileID: 21300000, guid: 339087685cf6a3245b0463810b29c593, type: 3}
-  answerButtonPrefab: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
   UIManager: {fileID: 1034219355}
-  fileContents: 
-  maxAllowedSize: 1048576
+  answerButtonPrefab: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
 --- !u!114 &1034219355
 MonoBehaviour:
   m_ObjectHideFlags: 0
