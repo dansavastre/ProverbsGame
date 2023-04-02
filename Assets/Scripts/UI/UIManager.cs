@@ -117,4 +117,9 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(modes[modeIndex]);
     }
+
+    public void ChangeLocale(int localeIndex) 
+    {
+        print(localeIndex);
+    }
 }
