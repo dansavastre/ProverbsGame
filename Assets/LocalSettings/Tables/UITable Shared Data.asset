@@ -16,155 +16,155 @@ MonoBehaviour:
   m_TableCollectionNameGuidString: 2c46778d5d212d04d9b6eeca85d96a7e
   m_Entries:
   - m_Id: 122999263232
-    m_Key: catchphrase
+    m_Key: CATCHPHRASE
     m_Metadata:
       m_Items: []
   - m_Id: 1862100307968
-    m_Key: createAccount
+    m_Key: CREATE_ACCOUNT
     m_Metadata:
       m_Items: []
   - m_Id: 1879380840448
-    m_Key: signIn
+    m_Key: SIGN_IN
     m_Metadata:
       m_Items: []
   - m_Id: 2442617147392
-    m_Key: availableSessions
+    m_Key: AVAILABLE_SESSIONS
     m_Metadata:
       m_Items: []
   - m_Id: 2459323060224
-    m_Key: dictionary
+    m_Key: DICTIONARY
     m_Metadata:
       m_Items: []
   - m_Id: 2566277812224
-    m_Key: singleplayer
+    m_Key: SINGLEPLAYER
     m_Metadata:
       m_Items: []
   - m_Id: 2582144864256
-    m_Key: multiplayer
+    m_Key: MULTIPLAYER
     m_Metadata:
       m_Items: []
   - m_Id: 2807408349184
-    m_Key: apprentice
+    m_Key: BUCKET_ONE
     m_Metadata:
       m_Items: []
   - m_Id: 2810801541120
-    m_Key: journeyman
+    m_Key: BUCKET_TWO
     m_Metadata:
       m_Items: []
   - m_Id: 2811380355072
-    m_Key: expert
+    m_Key: BUCKET_THREE
     m_Metadata:
       m_Items: []
   - m_Id: 2814597386240
-    m_Key: master
+    m_Key: BUCKET_FOUR
     m_Metadata:
       m_Items: []
   - m_Id: 27224934961152
-    m_Key: proverbDictionary
+    m_Key: PROVERB_DICTIONARY
     m_Metadata:
       m_Items: []
   - m_Id: 27426219610112
-    m_Key: enterFilter
+    m_Key: ENTER_FILTER
     m_Metadata:
       m_Items: []
   - m_Id: 28581502898176
-    m_Key: howToPlay
+    m_Key: HOW_PLAY
     m_Metadata:
       m_Items: []
   - m_Id: 29338771902464
-    m_Key: developmentTeam
+    m_Key: DEV_TEAM
     m_Metadata:
       m_Items: []
   - m_Id: 34115517927424
-    m_Key: howToPlayContent
+    m_Key: HOW_PLAY_CONTENT
     m_Metadata:
       m_Items: []
   - m_Id: 34120953745408
-    m_Key: developmentTeamContent
+    m_Key: DEV_TEAM_CONTENT
     m_Metadata:
       m_Items: []
   - m_Id: 38846923526144
-    m_Key: email
+    m_Key: EMAIL
     m_Metadata:
       m_Items: []
   - m_Id: 38981522935808
-    m_Key: enterEmail
+    m_Key: ENTER_EMAIL
     m_Metadata:
       m_Items: []
   - m_Id: 39807851155456
-    m_Key: username
+    m_Key: USERNAME
     m_Metadata:
       m_Items: []
   - m_Id: 39843733426176
-    m_Key: enterUsername
+    m_Key: ENTER_USERNAME
     m_Metadata:
       m_Items: []
   - m_Id: 40427794452480
-    m_Key: logOut
+    m_Key: LOG_OUT
     m_Metadata:
       m_Items: []
   - m_Id: 40744242106368
-    m_Key: fillInTheBlanks
+    m_Key: FILL_BLANKS
     m_Metadata:
       m_Items: []
   - m_Id: 758898899537920
-    m_Key: constructTheProverb
+    m_Key: CONSTRUCT_PROVERB
     m_Metadata:
       m_Items: []
   - m_Id: 759137786122240
-    m_Key: didYouKnow
+    m_Key: FUN_FACT
     m_Metadata:
       m_Items: []
   - m_Id: 759271299207168
-    m_Key: continue
+    m_Key: CONTINUE
     m_Metadata:
       m_Items: []
   - m_Id: 759379092819968
-    m_Key: selectTheProverb
+    m_Key: SELECT_PROVERB
     m_Metadata:
       m_Items: []
   - m_Id: 766836041043968
-    m_Key: congratulations
+    m_Key: CONGRATULATIONS
     m_Metadata:
       m_Items: []
   - m_Id: 767591535857664
-    m_Key: proverbLevelUp
+    m_Key: PROVERB_LEVEL_UP
     m_Metadata:
       m_Items: []
   - m_Id: 5377698584317952
-    m_Key: loading
+    m_Key: LOADING
     m_Metadata:
       m_Items: []
   - m_Id: 5378821474996224
-    m_Key: createRoom
+    m_Key: CREATE_ROOM
     m_Metadata:
       m_Items: []
   - m_Id: 5378828798251008
-    m_Key: joinRoom
+    m_Key: JOIN_ROOM
     m_Metadata:
       m_Items: []
   - m_Id: 5378832510210048
-    m_Key: back
+    m_Key: BACK
     m_Metadata:
       m_Items: []
   - m_Id: 5380309265928192
-    m_Key: enterRoomName
+    m_Key: ENTER_ROOM_NAME
     m_Metadata:
       m_Items: []
   - m_Id: 5380826243256320
-    m_Key: startGame
+    m_Key: START_GAME
     m_Metadata:
       m_Items: []
   - m_Id: 5384779521576960
-    m_Key: leaveRoom
+    m_Key: LEAVE_ROOM
     m_Metadata:
       m_Items: []
   - m_Id: 5385153687048192
-    m_Key: error
+    m_Key: ERROR
     m_Metadata:
       m_Items: []
   - m_Id: 5395260709785600
-    m_Key: language
+    m_Key: LANGUAGE
     m_Metadata:
       m_Items: []
   m_Metadata:

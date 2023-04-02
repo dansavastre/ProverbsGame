@@ -68,7 +68,7 @@ public class MultipleChoiceManager : SingleplayerManager
         if (gamemode == Mode.ProverbMeaning)
         {
             SetCurrentQuestion(nextProverb.meaning, nextProverb.otherMeanings);
-            taskText.text = "Select the meaning";
+            taskText.text = "Select the meaning"; // TODO: Change for localization
             currentQuestion.text = nextProverb.phrase;
         }
         else
@@ -107,7 +107,7 @@ public class MultipleChoiceManager : SingleplayerManager
             // Set the current question with phrase and other phrases
             SetCurrentQuestion(nextProverb.phrase, otherPhrases);
 
-            taskText.text = "Select the proverb";
+            taskText.text = "Select the proverb"; // TODO: Change for localization
             if (gamemode == Mode.MeaningProverb) currentQuestion.text = nextProverb.meaning;
             else currentQuestion.text = nextProverb.example;
         }
