@@ -265,6 +265,26 @@ MonoBehaviour:
     m_Localized: Language
     m_Metadata:
       m_Items: []
+  - m_Id: 6885523760336896
+    m_Localized: Select the meaning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6885632208261120
+    m_Localized: Select the proverb
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6904762789515264
+    m_Localized: Check
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6905090045890560
+    m_Localized: Show Picture
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7597339331252224
+    m_Localized: Hide Picture
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -2,6 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Tables;
+using UnityEngine.Localization.Settings;
 
 public class UIManager : MonoBehaviour
 {
@@ -78,9 +81,27 @@ public class UIManager : MonoBehaviour
     /// <param name="proficiencyText">String denoting the proficiency that the player leveled the proverb to.</param>
     public void enableCongratulations(string proficiencyText)
     {
+        // TODO: Improve the GetTypeOfStage implementation in SingleplayerManager or improve this somehow
+        string localKey = "";
+        switch (proficiencyText)
+        {
+            case "apprentice":
+                localKey = "BUCKET_ONE";
+                break;
+            case "journeyman":
+                localKey = "BUCKET_TWO";
+                break;
+            case "expert":
+                localKey = "BUCKET_THREE";
+                break;
+            case "master":
+                localKey = "BUCKET_FOUR";
+                break;
+        }
+        string localProf = LocalizationSettings.StringDatabase.GetLocalizedString("UITable", localKey);
         ProverbLevelUp.SetActive(true);
         ConfettiPS.Play();
-        ProficiencyText.text = proficiencyText + "!";
+        ProficiencyText.text = localProf + "!";
     }
 
     /// <summary>

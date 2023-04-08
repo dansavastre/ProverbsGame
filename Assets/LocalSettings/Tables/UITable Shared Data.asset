@@ -167,6 +167,26 @@ MonoBehaviour:
     m_Key: LANGUAGE
     m_Metadata:
       m_Items: []
+  - m_Id: 6885523760336896
+    m_Key: MULTI_CHOICE_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6885632208261120
+    m_Key: MULTI_CHOICE_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6904762789515264
+    m_Key: CHECK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6905090045890560
+    m_Key: SHOW_PICTURE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7597339331252224
+    m_Key: HIDE_PICTURE
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

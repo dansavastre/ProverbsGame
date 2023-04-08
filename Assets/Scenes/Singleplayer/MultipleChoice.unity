@@ -819,6 +819,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd96da88a4706f4ab7207698a1289ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fileContents: 
+  maxAllowedSize: 1048576
   progressBar: {fileID: 1048332964}
   questionText: {fileID: 2077129859}
   image: {fileID: 755107124}
@@ -830,10 +832,8 @@ MonoBehaviour:
   nextQuestionButton: {fileID: 4468596444585904564}
   continueOverlay: {fileID: 211817046}
   otherOptionBoard: {fileID: 21300000, guid: 4718b3b74e48df94cb3b1d3847df6749, type: 3}
-  answerButtonPrefab: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
   UIManager: {fileID: 1185331187}
-  fileContents: 
-  maxAllowedSize: 1048576
+  answerButtonPrefab: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
   taskText: {fileID: 1149138168}
   homeButton: {fileID: 1525436639}
   barBackground: {fileID: 1048332965}
@@ -846,6 +846,9 @@ MonoBehaviour:
   otherImageBoard: {fileID: 21300000, guid: e5a4910d4797bdb449ade390d7f6a9d3, type: 3}
   otherFunFactButton: {fileID: 21300000, guid: 089bf9e48c9e0104aa514e66fc62946a, type: 3}
   otherNextButton: {fileID: 21300000, guid: 68c674c004b05e242b8c048f8602a030, type: 3}
+  _localizedStringTable:
+    m_TableReference:
+      m_TableCollectionName: 
 --- !u!114 &1185331187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1641,6 +1644,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1185331185}
     m_Modifications:
+    - target: {fileID: 1144201848949168267, guid: 16cc268b21569b943bb5de5346d12cc5, type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5141194964996111116, guid: 16cc268b21569b943bb5de5346d12cc5, type: 3}
       propertyPath: m_Name
       value: TextOfTask
@@ -1729,5 +1736,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1144201848949168267, guid: 16cc268b21569b943bb5de5346d12cc5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 16cc268b21569b943bb5de5346d12cc5, type: 3}

@@ -7,13 +7,16 @@ using Firebase.Extensions;
 using Firebase.Storage;
 using MiniJSON;
 using TMPro;
+using Photon.Pun;
+using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
-using Photon.Realtime;
-using Random = System.Random;
 using UnityEngine.SceneManagement;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Tables;
+using UnityEngine.Localization.Settings;
+using Random = System.Random;
 using System.Text.RegularExpressions;
 
 public class CoopGame : SingleplayerManager
@@ -177,7 +180,7 @@ public class CoopGame : SingleplayerManager
         // If no proverbs left, then this player is finished and master should be let known
         if (proverbs.Count == 0)
         {
-            questionText.text = "You are done with your proverbs! Help your teammates finish theirs!";
+            questionText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UITable", "MULTI_DONE");
             checkButton.gameObject.SetActive(false);
             nextQuestionButton.SetActive(false);
             _photon.RPC("PlayerDone", RpcTarget.MasterClient);
@@ -262,7 +265,7 @@ public class CoopGame : SingleplayerManager
 
         if (PhotonNetwork.CurrentRoom.PlayerCount < playerCount)
         {
-            StartCoroutine(endGame("A player has unfortunately left your game... Moving you back to the lobby..."));
+            StartCoroutine(endGame(LocalizationSettings.StringDatabase.GetLocalizedString("UITable", "MULTI_LEFT")));
         }
     }
     
@@ -374,11 +377,11 @@ public class CoopGame : SingleplayerManager
 
         if (correct)
         {
-            resultText.text = "Correct";
+            resultText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UITable", "FEEDBACK_CORRECT");
             nextQuestionButton.SetActive(true);
             checkButton.gameObject.SetActive(false);
         }
-        else resultText.text = "Incorrect";
+        else resultText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UITable", "FEEDBACK_INCORRECT");
         // TODO: Disable the ability to click and check new answers
     }
 
@@ -479,7 +482,10 @@ public class CoopGame : SingleplayerManager
     private void LoadRoomAgain()
     {
         double seconds = Math.Round((DateTime.UtcNow - now).TotalSeconds, 2);
-        StartCoroutine(endGame("Good job! You finished all of the proverbs in: " + seconds + " seconds! Moving you to the lobby..."));
+        var localizedString = new LocalizedString("UITable", "MULTI_END");
+        var dict = new Dictionary<string, string> { { "seconds", seconds.ToString() } };
+        localizedString.Arguments = new object[] { dict };
+        StartCoroutine(endGame(localizedString.GetLocalizedString()));
     }
 
     /// <summary>
@@ -487,14 +493,8 @@ public class CoopGame : SingleplayerManager
     /// </summary>
     public void changePopUpState()
     {
-        if (hintButton.GetComponentInChildren<TextMeshProUGUI>().text.Contains("Show"))
-        {
-            hintButton.GetComponentInChildren<TextMeshProUGUI>().text = "Hide Picture";
-        }
-        else
-        {
-            hintButton.GetComponentInChildren<TextMeshProUGUI>().text = "Show Picture";
-        }
+        if (!popupPanel.activeSelf) hintButton.GetComponentInChildren<TextMeshProUGUI>().text = LocalizationSettings.StringDatabase.GetLocalizedString("UITable", "HIDE_PICTURE");
+        else hintButton.GetComponentInChildren<TextMeshProUGUI>().text = LocalizationSettings.StringDatabase.GetLocalizedString("UITable", "SHOW_PICTURE");
         popupPanel.SetActive(!popupPanel.activeSelf);
     }
 }

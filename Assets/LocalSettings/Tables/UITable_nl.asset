@@ -209,6 +209,26 @@ MonoBehaviour:
     m_Localized: Taal
     m_Metadata:
       m_Items: []
+  - m_Id: 6885523760336896
+    m_Localized: Kies de juiste betekenis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6885632208261120
+    m_Localized: Kies het juiste spreekwoord
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6904762789515264
+    m_Localized: Checken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6905090045890560
+    m_Localized: Toon Afbeelding
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7597339331252224
+    m_Localized: Verberg Afbeelding
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

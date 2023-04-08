@@ -132,11 +132,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1787846073647382791, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
       propertyPath: m_text
-      value: Show Picture
+      value: Show Image
       objectReference: {fileID: 0}
     - target: {fileID: 1787846073647382791, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
       propertyPath: m_fontSize
-      value: 15
+      value: 15.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1787846073647382791, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1787846073647382791, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
       propertyPath: m_fontSizeBase
@@ -144,7 +148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1787846073647382791, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
       propertyPath: m_enableAutoSizing
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3804430226224073191, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
       propertyPath: m_SizeDelta.x
@@ -152,7 +156,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3804430226224073191, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -14.9973
+      value: -10.6021
       objectReference: {fileID: 0}
     - target: {fileID: 3804430226224073191, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -160,7 +164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3804430226224073191, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 1.0988
       objectReference: {fileID: 0}
     - target: {fileID: 5267190634657725664, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -329,6 +333,62 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!1 &75835181 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5704468520081065144, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
+  m_PrefabInstance: {fileID: 75835176}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &75835182 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1787846073647382791, guid: 095af72cf41835c4c8cd29ad4184514c, type: 3}
+  m_PrefabInstance: {fileID: 75835176}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75835181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &75835183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75835181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+    m_TableEntryReference:
+      m_KeyId: 6905090045890560
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 75835182}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &105648760 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6314567295258596421, guid: 5ffcb38efe735a94eb699e8365736158, type: 3}
@@ -953,6 +1013,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7835fa244a6f10f4cb06e036dce4535a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fileContents: 
+  maxAllowedSize: 1048576
   progressBar: {fileID: 0}
   questionText: {fileID: 310002088}
   image: {fileID: 0}
@@ -964,11 +1026,10 @@ MonoBehaviour:
   nextQuestionButton: {fileID: 2112776575}
   continueOverlay: {fileID: 0}
   otherOptionBoard: {fileID: 0}
-  answerButtonPrefab: {fileID: 3265820505575547767, guid: f9a2da42e09b114439c8d12d86fedcd8, type: 3}
   UIManager: {fileID: 0}
-  fileContents: 
-  maxAllowedSize: 1048576
+  answerButtonPrefab: {fileID: 3265820505575547767, guid: f9a2da42e09b114439c8d12d86fedcd8, type: 3}
   _photon: {fileID: 1151029734}
+  LastClickedWord: 
   keywordBoard: {fileID: 207808619}
   dragDropButtonPrefab: {fileID: 3265820505575547767, guid: f9a2da42e09b114439c8d12d86fedcd8, type: 3}
   canvas: {fileID: 1151029731}
@@ -978,7 +1039,6 @@ MonoBehaviour:
   - {fileID: 1255227654}
   popupPanel: {fileID: 1420758455}
   hintButton: {fileID: 75835177}
-  LastClickedWord: 
 --- !u!114 &1151029734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1533,6 +1593,14 @@ PrefabInstance:
       propertyPath: m_text
       value: Check
       objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 6904762789515264
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
 --- !u!224 &1424475035 stripped
@@ -1849,9 +1917,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: NextQuestionButton
       objectReference: {fileID: 0}
+    - target: {fileID: 3485775704209756259, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3485775704610008390, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
       propertyPath: m_text
       value: Continue
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 759271299207168
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530173987714040217, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:2c46778d5d212d04d9b6eeca85d96a7e
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a1067d2d458474449da2bd3fe077fdf, type: 3}

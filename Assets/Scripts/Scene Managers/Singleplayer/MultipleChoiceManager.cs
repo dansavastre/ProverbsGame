@@ -9,6 +9,9 @@ using Firebase.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Tables;
+using UnityEngine.Localization.Settings;
 using Random = UnityEngine.Random;
 
 public class MultipleChoiceManager : SingleplayerManager
@@ -29,6 +32,9 @@ public class MultipleChoiceManager : SingleplayerManager
     [SerializeField] private Sprite otherImageBoard;
     [SerializeField] private Sprite otherFunFactButton;
     [SerializeField] private Sprite otherNextButton;
+
+    [SerializeField] private LocalizedStringTable _localizedStringTable;
+    private StringTable _currentStringTable;
 
     /// <summary>
     /// Executes when the game is started.
@@ -68,7 +74,10 @@ public class MultipleChoiceManager : SingleplayerManager
         if (gamemode == Mode.ProverbMeaning)
         {
             SetCurrentQuestion(nextProverb.meaning, nextProverb.otherMeanings);
-            taskText.text = "Select the meaning"; // TODO: Change for localization
+            string localTask = LocalizationSettings.StringDatabase.GetLocalizedString("UITable", "MULTI_CHOICE_1");
+            taskText.text = localTask; 
+            // TODO: Check if works
+            Debug.Log(localTask);
             currentQuestion.text = nextProverb.phrase;
         }
         else
@@ -107,7 +116,10 @@ public class MultipleChoiceManager : SingleplayerManager
             // Set the current question with phrase and other phrases
             SetCurrentQuestion(nextProverb.phrase, otherPhrases);
 
-            taskText.text = "Select the proverb"; // TODO: Change for localization
+            string localTask = LocalizationSettings.StringDatabase.GetLocalizedString("UITable", "MULTI_CHOICE_2");
+            taskText.text = localTask;
+            // TODO: Check if works
+            Debug.Log(localTask);
             if (gamemode == Mode.MeaningProverb) currentQuestion.text = nextProverb.meaning;
             else currentQuestion.text = nextProverb.example;
         }
